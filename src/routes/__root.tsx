@@ -78,14 +78,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Zelar- Adminstraçã de Igrejas" },
+      { name: "description", content: "Heartfelt Connections is a platform for users to share and discover personal stories and experiences." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Zelar- Adminstraçã de Igrejas" },
+      { property: "og:description", content: "Heartfelt Connections is a platform for users to share and discover personal stories and experiences." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Zelar- Adminstraçã de Igrejas" },
+      { name: "twitter:description", content: "Heartfelt Connections is a platform for users to share and discover personal stories and experiences." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ba3ebb5a-cf3a-4adf-838c-160f66e1def2/id-preview-86c148fc--1eac348f-59b4-401d-8272-be9fd65d8e47.lovable.app-1781959277575.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ba3ebb5a-cf3a-4adf-838c-160f66e1def2/id-preview-86c148fc--1eac348f-59b4-401d-8272-be9fd65d8e47.lovable.app-1781959277575.png" },
     ],
     links: [
       {
