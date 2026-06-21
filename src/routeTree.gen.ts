@@ -17,6 +17,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppPatrimonioRouteImport } from './routes/app.patrimonio'
 import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
 import { Route as AppEscalasRouteImport } from './routes/app.escalas'
@@ -71,6 +72,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPatrimonioRoute = AppPatrimonioRouteImport.update({
+  id: '/patrimonio',
+  path: '/patrimonio',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMembersRoute = AppMembersRouteImport.update({
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
+  '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/escalas': typeof AppEscalasRoute
+  '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
+  '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
@@ -235,6 +244,7 @@ export interface FileRouteTypes {
     | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
+    | '/app/patrimonio'
     | '/app/settings'
     | '/app/'
     | '/app/checkin/$scheduleId'
@@ -256,6 +266,7 @@ export interface FileRouteTypes {
     | '/select-tenant'
     | '/app/departments'
     | '/app/escalas'
+    | '/app/patrimonio'
     | '/app/settings'
     | '/app'
     | '/app/checkin/$scheduleId'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
+    | '/app/patrimonio'
     | '/app/settings'
     | '/app/'
     | '/app/checkin/$scheduleId'
@@ -360,6 +372,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/app/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/patrimonio': {
+      id: '/app/patrimonio'
+      path: '/patrimonio'
+      fullPath: '/app/patrimonio'
+      preLoaderRoute: typeof AppPatrimonioRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/members': {
@@ -536,6 +555,7 @@ interface AppRouteChildren {
   AppEscalasRoute: typeof AppEscalasRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppMembersRoute: typeof AppMembersRouteWithChildren
+  AppPatrimonioRoute: typeof AppPatrimonioRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
 }
@@ -546,6 +566,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppEscalasRoute: AppEscalasRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppMembersRoute: AppMembersRouteWithChildren,
+  AppPatrimonioRoute: AppPatrimonioRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
 }
