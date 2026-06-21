@@ -84,7 +84,7 @@ function AdminLayout() {
             </div>
             <div className="ml-auto flex items-center gap-2">
               <span className="hidden text-xs text-muted-foreground sm:inline">
-                {profile.name || profile.email || session?.user.email}
+                {session?.user.email}
               </span>
               <Button asChild variant="outline" size="sm">
                 <Link to="/app">
