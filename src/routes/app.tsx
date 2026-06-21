@@ -1,8 +1,9 @@
-import { createFileRoute, Outlet, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { LogOut } from "lucide-react";
 
 import { AppSidebar } from "@/components/AppSidebar";
+import { TenantSwitcher } from "@/components/TenantSwitcher";
 import { Button } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -57,18 +58,16 @@ function AppLayout() {
           <header className="flex h-14 items-center gap-2 border-b px-4">
             <SidebarTrigger />
             <Separator orientation="vertical" className="h-6" />
-            <div className="flex min-w-0 flex-1 items-center gap-2">
-              <span className="truncate text-sm font-medium">
-                {currentTenant?.name ?? "Sem área de trabalho"}
+            <TenantSwitcher />
+            <div className="ml-auto flex items-center gap-2">
+              <span className="hidden text-xs text-muted-foreground sm:inline">
+                {session.user.email}
               </span>
+              <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                <LogOut className="mr-1 h-4 w-4" />
+                Sair
+              </Button>
             </div>
-            <Link to="/app/members" className="text-sm text-muted-foreground hover:text-foreground">
-              Membros
-            </Link>
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
-              <LogOut className="h-4 w-4" />
-              Sair
-            </Button>
           </header>
           <main className="flex-1 p-6">
             <Outlet />
