@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthStore } from "@/stores/authStore";
+import logoAsset from "@/assets/logo-zelar.svg.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
