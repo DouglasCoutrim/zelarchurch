@@ -222,13 +222,15 @@ export async function getAccountBreakdown(
     .gte("transaction_date", from)
     .lte("transaction_date", to);
   if (error) throw error;
-  type Row = { amount: number; type: TransactionType; account: { id: string; name: string } | null };
+  type Acc = { id: string; name: string };
+  type Row = { amount: number; type: TransactionType; account: Acc | Acc[] | null };
   const map = new Map<string, AccountBreakdownRow>();
-  for (const r of (data ?? []) as Row[]) {
-    const id = r.account?.id ?? "none";
-    const name = r.account?.name ?? "Sem categoria";
+  for (const r of (data ?? []) as unknown as Row[]) {
+    const acc = Array.isArray(r.account) ? r.account[0] ?? null : r.account;
+    const id = acc?.id ?? "none";
+    const name = acc?.name ?? "Sem categoria";
     const key = `${r.type}:${id}`;
-    const cur = map.get(key) ?? { account_id: r.account?.id ?? null, account_name: name, type: r.type, total: 0 };
+    const cur = map.get(key) ?? { account_id: acc?.id ?? null, account_name: name, type: r.type, total: 0 };
     cur.total += Number(r.amount) || 0;
     map.set(key, cur);
   }
