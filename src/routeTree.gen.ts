@@ -82,21 +82,6 @@ const AppDepartmentsRoute = AppDepartmentsRouteImport.update({
   path: '/departments',
   getParentRoute: () => AppRoute,
 } as any)
-const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
-  id: '/financeiro',
-  path: '/financeiro',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFinanceiroIndexRoute = AppFinanceiroIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppFinanceiroRoute,
-} as any)
-const AppFinanceiroContasRoute = AppFinanceiroContasRouteImport.update({
-  id: '/contas',
-  path: '/contas',
-  getParentRoute: () => AppFinanceiroRoute,
-} as any)
 const AppMembersIndexRoute = AppMembersIndexRouteImport.update({
   id: '/',
   path: '/',
