@@ -19,11 +19,14 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppRelatoriosRouteImport } from './routes/app.relatorios'
 import { Route as AppPatrimonioRouteImport } from './routes/app.patrimonio'
+import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
 import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
 import { Route as AppEscalasRouteImport } from './routes/app.escalas'
 import { Route as AppEbdRouteImport } from './routes/app.ebd'
 import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
+import { Route as AppConvocacoesRouteImport } from './routes/app.convocacoes'
+import { Route as AppConselhoFiscalRouteImport } from './routes/app.conselho-fiscal'
 import { Route as AppComprasRouteImport } from './routes/app.compras'
 import { Route as AppCheckinRouteImport } from './routes/app.checkin'
 import { Route as AppAtasRouteImport } from './routes/app.atas'
@@ -90,6 +93,11 @@ const AppPatrimonioRoute = AppPatrimonioRouteImport.update({
   path: '/patrimonio',
   getParentRoute: () => AppRoute,
 } as any)
+const AppNotificacoesRoute = AppNotificacoesRouteImport.update({
+  id: '/notificacoes',
+  path: '/notificacoes',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMembersRoute = AppMembersRouteImport.update({
   id: '/members',
   path: '/members',
@@ -113,6 +121,16 @@ const AppEbdRoute = AppEbdRouteImport.update({
 const AppDepartmentsRoute = AppDepartmentsRouteImport.update({
   id: '/departments',
   path: '/departments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppConvocacoesRoute = AppConvocacoesRouteImport.update({
+  id: '/convocacoes',
+  path: '/convocacoes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppConselhoFiscalRoute = AppConselhoFiscalRouteImport.update({
+  id: '/conselho-fiscal',
+  path: '/conselho-fiscal',
   getParentRoute: () => AppRoute,
 } as any)
 const AppComprasRoute = AppComprasRouteImport.update({
@@ -201,11 +219,14 @@ export interface FileRoutesByFullPath {
   '/app/atas': typeof AppAtasRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/compras': typeof AppComprasRoute
+  '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
+  '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
+  '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
@@ -231,8 +252,11 @@ export interface FileRoutesByTo {
   '/select-tenant': typeof SelectTenantRoute
   '/app/atas': typeof AppAtasRoute
   '/app/compras': typeof AppComprasRoute
+  '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
+  '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/escalas': typeof AppEscalasRoute
+  '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
@@ -261,11 +285,14 @@ export interface FileRoutesById {
   '/app/atas': typeof AppAtasRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/compras': typeof AppComprasRoute
+  '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
+  '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
+  '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
@@ -295,11 +322,14 @@ export interface FileRouteTypes {
     | '/app/atas'
     | '/app/checkin'
     | '/app/compras'
+    | '/app/conselho-fiscal'
+    | '/app/convocacoes'
     | '/app/departments'
     | '/app/ebd'
     | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
+    | '/app/notificacoes'
     | '/app/patrimonio'
     | '/app/relatorios'
     | '/app/settings'
@@ -325,8 +355,11 @@ export interface FileRouteTypes {
     | '/select-tenant'
     | '/app/atas'
     | '/app/compras'
+    | '/app/conselho-fiscal'
+    | '/app/convocacoes'
     | '/app/departments'
     | '/app/escalas'
+    | '/app/notificacoes'
     | '/app/patrimonio'
     | '/app/relatorios'
     | '/app/settings'
@@ -354,11 +387,14 @@ export interface FileRouteTypes {
     | '/app/atas'
     | '/app/checkin'
     | '/app/compras'
+    | '/app/conselho-fiscal'
+    | '/app/convocacoes'
     | '/app/departments'
     | '/app/ebd'
     | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
+    | '/app/notificacoes'
     | '/app/patrimonio'
     | '/app/relatorios'
     | '/app/settings'
@@ -458,6 +494,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPatrimonioRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/notificacoes': {
+      id: '/app/notificacoes'
+      path: '/notificacoes'
+      fullPath: '/app/notificacoes'
+      preLoaderRoute: typeof AppNotificacoesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/members': {
       id: '/app/members'
       path: '/members'
@@ -491,6 +534,20 @@ declare module '@tanstack/react-router' {
       path: '/departments'
       fullPath: '/app/departments'
       preLoaderRoute: typeof AppDepartmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/convocacoes': {
+      id: '/app/convocacoes'
+      path: '/convocacoes'
+      fullPath: '/app/convocacoes'
+      preLoaderRoute: typeof AppConvocacoesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/conselho-fiscal': {
+      id: '/app/conselho-fiscal'
+      path: '/conselho-fiscal'
+      fullPath: '/app/conselho-fiscal'
+      preLoaderRoute: typeof AppConselhoFiscalRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/compras': {
@@ -678,11 +735,14 @@ interface AppRouteChildren {
   AppAtasRoute: typeof AppAtasRoute
   AppCheckinRoute: typeof AppCheckinRouteWithChildren
   AppComprasRoute: typeof AppComprasRoute
+  AppConselhoFiscalRoute: typeof AppConselhoFiscalRoute
+  AppConvocacoesRoute: typeof AppConvocacoesRoute
   AppDepartmentsRoute: typeof AppDepartmentsRoute
   AppEbdRoute: typeof AppEbdRouteWithChildren
   AppEscalasRoute: typeof AppEscalasRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppMembersRoute: typeof AppMembersRouteWithChildren
+  AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppPatrimonioRoute: typeof AppPatrimonioRoute
   AppRelatoriosRoute: typeof AppRelatoriosRoute
   AppSettingsRoute: typeof AppSettingsRoute
@@ -693,11 +753,14 @@ const AppRouteChildren: AppRouteChildren = {
   AppAtasRoute: AppAtasRoute,
   AppCheckinRoute: AppCheckinRouteWithChildren,
   AppComprasRoute: AppComprasRoute,
+  AppConselhoFiscalRoute: AppConselhoFiscalRoute,
+  AppConvocacoesRoute: AppConvocacoesRoute,
   AppDepartmentsRoute: AppDepartmentsRoute,
   AppEbdRoute: AppEbdRouteWithChildren,
   AppEscalasRoute: AppEscalasRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppMembersRoute: AppMembersRouteWithChildren,
+  AppNotificacoesRoute: AppNotificacoesRoute,
   AppPatrimonioRoute: AppPatrimonioRoute,
   AppRelatoriosRoute: AppRelatoriosRoute,
   AppSettingsRoute: AppSettingsRoute,
@@ -717,13 +780,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
