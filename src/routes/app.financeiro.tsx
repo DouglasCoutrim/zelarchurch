@@ -9,6 +9,8 @@ export const Route = createFileRoute("/app/financeiro")({
 const tabs = [
   { to: "/app/financeiro", label: "Lançamentos", exact: true },
   { to: "/app/financeiro/contas", label: "Plano de contas", exact: false },
+  { to: "/app/financeiro/centros", label: "Centros de custo", exact: false },
+  { to: "/app/financeiro/relatorios", label: "Relatórios", exact: false },
 ];
 
 function FinanceLayout() {
