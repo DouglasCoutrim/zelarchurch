@@ -37,6 +37,7 @@ import { Route as AppAtasRouteImport } from './routes/app.atas'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminPlansRouteImport } from './routes/admin.plans'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
+import { Route as AdminBillingRouteImport } from './routes/admin.billing'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
 import { Route as AppEbdIndexRouteImport } from './routes/app.ebd.index'
@@ -192,6 +193,11 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBillingRoute = AdminBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AppMembersIndexRoute = AppMembersIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -271,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
+  '/admin/billing': typeof AdminBillingRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/plans': typeof AdminPlansRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
@@ -313,6 +320,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
+  '/admin/billing': typeof AdminBillingRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/plans': typeof AdminPlansRoute
   '/app/atas': typeof AppAtasRoute
@@ -353,6 +361,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
+  '/admin/billing': typeof AdminBillingRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/plans': typeof AdminPlansRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
@@ -399,6 +408,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/select-tenant'
+    | '/admin/billing'
     | '/admin/dashboard'
     | '/admin/plans'
     | '/admin/tenants'
@@ -441,6 +451,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/select-tenant'
+    | '/admin/billing'
     | '/admin/dashboard'
     | '/admin/plans'
     | '/app/atas'
@@ -480,6 +491,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/select-tenant'
+    | '/admin/billing'
     | '/admin/dashboard'
     | '/admin/plans'
     | '/admin/tenants'
@@ -725,6 +737,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/billing': {
+      id: '/admin/billing'
+      path: '/billing'
+      fullPath: '/admin/billing'
+      preLoaderRoute: typeof AdminBillingRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/app/members/': {
       id: '/app/members/'
       path: '/'
@@ -841,6 +860,7 @@ const AdminTenantsRouteWithChildren = AdminTenantsRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
+  AdminBillingRoute: typeof AdminBillingRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminPlansRoute: typeof AdminPlansRoute
   AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
@@ -848,6 +868,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBillingRoute: AdminBillingRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminPlansRoute: AdminPlansRoute,
   AdminTenantsRoute: AdminTenantsRouteWithChildren,
