@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Plus, Pencil, Trash2, ArrowUpCircle, ArrowDownCircle, Wallet, Clock,
@@ -83,7 +84,9 @@ function TransactionsPage() {
       qc.invalidateQueries({ queryKey: ["transactions"] });
       qc.invalidateQueries({ queryKey: ["finance-summary"] });
       setDeleting(null);
+      toast.success("Lançamento excluído");
     },
+    onError: (e: Error) => toast.error(e.message || "Erro ao excluir lançamento"),
   });
 
   const totalPages = Math.max(1, Math.ceil((list.data?.total ?? 0) / pageSize));
@@ -366,7 +369,9 @@ function TransactionDialog({
       qc.invalidateQueries({ queryKey: ["transactions"] });
       qc.invalidateQueries({ queryKey: ["finance-summary"] });
       onClose();
+      toast.success(initial ? "Lançamento atualizado" : "Lançamento criado");
     },
+    onError: (e: Error) => toast.error(e.message || "Erro ao salvar lançamento"),
   });
 
   async function openReceipt() {
