@@ -27,7 +27,6 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const navigate = useNavigate();
   const session = useAuthStore((s) => s.session);
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,15 +41,7 @@ function AuthPage() {
     setLoading(true);
     setError(null);
     try {
-      const fn =
-        mode === "signin"
-          ? supabase.auth.signInWithPassword({ email, password })
-          : supabase.auth.signUp({
-              email,
-              password,
-              options: { emailRedirectTo: `${window.location.origin}/app` },
-            });
-      const { error } = await fn;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       navigate({ to: "/select-tenant", replace: true });
     } catch (err) {
@@ -113,13 +104,9 @@ function AuthPage() {
           </Link>
           <div className="rounded-2xl glass-strong p-8 shadow-elevated">
             <div className="mb-6 space-y-1">
-              <h1 className="text-2xl font-bold tracking-tight">
-                {mode === "signin" ? "Entrar na sua conta" : "Criar conta"}
-              </h1>
+              <h1 className="text-2xl font-bold tracking-tight">Entrar na sua conta</h1>
               <p className="text-sm text-muted-foreground">
-                {mode === "signin"
-                  ? "Informe suas credenciais para continuar."
-                  : "Comece a usar sua área de trabalho em segundos."}
+                Acesse com o e-mail cadastrado pela sua igreja ou no cadastro inicial.
               </p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -143,7 +130,7 @@ function AuthPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                  autoComplete="current-password"
                 />
               </div>
               {error && (
@@ -152,19 +139,18 @@ function AuthPage() {
                 </p>
               )}
               <Button type="submit" variant="gold" size="lg" className="w-full" disabled={loading}>
-                {loading ? "Aguarde..." : mode === "signin" ? "Entrar agora" : "Criar minha conta"}
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full"
-                onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-              >
-                {mode === "signin"
-                  ? "Não tem uma conta? Cadastre-se"
-                  : "Já tem uma conta? Entrar"}
+                {loading ? "Aguarde..." : "Entrar agora"}
               </Button>
             </form>
+            <div className="mt-6 rounded-xl border border-border/60 bg-background/50 p-4 text-center text-sm">
+              <p className="font-medium text-foreground">É pastor ou líder de igreja?</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Cadastre sua igreja e teste grátis por 14 dias.
+              </p>
+              <Button asChild variant="outline" size="sm" className="mt-3">
+                <Link to="/register">Cadastrar minha igreja</Link>
+              </Button>
+            </div>
           </div>
           <p className="mt-6 text-center text-xs text-muted-foreground">
             Ao continuar você aceita os{" "}
