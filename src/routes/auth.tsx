@@ -28,7 +28,7 @@ function AuthPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (session) navigate({ to: "/app" });
+    if (session) navigate({ to: "/select-tenant", replace: true });
   }, [session, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -46,7 +46,7 @@ function AuthPage() {
             });
       const { error } = await fn;
       if (error) throw error;
-      navigate({ to: "/app" });
+      navigate({ to: "/select-tenant", replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha na autenticação");
     } finally {
