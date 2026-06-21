@@ -493,6 +493,35 @@ function TransactionDialog({
               onChange={(e) => set("notes", e.target.value)}
             />
           </div>
+          <div className="space-y-1">
+            <Label>Comprovante</Label>
+            {initial?.receipt_url && !removingReceipt && !receiptFile && (
+              <div className="flex items-center gap-2 rounded-md border bg-muted/40 px-2 py-1.5 text-sm">
+                <span className="flex-1 truncate text-muted-foreground">
+                  Comprovante anexado
+                </span>
+                <Button type="button" variant="ghost" size="sm" onClick={openReceipt}>
+                  Ver
+                </Button>
+                <Button
+                  type="button" variant="ghost" size="sm"
+                  onClick={() => setRemovingReceipt(true)}
+                >
+                  Remover
+                </Button>
+              </div>
+            )}
+            <Input
+              type="file"
+              accept="image/*,application/pdf"
+              onChange={(e) => setReceiptFile(e.target.files?.[0] ?? null)}
+            />
+            {receiptFile && (
+              <p className="text-xs text-muted-foreground">
+                Novo arquivo: {receiptFile.name}
+              </p>
+            )}
+          </div>
           {saveMut.error && (
             <p className="text-sm text-destructive">
               {(saveMut.error as Error).message}
