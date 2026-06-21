@@ -28,6 +28,30 @@ import { APP_NAME } from "@/config/constants";
 import logoAsset from "@/assets/logo-zelar.svg.asset.json";
 import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
 
+const SITE_URL = "https://zelarchurch.lovable.app";
+
+const STRUCTURED_DATA = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: APP_NAME,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description:
+    "Plataforma completa para administrar membros, departamentos, finanças, escalas, EBD e patrimônio da sua igreja.",
+  url: SITE_URL,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "BRL",
+    description: "14 dias grátis",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: APP_NAME,
+    url: SITE_URL,
+  },
+};
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -43,10 +67,19 @@ export const Route = createFileRoute("/")({
         content: "Toda a gestão da sua igreja em um só lugar. Comece grátis por 14 dias.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(STRUCTURED_DATA),
+      },
     ],
   }),
   component: Landing,
 });
+
 
 function Landing() {
   return (
