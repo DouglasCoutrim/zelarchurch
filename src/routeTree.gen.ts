@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SelectTenantRouteImport } from './routes/select-tenant'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
@@ -19,6 +20,11 @@ import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppMembersIdRouteImport } from './routes/app.members.$id'
 
+const SelectTenantRoute = SelectTenantRouteImport.update({
+  id: '/select-tenant',
+  path: '/select-tenant',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
+  '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
@@ -90,6 +98,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
+  '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/select-tenant'
     | '/app/departments'
     | '/app/members'
     | '/app/settings'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/select-tenant'
     | '/app/departments'
     | '/app/settings'
     | '/app'
@@ -123,6 +134,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/select-tenant'
     | '/app/departments'
     | '/app/members'
     | '/app/settings'
@@ -135,10 +147,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRoute
+  SelectTenantRoute: typeof SelectTenantRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/select-tenant': {
+      id: '/select-tenant'
+      path: '/select-tenant'
+      fullPath: '/select-tenant'
+      preLoaderRoute: typeof SelectTenantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -239,6 +259,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRoute,
+  SelectTenantRoute: SelectTenantRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

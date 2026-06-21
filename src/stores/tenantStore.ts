@@ -5,8 +5,10 @@ import type { Tenant } from "@/types/tenant";
 interface TenantState {
   currentTenant: Tenant | null;
   tenants: Tenant[];
+  loading: boolean;
   setCurrentTenant: (tenant: Tenant | null) => void;
   setTenants: (tenants: Tenant[]) => void;
+  setLoading: (loading: boolean) => void;
   reset: () => void;
 }
 
@@ -15,10 +17,15 @@ export const useTenantStore = create<TenantState>()(
     (set) => ({
       currentTenant: null,
       tenants: [],
+      loading: false,
       setCurrentTenant: (currentTenant) => set({ currentTenant }),
       setTenants: (tenants) => set({ tenants }),
-      reset: () => set({ currentTenant: null, tenants: [] }),
+      setLoading: (loading) => set({ loading }),
+      reset: () => set({ currentTenant: null, tenants: [], loading: false }),
     }),
-    { name: "loop.tenant" },
+    {
+      name: "zelar.tenant",
+      partialize: (state) => ({ currentTenant: state.currentTenant }),
+    },
   ),
 );

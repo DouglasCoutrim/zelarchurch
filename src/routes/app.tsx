@@ -19,10 +19,19 @@ function AppLayout() {
   const session = useAuthStore((s) => s.session);
   const loading = useAuthStore((s) => s.loading);
   const currentTenant = useTenantStore((s) => s.currentTenant);
+  const tenantLoading = useTenantStore((s) => s.loading);
+  const tenants = useTenantStore((s) => s.tenants);
 
   useEffect(() => {
-    if (!loading && !session) navigate({ to: "/auth" });
-  }, [loading, session, navigate]);
+    if (loading) return;
+    if (!session) {
+      navigate({ to: "/auth", replace: true });
+      return;
+    }
+    if (!tenantLoading && !currentTenant) {
+      navigate({ to: "/select-tenant", replace: true });
+    }
+  }, [loading, session, tenantLoading, currentTenant, tenants, navigate]);
 
   async function handleSignOut() {
     await supabase.auth.signOut();
@@ -31,7 +40,7 @@ function AppLayout() {
     navigate({ to: "/auth", replace: true });
   }
 
-  if (loading) {
+  if (loading || tenantLoading || !currentTenant) {
     return (
       <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
         Carregando...
