@@ -68,11 +68,8 @@ function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Link to="/" className="flex items-center gap-2 font-semibold">
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-primary text-primary-foreground">
-            {APP_NAME.slice(0, 1)}
-          </span>
-          {APP_NAME}
+        <Link to="/" className="flex items-center gap-2" aria-label={APP_NAME}>
+          <img src={logoAsset.url} alt={APP_NAME} className="h-8 w-auto" />
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
           <a href="#funcionalidades" className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground">
