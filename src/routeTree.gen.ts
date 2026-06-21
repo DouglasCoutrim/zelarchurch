@@ -18,10 +18,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppMembersRouteImport } from './routes/app.members'
+import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
 import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
+import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
 import { Route as AppMembersNewRouteImport } from './routes/app.members.new'
 import { Route as AppMembersIdRouteImport } from './routes/app.members.$id'
+import { Route as AppFinanceiroContasRouteImport } from './routes/app.financeiro.contas'
 import { Route as AppMembersIdEditRouteImport } from './routes/app.members.$id.edit'
 
 const SelectTenantRoute = SelectTenantRouteImport.update({
@@ -69,15 +72,40 @@ const AppMembersRoute = AppMembersRouteImport.update({
   path: '/members',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDepartmentsRoute = AppDepartmentsRouteImport.update({
   id: '/departments',
   path: '/departments',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceiroIndexRoute = AppFinanceiroIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppFinanceiroRoute,
+} as any)
+const AppFinanceiroContasRoute = AppFinanceiroContasRouteImport.update({
+  id: '/contas',
+  path: '/contas',
+  getParentRoute: () => AppFinanceiroRoute,
+} as any)
 const AppMembersIndexRoute = AppMembersIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppMembersRoute,
+} as any)
+const AppFinanceiroIndexRoute = AppFinanceiroIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppFinanceiroRoute,
 } as any)
 const AppMembersNewRoute = AppMembersNewRouteImport.update({
   id: '/new',
@@ -88,6 +116,11 @@ const AppMembersIdRoute = AppMembersIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => AppMembersRoute,
+} as any)
+const AppFinanceiroContasRoute = AppFinanceiroContasRouteImport.update({
+  id: '/contas',
+  path: '/contas',
+  getParentRoute: () => AppFinanceiroRoute,
 } as any)
 const AppMembersIdEditRoute = AppMembersIdEditRouteImport.update({
   id: '/edit',
@@ -103,11 +136,14 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
+  '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
+  '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
@@ -120,8 +156,10 @@ export interface FileRoutesByTo {
   '/app/departments': typeof AppDepartmentsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
+  '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/financeiro': typeof AppFinanceiroIndexRoute
   '/app/members': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
@@ -134,11 +172,14 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
+  '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
+  '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
@@ -152,11 +193,14 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/app/departments'
+    | '/app/financeiro'
     | '/app/members'
     | '/app/settings'
     | '/app/'
+    | '/app/financeiro/contas'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/financeiro/'
     | '/app/members/'
     | '/app/members/$id/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -169,8 +213,10 @@ export interface FileRouteTypes {
     | '/app/departments'
     | '/app/settings'
     | '/app'
+    | '/app/financeiro/contas'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/financeiro'
     | '/app/members'
     | '/app/members/$id/edit'
   id:
@@ -182,11 +228,14 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/app/departments'
+    | '/app/financeiro'
     | '/app/members'
     | '/app/settings'
     | '/app/'
+    | '/app/financeiro/contas'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/financeiro/'
     | '/app/members/'
     | '/app/members/$id/edit'
   fileRoutesById: FileRoutesById
@@ -265,6 +314,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMembersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/financeiro': {
+      id: '/app/financeiro'
+      path: '/financeiro'
+      fullPath: '/app/financeiro'
+      preLoaderRoute: typeof AppFinanceiroRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/departments': {
       id: '/app/departments'
       path: '/departments'
@@ -278,6 +334,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/members/'
       preLoaderRoute: typeof AppMembersIndexRouteImport
       parentRoute: typeof AppMembersRoute
+    }
+    '/app/financeiro/': {
+      id: '/app/financeiro/'
+      path: '/'
+      fullPath: '/app/financeiro/'
+      preLoaderRoute: typeof AppFinanceiroIndexRouteImport
+      parentRoute: typeof AppFinanceiroRoute
     }
     '/app/members/new': {
       id: '/app/members/new'
@@ -293,6 +356,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMembersIdRouteImport
       parentRoute: typeof AppMembersRoute
     }
+    '/app/financeiro/contas': {
+      id: '/app/financeiro/contas'
+      path: '/contas'
+      fullPath: '/app/financeiro/contas'
+      preLoaderRoute: typeof AppFinanceiroContasRouteImport
+      parentRoute: typeof AppFinanceiroRoute
+    }
     '/app/members/$id/edit': {
       id: '/app/members/$id/edit'
       path: '/edit'
@@ -302,6 +372,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AppFinanceiroRouteChildren {
+  AppFinanceiroContasRoute: typeof AppFinanceiroContasRoute
+  AppFinanceiroIndexRoute: typeof AppFinanceiroIndexRoute
+}
+
+const AppFinanceiroRouteChildren: AppFinanceiroRouteChildren = {
+  AppFinanceiroContasRoute: AppFinanceiroContasRoute,
+  AppFinanceiroIndexRoute: AppFinanceiroIndexRoute,
+}
+
+const AppFinanceiroRouteWithChildren = AppFinanceiroRoute._addFileChildren(
+  AppFinanceiroRouteChildren,
+)
 
 interface AppMembersIdRouteChildren {
   AppMembersIdEditRoute: typeof AppMembersIdEditRoute
@@ -333,6 +417,7 @@ const AppMembersRouteWithChildren = AppMembersRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppDepartmentsRoute: typeof AppDepartmentsRoute
+  AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppMembersRoute: typeof AppMembersRouteWithChildren
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -340,6 +425,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppDepartmentsRoute: AppDepartmentsRoute,
+  AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppMembersRoute: AppMembersRouteWithChildren,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
