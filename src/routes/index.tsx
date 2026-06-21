@@ -362,7 +362,10 @@ function SiteFooter() {
   return (
     <footer className="border-t">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-muted-foreground sm:flex-row">
-        <span>© {new Date().getFullYear()} {APP_NAME}. Todos os direitos reservados.</span>
+        <div className="flex items-center gap-2">
+          <img src={faviconAsset.url} alt={APP_NAME} className="h-6 w-6 rounded" />
+          <span>© {new Date().getFullYear()} {APP_NAME}. Todos os direitos reservados.</span>
+        </div>
         <div className="flex gap-4">
           <Link to="/pricing">Planos</Link>
           <Link to="/auth">Entrar</Link>
