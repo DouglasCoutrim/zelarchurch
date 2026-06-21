@@ -84,7 +84,9 @@ function TransactionsPage() {
       qc.invalidateQueries({ queryKey: ["transactions"] });
       qc.invalidateQueries({ queryKey: ["finance-summary"] });
       setDeleting(null);
+      toast.success("Lançamento excluído");
     },
+    onError: (e: Error) => toast.error(e.message || "Erro ao excluir lançamento"),
   });
 
   const totalPages = Math.max(1, Math.ceil((list.data?.total ?? 0) / pageSize));
