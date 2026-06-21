@@ -19,7 +19,16 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute("/register")({
-  head: () => ({ meta: [{ title: `Cadastrar igreja — ${APP_NAME}` }] }),
+  head: () => ({
+    meta: [
+      { title: `Cadastrar igreja — ${APP_NAME}` },
+      {
+        name: "description",
+        content: "Crie a conta da sua igreja no Zelar e comece grátis por 14 dias.",
+      },
+      { name: "robots", content: "noindex,follow" },
+    ],
+  }),
   validateSearch: (s) => searchSchema.parse(s),
   component: RegisterPage,
 });
