@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "../components/AuthProvider";
 import { Toaster } from "../components/ui/sonner";
+import faviconAsset from "../assets/favicon-zelar.svg.asset.json";
+import logoAsset from "../assets/logo-zelar.svg.asset.json";
 
 function NotFoundComponent() {
   return (
