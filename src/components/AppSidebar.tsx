@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/sidebar";
 import { APP_NAME } from "@/config/constants";
 import { cn } from "@/lib/utils";
+import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
 
 type Item = {
   title: string;
