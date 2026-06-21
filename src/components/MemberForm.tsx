@@ -223,7 +223,7 @@ function SelectField({
   return (
     <div className="space-y-1.5">
       <Label>{label}</Label>
-      <Select value={value || undefined} onValueChange={onChange}>
+      <Select value={value || undefined} onValueChange={(v) => onChange(v === "__none" ? "" : v)}>
         <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
         <SelectContent>
           {clearable && <SelectItem value="__none">— Nenhum —</SelectItem>}
