@@ -1,8 +1,9 @@
 import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { LogOut } from "lucide-react";
+import { LogOut, Search } from "lucide-react";
 
 import { AppSidebar } from "@/components/AppSidebar";
+import { CommandPalette } from "@/components/CommandPalette";
 import { TenantSwitcher } from "@/components/TenantSwitcher";
 import { Button } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -52,6 +53,7 @@ function AppLayout() {
 
   return (
     <SidebarProvider>
+      <CommandPalette />
       <div className="flex min-h-screen w-full">
         <AppSidebar />
         <SidebarInset className="flex flex-1 flex-col">
@@ -60,6 +62,21 @@ function AppLayout() {
             <Separator orientation="vertical" className="h-6" />
             <TenantSwitcher />
             <div className="ml-auto flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  window.dispatchEvent(
+                    new KeyboardEvent("keydown", { key: "k", metaKey: true }),
+                  );
+                }}
+                className="hidden items-center gap-2 rounded-md border bg-muted/40 px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted md:inline-flex"
+              >
+                <Search className="h-3.5 w-3.5" />
+                Buscar…
+                <kbd className="ml-2 rounded bg-background px-1.5 py-0.5 font-mono text-[10px]">
+                  ⌘K
+                </kbd>
+              </button>
               <span className="hidden text-xs text-muted-foreground sm:inline">
                 {session.user.email}
               </span>
