@@ -16,10 +16,10 @@ import {
 import { APP_NAME } from "@/config/constants";
 
 const items = [
-  { title: "Dashboard", url: "/app", icon: LayoutDashboard, exact: true },
-  { title: "Members", url: "/app/members", icon: Users, exact: false },
-  { title: "Departments", url: "/app/departments", icon: Building2, exact: false },
-  { title: "Settings", url: "/app/settings", icon: Settings, exact: false },
+  { title: "Painel", url: "/app", icon: LayoutDashboard, exact: true },
+  { title: "Membros", url: "/app/members", icon: Users, exact: false },
+  { title: "Departamentos", url: "/app/departments", icon: Building2, exact: false },
+  { title: "Configurações", url: "/app/settings", icon: Settings, exact: false },
 ];
 
 export function AppSidebar() {
@@ -42,7 +42,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel>Área de trabalho</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/app/members/$id")({
-  head: () => ({ meta: [{ title: "Member profile" }] }),
+  head: () => ({ meta: [{ title: "Perfil do membro" }] }),
   component: MemberProfile,
 });
 
@@ -12,11 +12,11 @@ function MemberProfile() {
   return (
     <div className="space-y-6">
       <Button asChild variant="ghost" size="sm">
-        <Link to="/app/members">← Back to members</Link>
+        <Link to="/app/members">← Voltar para membros</Link>
       </Button>
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Member #{id}</h1>
-        <p className="text-sm text-muted-foreground">Profile details coming soon.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">Membro #{id}</h1>
+        <p className="text-sm text-muted-foreground">Detalhes do perfil em breve.</p>
       </div>
     </div>
   );
