@@ -34,6 +34,7 @@ import { Route as AppComprasRouteImport } from './routes/app.compras'
 import { Route as AppCheckinRouteImport } from './routes/app.checkin'
 import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
 import { Route as AppAtasRouteImport } from './routes/app.atas'
+import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
@@ -173,6 +174,11 @@ const AppAtasRoute = AppAtasRouteImport.update({
   path: '/atas',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminTenantsRoute = AdminTenantsRouteImport.update({
+  id: '/tenants',
+  path: '/tenants',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -248,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/tenants': typeof AdminTenantsRoute
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
@@ -286,6 +293,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/tenants': typeof AdminTenantsRoute
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/compras': typeof AppComprasRoute
@@ -323,6 +331,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/tenants': typeof AdminTenantsRoute
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
@@ -365,6 +374,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/admin/dashboard'
+    | '/admin/tenants'
     | '/app/atas'
     | '/app/auditoria'
     | '/app/checkin'
@@ -403,6 +413,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/admin/dashboard'
+    | '/admin/tenants'
     | '/app/atas'
     | '/app/auditoria'
     | '/app/compras'
@@ -439,6 +450,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/admin/dashboard'
+    | '/admin/tenants'
     | '/app/atas'
     | '/app/auditoria'
     | '/app/checkin'
@@ -658,6 +670,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAtasRouteImport
       parentRoute: typeof AppRoute
     }
+    '/admin/tenants': {
+      id: '/admin/tenants'
+      path: '/tenants'
+      fullPath: '/admin/tenants'
+      preLoaderRoute: typeof AdminTenantsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/dashboard'
@@ -754,11 +773,13 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminTenantsRoute: typeof AdminTenantsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminTenantsRoute: AdminTenantsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
