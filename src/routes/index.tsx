@@ -25,6 +25,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { APP_NAME } from "@/config/constants";
+import logoAsset from "@/assets/logo-zelar.svg.asset.json";
+import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
