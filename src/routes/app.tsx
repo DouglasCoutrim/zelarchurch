@@ -34,7 +34,7 @@ function AppLayout() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
-        Loading...
+        Carregando...
       </div>
     );
   }
@@ -50,15 +50,15 @@ function AppLayout() {
             <Separator orientation="vertical" className="h-6" />
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <span className="truncate text-sm font-medium">
-                {currentTenant?.name ?? "No workspace"}
+                {currentTenant?.name ?? "Sem área de trabalho"}
               </span>
             </div>
             <Link to="/app/members" className="text-sm text-muted-foreground hover:text-foreground">
-              Members
+              Membros
             </Link>
             <Button variant="ghost" size="sm" onClick={handleSignOut}>
               <LogOut className="h-4 w-4" />
-              Sign out
+              Sair
             </Button>
           </header>
           <main className="flex-1 p-6">

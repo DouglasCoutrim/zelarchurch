@@ -11,8 +11,8 @@ import { useAuthStore } from "@/stores/authStore";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in" },
-      { name: "description", content: "Sign in to your workspace." },
+      { title: "Entrar" },
+      { name: "description", content: "Acesse sua área de trabalho." },
     ],
   }),
   component: AuthPage,
@@ -48,7 +48,7 @@ function AuthPage() {
       if (error) throw error;
       navigate({ to: "/app" });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Authentication failed");
+      setError(err instanceof Error ? err.message : "Falha na autenticação");
     } finally {
       setLoading(false);
     }
@@ -58,17 +58,17 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{mode === "signin" ? "Sign in" : "Create account"}</CardTitle>
+          <CardTitle>{mode === "signin" ? "Entrar" : "Criar conta"}</CardTitle>
           <CardDescription>
             {mode === "signin"
-              ? "Welcome back. Enter your credentials."
-              : "Get started with your workspace."}
+              ? "Bem-vindo de volta. Informe suas credenciais."
+              : "Comece a usar sua área de trabalho."}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">E-mail</Label>
               <Input
                 id="email"
                 type="email"
@@ -79,7 +79,7 @@ function AuthPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Senha</Label>
               <Input
                 id="password"
                 type="password"
@@ -92,7 +92,7 @@ function AuthPage() {
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Please wait..." : mode === "signin" ? "Sign in" : "Sign up"}
+              {loading ? "Aguarde..." : mode === "signin" ? "Entrar" : "Cadastrar"}
             </Button>
             <Button
               type="button"
@@ -101,8 +101,8 @@ function AuthPage() {
               onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
             >
               {mode === "signin"
-                ? "Don't have an account? Sign up"
-                : "Already have an account? Sign in"}
+                ? "Não tem uma conta? Cadastre-se"
+                : "Já tem uma conta? Entrar"}
             </Button>
           </form>
         </CardContent>
