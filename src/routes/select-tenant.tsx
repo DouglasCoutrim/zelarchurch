@@ -10,7 +10,12 @@ import { useTenantStore } from "@/stores/tenantStore";
 import type { Tenant } from "@/types/tenant";
 
 export const Route = createFileRoute("/select-tenant")({
-  head: () => ({ meta: [{ title: "Selecionar área de trabalho" }] }),
+  head: () => ({
+    meta: [
+      { title: "Selecionar área de trabalho" },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
   component: SelectTenantPage,
 });
 
