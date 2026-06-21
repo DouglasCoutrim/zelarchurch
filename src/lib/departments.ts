@@ -60,9 +60,11 @@ export async function getDepartmentMembers(departmentId: string) {
     .select("member:members(id, full_name, status, photo_url)")
     .eq("department_id", departmentId);
   if (error) throw error;
-  return (data ?? [])
-    .flatMap((r: { member: { id: string; full_name: string; status: string; photo_url: string | null } | null }) =>
-      r.member ? [r.member] : []);
+  type LinkedMember = { id: string; full_name: string; status: string; photo_url: string | null };
+  const rows = (data ?? []) as Array<{ member: LinkedMember | LinkedMember[] | null }>;
+  return rows.flatMap((r) =>
+    Array.isArray(r.member) ? r.member : r.member ? [r.member] : [],
+  );
 }
 
 export async function addMemberToDepartment(
