@@ -291,6 +291,7 @@ export interface TransactionInput {
   transaction_date: string;
   due_date?: string | null;
   paid_at?: string | null;
+  receipt_url?: string | null;
 }
 
 export async function createTransaction(

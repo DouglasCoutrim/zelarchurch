@@ -28,6 +28,7 @@ import {
 import {
   listTransactions, createTransaction, updateTransaction, softDeleteTransaction,
   listAccounts, listCostCenters, getFinanceSummary,
+  uploadReceipt, getReceiptUrl, removeReceipt,
   TRANSACTION_STATUS_OPTIONS,
   type TransactionInput, type TransactionRow, type TransactionStatus, type TransactionType,
 } from "@/lib/finance";
@@ -334,6 +335,9 @@ function TransactionDialog({
     [accountsQ.data, form.type],
   );
 
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [removingReceipt, setRemovingReceipt] = useState(false);
+
   const saveMut = useMutation({
     mutationFn: async () => {
       const payload: TransactionInput = {
@@ -345,8 +349,18 @@ function TransactionDialog({
         cost_center_id: form.cost_center_id || null,
         due_date: form.due_date || null,
       };
-      if (initial) return updateTransaction(initial.id, payload);
-      return createTransaction(tenant!.id, payload);
+      if (removingReceipt) payload.receipt_url = null;
+      const saved = initial
+        ? await updateTransaction(initial.id, payload)
+        : await createTransaction(tenant!.id, payload);
+      if (receiptFile) {
+        if (initial?.receipt_url) await removeReceipt(initial.receipt_url).catch(() => {});
+        const path = await uploadReceipt(tenant!.id, saved.id, receiptFile);
+        await updateTransaction(saved.id, { receipt_url: path });
+      } else if (removingReceipt && initial?.receipt_url) {
+        await removeReceipt(initial.receipt_url).catch(() => {});
+      }
+      return saved;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["transactions"] });
@@ -354,6 +368,12 @@ function TransactionDialog({
       onClose();
     },
   });
+
+  async function openReceipt() {
+    if (!initial?.receipt_url) return;
+    const url = await getReceiptUrl(initial.receipt_url);
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+  }
 
   function set<K extends keyof TransactionInput>(k: K, v: TransactionInput[K]) {
     setForm((f) => ({ ...f, [k]: v }));
