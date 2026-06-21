@@ -29,6 +29,7 @@ import { Route as AppConvocacoesRouteImport } from './routes/app.convocacoes'
 import { Route as AppConselhoFiscalRouteImport } from './routes/app.conselho-fiscal'
 import { Route as AppComprasRouteImport } from './routes/app.compras'
 import { Route as AppCheckinRouteImport } from './routes/app.checkin'
+import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
 import { Route as AppAtasRouteImport } from './routes/app.atas'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
@@ -143,6 +144,11 @@ const AppCheckinRoute = AppCheckinRouteImport.update({
   path: '/checkin',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAuditoriaRoute = AppAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAtasRoute = AppAtasRouteImport.update({
   id: '/atas',
   path: '/atas',
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/app/atas': typeof AppAtasRoute
+  '/app/auditoria': typeof AppAuditoriaRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/compras': typeof AppComprasRoute
   '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
@@ -251,6 +258,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/app/atas': typeof AppAtasRoute
+  '/app/auditoria': typeof AppAuditoriaRoute
   '/app/compras': typeof AppComprasRoute
   '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
   '/app/convocacoes': typeof AppConvocacoesRoute
@@ -283,6 +291,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/app/atas': typeof AppAtasRoute
+  '/app/auditoria': typeof AppAuditoriaRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/compras': typeof AppComprasRoute
   '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
@@ -320,6 +329,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/app/atas'
+    | '/app/auditoria'
     | '/app/checkin'
     | '/app/compras'
     | '/app/conselho-fiscal'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/app/atas'
+    | '/app/auditoria'
     | '/app/compras'
     | '/app/conselho-fiscal'
     | '/app/convocacoes'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/app/atas'
+    | '/app/auditoria'
     | '/app/checkin'
     | '/app/compras'
     | '/app/conselho-fiscal'
@@ -564,6 +576,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCheckinRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/auditoria': {
+      id: '/app/auditoria'
+      path: '/auditoria'
+      fullPath: '/app/auditoria'
+      preLoaderRoute: typeof AppAuditoriaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/atas': {
       id: '/app/atas'
       path: '/atas'
@@ -733,6 +752,7 @@ const AppMembersRouteWithChildren = AppMembersRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppAtasRoute: typeof AppAtasRoute
+  AppAuditoriaRoute: typeof AppAuditoriaRoute
   AppCheckinRoute: typeof AppCheckinRouteWithChildren
   AppComprasRoute: typeof AppComprasRoute
   AppConselhoFiscalRoute: typeof AppConselhoFiscalRoute
@@ -751,6 +771,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAtasRoute: AppAtasRoute,
+  AppAuditoriaRoute: AppAuditoriaRoute,
   AppCheckinRoute: AppCheckinRouteWithChildren,
   AppComprasRoute: AppComprasRoute,
   AppConselhoFiscalRoute: AppConselhoFiscalRoute,
