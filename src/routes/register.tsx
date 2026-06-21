@@ -110,93 +110,107 @@ function RegisterPage() {
   const selectedPlan = plans?.find((p) => p.slug === form.plan_slug);
 
   return (
-    <div className="min-h-screen bg-muted/30 px-4 py-10">
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-6 flex items-center justify-between">
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+    <div className="relative min-h-screen gradient-mesh px-4 py-10">
+      <div className="pointer-events-none absolute -top-32 left-10 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-brand-gold/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-2xl">
+        <div className="mb-6 flex items-center justify-between text-sm">
+          <Link to="/" className="text-muted-foreground transition-colors hover:text-primary">
             ← Voltar
           </Link>
-          <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground">
+          <Link to="/pricing" className="text-muted-foreground transition-colors hover:text-primary">
             Ver planos
           </Link>
         </div>
-        <Card>
-          <CardHeader>
-            <CardTitle>Cadastrar sua igreja no {APP_NAME}</CardTitle>
-            <CardDescription>
-              14 dias de teste grátis. Você poderá trocar de plano a qualquer momento.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <section className="space-y-3">
-                <h3 className="text-sm font-semibold uppercase text-muted-foreground">Sua conta</h3>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <Field label="Seu nome" id="pastor_name" required
-                    value={form.pastor_name} onChange={(v) => update("pastor_name", v)} />
-                  <Field label="E-mail" id="email" type="email" required autoComplete="email"
-                    value={form.email} onChange={(v) => update("email", v)} />
-                </div>
-                <Field label="Senha" id="password" type="password" required minLength={6}
-                  autoComplete="new-password" value={form.password}
-                  onChange={(v) => update("password", v)} />
-              </section>
 
-              <section className="space-y-3">
-                <h3 className="text-sm font-semibold uppercase text-muted-foreground">Sua igreja</h3>
-                <Field label="Nome da igreja" id="church_name" required
-                  value={form.church_name} onChange={(v) => update("church_name", v)} />
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <Field label="CNPJ (opcional)" id="cnpj"
-                    value={form.cnpj} onChange={(v) => update("cnpj", v)} />
-                  <Field label="Telefone (opcional)" id="phone"
-                    value={form.phone} onChange={(v) => update("phone", v)} />
-                </div>
-                <div className="grid gap-3 sm:grid-cols-[1fr_120px]">
-                  <Field label="Cidade" id="city"
-                    value={form.city} onChange={(v) => update("city", v)} />
-                  <Field label="UF" id="state" maxLength={2}
-                    value={form.state} onChange={(v) => update("state", v.toUpperCase())} />
-                </div>
-              </section>
+        <div className="rounded-2xl glass-strong p-8 shadow-elevated page-enter">
+          <div className="mb-6 space-y-1">
+            <span className="inline-block rounded-full bg-brand-gold/15 px-3 py-1 text-xs font-medium text-brand-gold">
+              14 dias grátis
+            </span>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Cadastrar sua igreja no <span className="text-gradient-navy">{APP_NAME}</span>
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Você poderá trocar de plano a qualquer momento.
+            </p>
+          </div>
 
-              <section className="space-y-2">
-                <h3 className="text-sm font-semibold uppercase text-muted-foreground">Plano</h3>
-                <Select value={form.plan_slug} onValueChange={(v) => update("plan_slug", v)}>
-                  <SelectTrigger><SelectValue placeholder="Selecione um plano" /></SelectTrigger>
-                  <SelectContent>
-                    {plans?.map((p) => (
-                      <SelectItem key={p.slug} value={p.slug}>
-                        {p.name}{p.price_monthly > 0 ? ` — ${formatBRL(p.price_monthly)}/mês` : ""}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {selectedPlan && (
-                  <p className="text-xs text-muted-foreground">
-                    Até {selectedPlan.max_members.toLocaleString("pt-BR")} membros e{" "}
-                    {selectedPlan.max_departments} departamentos.
-                  </p>
-                )}
-              </section>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <section className="space-y-3">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Sua conta
+              </h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field label="Seu nome" id="pastor_name" required
+                  value={form.pastor_name} onChange={(v) => update("pastor_name", v)} />
+                <Field label="E-mail" id="email" type="email" required autoComplete="email"
+                  value={form.email} onChange={(v) => update("email", v)} />
+              </div>
+              <Field label="Senha" id="password" type="password" required minLength={6}
+                autoComplete="new-password" value={form.password}
+                onChange={(v) => update("password", v)} />
+            </section>
 
-              {error && (
-                <Alert variant="destructive">
-                  <AlertTitle>Não foi possível concluir o cadastro</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
+            <section className="space-y-3">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Sua igreja
+              </h3>
+              <Field label="Nome da igreja" id="church_name" required
+                value={form.church_name} onChange={(v) => update("church_name", v)} />
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field label="CNPJ (opcional)" id="cnpj"
+                  value={form.cnpj} onChange={(v) => update("cnpj", v)} />
+                <Field label="Telefone (opcional)" id="phone"
+                  value={form.phone} onChange={(v) => update("phone", v)} />
+              </div>
+              <div className="grid gap-3 sm:grid-cols-[1fr_120px]">
+                <Field label="Cidade" id="city"
+                  value={form.city} onChange={(v) => update("city", v)} />
+                <Field label="UF" id="state" maxLength={2}
+                  value={form.state} onChange={(v) => update("state", v.toUpperCase())} />
+              </div>
+            </section>
+
+            <section className="space-y-2">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Plano
+              </h3>
+              <Select value={form.plan_slug} onValueChange={(v) => update("plan_slug", v)}>
+                <SelectTrigger><SelectValue placeholder="Selecione um plano" /></SelectTrigger>
+                <SelectContent>
+                  {plans?.map((p) => (
+                    <SelectItem key={p.slug} value={p.slug}>
+                      {p.name}{p.price_monthly > 0 ? ` — ${formatBRL(p.price_monthly)}/mês` : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {selectedPlan && (
+                <p className="text-xs text-muted-foreground">
+                  Até {selectedPlan.max_members.toLocaleString("pt-BR")} membros e{" "}
+                  {selectedPlan.max_departments} departamentos.
+                </p>
               )}
+            </section>
 
-              <Button type="submit" className="w-full" disabled={submitting}>
-                {submitting ? "Criando sua igreja..." : "Criar igreja e iniciar teste grátis"}
-              </Button>
-              <p className="text-center text-xs text-muted-foreground">
-                Já tem conta?{" "}
-                <Link to="/auth" className="underline">Entrar</Link>
-              </p>
-            </form>
-          </CardContent>
-        </Card>
+            {error && (
+              <Alert variant="destructive">
+                <AlertTitle>Não foi possível concluir o cadastro</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <Button type="submit" variant="gold" size="lg" className="w-full" disabled={submitting}>
+              {submitting ? "Criando sua igreja..." : "Criar igreja e iniciar teste grátis"}
+            </Button>
+            <p className="text-center text-xs text-muted-foreground">
+              Já tem conta?{" "}
+              <Link to="/auth" className="font-medium text-primary underline-offset-2 hover:underline">Entrar</Link>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
