@@ -21,13 +21,16 @@ import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
 import { Route as AppEscalasRouteImport } from './routes/app.escalas'
 import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
+import { Route as AppCheckinRouteImport } from './routes/app.checkin'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
+import { Route as AppCheckinIndexRouteImport } from './routes/app.checkin.index'
 import { Route as AppMembersNewRouteImport } from './routes/app.members.new'
 import { Route as AppMembersIdRouteImport } from './routes/app.members.$id'
 import { Route as AppFinanceiroRelatoriosRouteImport } from './routes/app.financeiro.relatorios'
 import { Route as AppFinanceiroContasRouteImport } from './routes/app.financeiro.contas'
 import { Route as AppFinanceiroCentrosRouteImport } from './routes/app.financeiro.centros'
+import { Route as AppCheckinScheduleIdRouteImport } from './routes/app.checkin.$scheduleId'
 import { Route as AppMembersIdEditRouteImport } from './routes/app.members.$id.edit'
 
 const SelectTenantRoute = SelectTenantRouteImport.update({
@@ -90,6 +93,11 @@ const AppDepartmentsRoute = AppDepartmentsRouteImport.update({
   path: '/departments',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCheckinRoute = AppCheckinRouteImport.update({
+  id: '/checkin',
+  path: '/checkin',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMembersIndexRoute = AppMembersIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -99,6 +107,11 @@ const AppFinanceiroIndexRoute = AppFinanceiroIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppFinanceiroRoute,
+} as any)
+const AppCheckinIndexRoute = AppCheckinIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppCheckinRoute,
 } as any)
 const AppMembersNewRoute = AppMembersNewRouteImport.update({
   id: '/new',
@@ -125,6 +138,11 @@ const AppFinanceiroCentrosRoute = AppFinanceiroCentrosRouteImport.update({
   path: '/centros',
   getParentRoute: () => AppFinanceiroRoute,
 } as any)
+const AppCheckinScheduleIdRoute = AppCheckinScheduleIdRouteImport.update({
+  id: '/$scheduleId',
+  path: '/$scheduleId',
+  getParentRoute: () => AppCheckinRoute,
+} as any)
 const AppMembersIdEditRoute = AppMembersIdEditRouteImport.update({
   id: '/edit',
   path: '/edit',
@@ -138,17 +156,20 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
+  '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/departments': typeof AppDepartmentsRoute
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
+  '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
   '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/checkin/': typeof AppCheckinIndexRoute
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
@@ -163,11 +184,13 @@ export interface FileRoutesByTo {
   '/app/escalas': typeof AppEscalasRoute
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
+  '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
   '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/checkin': typeof AppCheckinIndexRoute
   '/app/financeiro': typeof AppFinanceiroIndexRoute
   '/app/members': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
@@ -180,17 +203,20 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
+  '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/departments': typeof AppDepartmentsRoute
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
+  '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
   '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/checkin/': typeof AppCheckinIndexRoute
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
@@ -204,17 +230,20 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/select-tenant'
+    | '/app/checkin'
     | '/app/departments'
     | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
     | '/app/settings'
     | '/app/'
+    | '/app/checkin/$scheduleId'
     | '/app/financeiro/centros'
     | '/app/financeiro/contas'
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/checkin/'
     | '/app/financeiro/'
     | '/app/members/'
     | '/app/members/$id/edit'
@@ -229,11 +258,13 @@ export interface FileRouteTypes {
     | '/app/escalas'
     | '/app/settings'
     | '/app'
+    | '/app/checkin/$scheduleId'
     | '/app/financeiro/centros'
     | '/app/financeiro/contas'
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/checkin'
     | '/app/financeiro'
     | '/app/members'
     | '/app/members/$id/edit'
@@ -245,17 +276,20 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/select-tenant'
+    | '/app/checkin'
     | '/app/departments'
     | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
     | '/app/settings'
     | '/app/'
+    | '/app/checkin/$scheduleId'
     | '/app/financeiro/centros'
     | '/app/financeiro/contas'
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/checkin/'
     | '/app/financeiro/'
     | '/app/members/'
     | '/app/members/$id/edit'
@@ -356,6 +390,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDepartmentsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/checkin': {
+      id: '/app/checkin'
+      path: '/checkin'
+      fullPath: '/app/checkin'
+      preLoaderRoute: typeof AppCheckinRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/members/': {
       id: '/app/members/'
       path: '/'
@@ -369,6 +410,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/financeiro/'
       preLoaderRoute: typeof AppFinanceiroIndexRouteImport
       parentRoute: typeof AppFinanceiroRoute
+    }
+    '/app/checkin/': {
+      id: '/app/checkin/'
+      path: '/'
+      fullPath: '/app/checkin/'
+      preLoaderRoute: typeof AppCheckinIndexRouteImport
+      parentRoute: typeof AppCheckinRoute
     }
     '/app/members/new': {
       id: '/app/members/new'
@@ -405,6 +453,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFinanceiroCentrosRouteImport
       parentRoute: typeof AppFinanceiroRoute
     }
+    '/app/checkin/$scheduleId': {
+      id: '/app/checkin/$scheduleId'
+      path: '/$scheduleId'
+      fullPath: '/app/checkin/$scheduleId'
+      preLoaderRoute: typeof AppCheckinScheduleIdRouteImport
+      parentRoute: typeof AppCheckinRoute
+    }
     '/app/members/$id/edit': {
       id: '/app/members/$id/edit'
       path: '/edit'
@@ -414,6 +469,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AppCheckinRouteChildren {
+  AppCheckinScheduleIdRoute: typeof AppCheckinScheduleIdRoute
+  AppCheckinIndexRoute: typeof AppCheckinIndexRoute
+}
+
+const AppCheckinRouteChildren: AppCheckinRouteChildren = {
+  AppCheckinScheduleIdRoute: AppCheckinScheduleIdRoute,
+  AppCheckinIndexRoute: AppCheckinIndexRoute,
+}
+
+const AppCheckinRouteWithChildren = AppCheckinRoute._addFileChildren(
+  AppCheckinRouteChildren,
+)
 
 interface AppFinanceiroRouteChildren {
   AppFinanceiroCentrosRoute: typeof AppFinanceiroCentrosRoute
@@ -462,6 +531,7 @@ const AppMembersRouteWithChildren = AppMembersRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppCheckinRoute: typeof AppCheckinRouteWithChildren
   AppDepartmentsRoute: typeof AppDepartmentsRoute
   AppEscalasRoute: typeof AppEscalasRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
@@ -471,6 +541,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCheckinRoute: AppCheckinRouteWithChildren,
   AppDepartmentsRoute: AppDepartmentsRoute,
   AppEscalasRoute: AppEscalasRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
