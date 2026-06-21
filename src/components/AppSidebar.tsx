@@ -94,9 +94,11 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b px-4 py-3">
         <div className="flex items-center gap-2">
-          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-primary text-primary-foreground font-bold">
-            {APP_NAME.slice(0, 1)}
-          </div>
+          <img
+            src={faviconAsset.url}
+            alt={APP_NAME}
+            className="h-8 w-8 shrink-0 rounded-md object-contain"
+          />
           {!collapsed && <span className="truncate font-semibold">{APP_NAME}</span>}
         </div>
       </SidebarHeader>
