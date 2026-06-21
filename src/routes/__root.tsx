@@ -108,6 +108,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "twitter:description",
         content: "Toda a gestão da sua igreja em um só lugar. Comece grátis por 14 dias.",
       },
+    ],
     links: [
       {
         rel: "stylesheet",
