@@ -20,9 +20,11 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-          <span className="text-2xl font-bold">Z</span>
-        </div>
+        <img
+          src={logoAsset.url}
+          alt="Zelar"
+          className="mx-auto mb-6 h-14 w-auto"
+        />
         <h1 className="text-7xl font-bold tracking-tight text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Página não encontrada</h2>
         <p className="mt-2 text-sm text-muted-foreground">
