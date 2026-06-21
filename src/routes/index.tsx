@@ -764,7 +764,7 @@ function SiteFooter() {
     <footer className="border-t border-[#1E3A5F]/10 bg-white/60 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-8 text-sm text-[#0f1f3a]/60 sm:flex-row">
         <div className="flex items-center gap-2">
-          <img src={faviconAsset.url} alt={APP_NAME} className="h-6 w-6 rounded" />
+          <img src={faviconAsset.url} alt={APP_NAME} className="h-9 w-9 rounded" />
           <span>© {new Date().getFullYear()} {APP_NAME}. Gestão com Fidelidade.</span>
         </div>
         <div className="flex gap-5">
