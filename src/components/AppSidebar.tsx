@@ -58,7 +58,7 @@ const sections: Section[] = [
       { title: "Atas", url: "/app/atas", icon: FileText },
       { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
       { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },
-      { title: "Relatórios", url: "/app/relatorios", icon: BarChart3, soon: true },
+      { title: "Relatórios", url: "/app/relatorios", icon: BarChart3 },
     ],
   },
   {
