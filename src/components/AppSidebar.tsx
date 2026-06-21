@@ -12,6 +12,9 @@ import {
   BarChart3,
   ShoppingCart,
   GraduationCap,
+  Megaphone,
+  ShieldCheck,
+  Bell,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -59,6 +62,8 @@ const sections: Section[] = [
       { title: "Escalas", url: "/app/escalas", icon: CalendarDays },
       { title: "EBD", url: "/app/ebd", icon: GraduationCap },
       { title: "Atas", url: "/app/atas", icon: FileText },
+      { title: "Convocações", url: "/app/convocacoes", icon: Megaphone },
+      { title: "Conselho Fiscal", url: "/app/conselho-fiscal", icon: ShieldCheck },
       { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
       { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },
       { title: "Compras", url: "/app/compras", icon: ShoppingCart },
@@ -67,7 +72,10 @@ const sections: Section[] = [
   },
   {
     label: "Sistema",
-    items: [{ title: "Configurações", url: "/app/settings", icon: Settings }],
+    items: [
+      { title: "Notificações", url: "/app/notificacoes", icon: Bell },
+      { title: "Configurações", url: "/app/settings", icon: Settings },
+    ],
   },
 ];
 
