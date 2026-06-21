@@ -37,23 +37,26 @@ function PricingPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
+    <div className="min-h-screen gradient-mesh">
+      <header className="sticky top-0 z-30 border-b border-border/60 glass-strong">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <Link to="/" className="font-semibold">{APP_NAME}</Link>
+          <Link to="/" className="font-semibold tracking-tight">{APP_NAME}</Link>
           <nav className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm"><Link to="/auth">Entrar</Link></Button>
-            <Button asChild size="sm"><Link to="/register">Criar conta</Link></Button>
+            <Button asChild variant="gold" size="sm"><Link to="/register">Criar conta</Link></Button>
           </nav>
         </div>
       </header>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="mx-auto max-w-6xl px-4 py-16 page-enter">
         <div className="mx-auto max-w-2xl text-center">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Escolha o plano da sua igreja
+          <span className="inline-block rounded-full bg-brand-gold/15 px-3 py-1 text-xs font-semibold text-brand-gold">
+            Planos transparentes
+          </span>
+          <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
+            Escolha o plano da sua <span className="text-gradient-navy">igreja</span>
           </h1>
-          <p className="mt-3 text-muted-foreground">
+          <p className="mt-4 text-muted-foreground">
             Todos os planos incluem 14 dias de teste grátis. Sem cartão de crédito.
           </p>
         </div>
@@ -71,50 +74,69 @@ function PricingPage() {
                   <CardContent><Skeleton className="h-24 w-full" /></CardContent>
                 </Card>
               ))
-            : plans?.map((p) => {
+            : plans?.map((p, idx) => {
                 const featured = p.slug === "plus";
                 return (
-                  <Card
+                  <div
                     key={p.id}
-                    className={featured ? "border-primary shadow-lg ring-1 ring-primary" : ""}
+                    style={{ animationDelay: `${idx * 80}ms` }}
+                    className={
+                      "page-enter relative flex flex-col rounded-2xl border p-6 backdrop-blur-sm transition-all hover-lift " +
+                      (featured
+                        ? "border-brand-gold/60 bg-card shadow-elevated ring-1 ring-brand-gold/40"
+                        : "border-border/70 bg-card/90")
+                    }
                   >
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle>{p.name}</CardTitle>
-                        {featured && <Badge>Recomendado</Badge>}
-                      </div>
-                      <CardDescription>{p.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        {p.price_monthly > 0 ? (
-                          <>
-                            <span className="text-3xl font-bold">{formatBRL(p.price_monthly)}</span>
-                            <span className="text-sm text-muted-foreground"> /mês</span>
-                          </>
-                        ) : (
-                          <span className="text-2xl font-bold">Sob consulta</span>
-                        )}
-                      </div>
-                      <ul className="space-y-2 text-sm">
-                        <li className="flex items-center gap-2">
-                          <Check className="h-4 w-4 text-primary" />
-                          Até {p.max_members.toLocaleString("pt-BR")} membros
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check className="h-4 w-4 text-primary" />
-                          Até {p.max_departments} departamentos
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check className="h-4 w-4 text-primary" />
-                          14 dias de teste grátis
-                        </li>
-                      </ul>
-                      <Button asChild className="w-full" variant={featured ? "default" : "outline"}>
-                        <Link to="/register" search={{ plan: p.slug }}>Começar com {p.name}</Link>
-                      </Button>
-                    </CardContent>
-                  </Card>
+                    {featured && (
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full gradient-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#1b3a6b] shadow-md">
+                        Mais escolhido
+                      </span>
+                    )}
+                    <div className="mb-2 flex items-center justify-between">
+                      <h3 className="text-lg font-bold">{p.name}</h3>
+                      {featured && <Badge variant="secondary">Recomendado</Badge>}
+                    </div>
+                    <p className="text-sm text-muted-foreground">{p.description}</p>
+                    <div className="my-5">
+                      {p.price_monthly > 0 ? (
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-4xl font-bold tracking-tight text-gradient-navy">
+                            {formatBRL(p.price_monthly)}
+                          </span>
+                          <span className="text-sm text-muted-foreground">/mês</span>
+                        </div>
+                      ) : (
+                        <span className="text-2xl font-bold">Sob consulta</span>
+                      )}
+                    </div>
+                    <ul className="mb-6 space-y-2 text-sm">
+                      <li className="flex items-center gap-2">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-emerald-light text-brand-emerald-dark">
+                          <Check className="h-3 w-3" />
+                        </span>
+                        Até {p.max_members.toLocaleString("pt-BR")} membros
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-emerald-light text-brand-emerald-dark">
+                          <Check className="h-3 w-3" />
+                        </span>
+                        Até {p.max_departments} departamentos
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-emerald-light text-brand-emerald-dark">
+                          <Check className="h-3 w-3" />
+                        </span>
+                        14 dias de teste grátis
+                      </li>
+                    </ul>
+                    <Button
+                      asChild
+                      className="mt-auto w-full"
+                      variant={featured ? "gold" : "outline"}
+                    >
+                      <Link to="/register" search={{ plan: p.slug }}>Começar com {p.name}</Link>
+                    </Button>
+                  </div>
                 );
               })}
         </div>
