@@ -25,6 +25,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { APP_NAME } from "@/config/constants";
+import logoAsset from "@/assets/logo-zelar.svg.asset.json";
+import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -66,11 +68,8 @@ function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Link to="/" className="flex items-center gap-2 font-semibold">
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-primary text-primary-foreground">
-            {APP_NAME.slice(0, 1)}
-          </span>
-          {APP_NAME}
+        <Link to="/" className="flex items-center gap-2" aria-label={APP_NAME}>
+          <img src={logoAsset.url} alt={APP_NAME} className="h-8 w-auto" />
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
           <a href="#funcionalidades" className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground">
@@ -363,7 +362,10 @@ function SiteFooter() {
   return (
     <footer className="border-t">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-muted-foreground sm:flex-row">
-        <span>© {new Date().getFullYear()} {APP_NAME}. Todos os direitos reservados.</span>
+        <div className="flex items-center gap-2">
+          <img src={faviconAsset.url} alt={APP_NAME} className="h-6 w-6 rounded" />
+          <span>© {new Date().getFullYear()} {APP_NAME}. Todos os direitos reservados.</span>
+        </div>
         <div className="flex gap-4">
           <Link to="/pricing">Planos</Link>
           <Link to="/auth">Entrar</Link>
