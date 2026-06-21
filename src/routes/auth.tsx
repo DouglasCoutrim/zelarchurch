@@ -12,8 +12,12 @@ import logoAsset from "@/assets/logo-zelar.svg.asset.json";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Entrar" },
-      { name: "description", content: "Acesse sua área de trabalho." },
+      { title: `Entrar — ${APP_NAME}` },
+      {
+        name: "description",
+        content: "Acesse sua conta Zelar e gerencie sua igreja com facilidade.",
+      },
+      { name: "robots", content: "noindex,follow" },
     ],
   }),
   component: AuthPage,
