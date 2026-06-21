@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppRelatoriosRouteImport } from './routes/app.relatorios'
+import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppPatrimonioRouteImport } from './routes/app.patrimonio'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
 import { Route as AppMembersRouteImport } from './routes/app.members'
@@ -87,6 +88,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppRelatoriosRoute = AppRelatoriosRouteImport.update({
   id: '/relatorios',
   path: '/relatorios',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPatrimonioRoute = AppPatrimonioRouteImport.update({
@@ -235,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
@@ -266,6 +273,7 @@ export interface FileRoutesByTo {
   '/app/escalas': typeof AppEscalasRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
@@ -303,6 +311,7 @@ export interface FileRoutesById {
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
@@ -341,6 +350,7 @@ export interface FileRouteTypes {
     | '/app/members'
     | '/app/notificacoes'
     | '/app/patrimonio'
+    | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
     | '/app/'
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
     | '/app/escalas'
     | '/app/notificacoes'
     | '/app/patrimonio'
+    | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
     | '/app'
@@ -408,6 +419,7 @@ export interface FileRouteTypes {
     | '/app/members'
     | '/app/notificacoes'
     | '/app/patrimonio'
+    | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
     | '/app/'
@@ -497,6 +509,13 @@ declare module '@tanstack/react-router' {
       path: '/relatorios'
       fullPath: '/app/relatorios'
       preLoaderRoute: typeof AppRelatoriosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/profile': {
+      id: '/app/profile'
+      path: '/profile'
+      fullPath: '/app/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/patrimonio': {
@@ -764,6 +783,7 @@ interface AppRouteChildren {
   AppMembersRoute: typeof AppMembersRouteWithChildren
   AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppPatrimonioRoute: typeof AppPatrimonioRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppRelatoriosRoute: typeof AppRelatoriosRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -783,6 +803,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMembersRoute: AppMembersRouteWithChildren,
   AppNotificacoesRoute: AppNotificacoesRoute,
   AppPatrimonioRoute: AppPatrimonioRoute,
+  AppProfileRoute: AppProfileRoute,
   AppRelatoriosRoute: AppRelatoriosRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,

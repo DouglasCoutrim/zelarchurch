@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { LogOut, Search } from "lucide-react";
 
@@ -77,9 +77,12 @@ function AppLayout() {
                   ⌘K
                 </kbd>
               </button>
-              <span className="hidden text-xs text-muted-foreground sm:inline">
+              <Link
+                to="/app/profile"
+                className="hidden text-xs text-muted-foreground hover:underline sm:inline"
+              >
                 {session.user.email}
-              </span>
+              </Link>
               <Button variant="ghost" size="sm" onClick={handleSignOut}>
                 <LogOut className="mr-1 h-4 w-4" />
                 Sair

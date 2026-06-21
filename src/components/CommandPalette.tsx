@@ -19,6 +19,7 @@ import {
   History,
   Plus,
   LogOut,
+  User as UserIcon,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -58,6 +59,7 @@ const NAV: NavItem[] = [
 ];
 
 const ACTIONS: NavItem[] = [
+  { label: "Meu perfil", to: "/app/profile", icon: UserIcon },
   { label: "Novo membro", to: "/app/members/new", icon: Plus },
   { label: "Trocar de igreja", to: "/select-tenant", icon: Building2 },
 ];
