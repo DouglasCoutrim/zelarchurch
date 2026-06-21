@@ -14,6 +14,9 @@ import { useAuthStore } from "@/stores/authStore";
 import { useTenantStore } from "@/stores/tenantStore";
 
 export const Route = createFileRoute("/app")({
+  head: () => ({
+    meta: [{ name: "robots", content: "noindex,nofollow" }],
+  }),
   component: AppLayout,
 });
 
