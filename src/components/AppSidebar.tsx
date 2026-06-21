@@ -11,6 +11,7 @@ import {
   Boxes,
   BarChart3,
   ShoppingCart,
+  GraduationCap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -56,6 +57,7 @@ const sections: Section[] = [
     items: [
       { title: "Financeiro", url: "/app/financeiro", icon: Wallet },
       { title: "Escalas", url: "/app/escalas", icon: CalendarDays },
+      { title: "EBD", url: "/app/ebd", icon: GraduationCap },
       { title: "Atas", url: "/app/atas", icon: FileText },
       { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
       { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },

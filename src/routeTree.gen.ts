@@ -22,18 +22,21 @@ import { Route as AppPatrimonioRouteImport } from './routes/app.patrimonio'
 import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
 import { Route as AppEscalasRouteImport } from './routes/app.escalas'
+import { Route as AppEbdRouteImport } from './routes/app.ebd'
 import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
 import { Route as AppComprasRouteImport } from './routes/app.compras'
 import { Route as AppCheckinRouteImport } from './routes/app.checkin'
 import { Route as AppAtasRouteImport } from './routes/app.atas'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
+import { Route as AppEbdIndexRouteImport } from './routes/app.ebd.index'
 import { Route as AppCheckinIndexRouteImport } from './routes/app.checkin.index'
 import { Route as AppMembersNewRouteImport } from './routes/app.members.new'
 import { Route as AppMembersIdRouteImport } from './routes/app.members.$id'
 import { Route as AppFinanceiroRelatoriosRouteImport } from './routes/app.financeiro.relatorios'
 import { Route as AppFinanceiroContasRouteImport } from './routes/app.financeiro.contas'
 import { Route as AppFinanceiroCentrosRouteImport } from './routes/app.financeiro.centros'
+import { Route as AppEbdClassIdRouteImport } from './routes/app.ebd.$classId'
 import { Route as AppCheckinScheduleIdRouteImport } from './routes/app.checkin.$scheduleId'
 import { Route as AppMembersIdEditRouteImport } from './routes/app.members.$id.edit'
 
@@ -102,6 +105,11 @@ const AppEscalasRoute = AppEscalasRouteImport.update({
   path: '/escalas',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEbdRoute = AppEbdRouteImport.update({
+  id: '/ebd',
+  path: '/ebd',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDepartmentsRoute = AppDepartmentsRouteImport.update({
   id: '/departments',
   path: '/departments',
@@ -131,6 +139,11 @@ const AppFinanceiroIndexRoute = AppFinanceiroIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppFinanceiroRoute,
+} as any)
+const AppEbdIndexRoute = AppEbdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppEbdRoute,
 } as any)
 const AppCheckinIndexRoute = AppCheckinIndexRouteImport.update({
   id: '/',
@@ -162,6 +175,11 @@ const AppFinanceiroCentrosRoute = AppFinanceiroCentrosRouteImport.update({
   path: '/centros',
   getParentRoute: () => AppFinanceiroRoute,
 } as any)
+const AppEbdClassIdRoute = AppEbdClassIdRouteImport.update({
+  id: '/$classId',
+  path: '/$classId',
+  getParentRoute: () => AppEbdRoute,
+} as any)
 const AppCheckinScheduleIdRoute = AppCheckinScheduleIdRouteImport.update({
   id: '/$scheduleId',
   path: '/$scheduleId',
@@ -184,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/compras': typeof AppComprasRoute
   '/app/departments': typeof AppDepartmentsRoute
+  '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
@@ -192,12 +211,14 @@ export interface FileRoutesByFullPath {
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
+  '/app/ebd/$classId': typeof AppEbdClassIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
   '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
   '/app/checkin/': typeof AppCheckinIndexRoute
+  '/app/ebd/': typeof AppEbdIndexRoute
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
@@ -217,12 +238,14 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
+  '/app/ebd/$classId': typeof AppEbdClassIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
   '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
   '/app/checkin': typeof AppCheckinIndexRoute
+  '/app/ebd': typeof AppEbdIndexRoute
   '/app/financeiro': typeof AppFinanceiroIndexRoute
   '/app/members': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
@@ -239,6 +262,7 @@ export interface FileRoutesById {
   '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/compras': typeof AppComprasRoute
   '/app/departments': typeof AppDepartmentsRoute
+  '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
@@ -247,12 +271,14 @@ export interface FileRoutesById {
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
+  '/app/ebd/$classId': typeof AppEbdClassIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
   '/app/financeiro/contas': typeof AppFinanceiroContasRoute
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
   '/app/checkin/': typeof AppCheckinIndexRoute
+  '/app/ebd/': typeof AppEbdIndexRoute
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
@@ -270,6 +296,7 @@ export interface FileRouteTypes {
     | '/app/checkin'
     | '/app/compras'
     | '/app/departments'
+    | '/app/ebd'
     | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
@@ -278,12 +305,14 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/'
     | '/app/checkin/$scheduleId'
+    | '/app/ebd/$classId'
     | '/app/financeiro/centros'
     | '/app/financeiro/contas'
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
     | '/app/checkin/'
+    | '/app/ebd/'
     | '/app/financeiro/'
     | '/app/members/'
     | '/app/members/$id/edit'
@@ -303,12 +332,14 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app'
     | '/app/checkin/$scheduleId'
+    | '/app/ebd/$classId'
     | '/app/financeiro/centros'
     | '/app/financeiro/contas'
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
     | '/app/checkin'
+    | '/app/ebd'
     | '/app/financeiro'
     | '/app/members'
     | '/app/members/$id/edit'
@@ -324,6 +355,7 @@ export interface FileRouteTypes {
     | '/app/checkin'
     | '/app/compras'
     | '/app/departments'
+    | '/app/ebd'
     | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
@@ -332,12 +364,14 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/'
     | '/app/checkin/$scheduleId'
+    | '/app/ebd/$classId'
     | '/app/financeiro/centros'
     | '/app/financeiro/contas'
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
     | '/app/checkin/'
+    | '/app/ebd/'
     | '/app/financeiro/'
     | '/app/members/'
     | '/app/members/$id/edit'
@@ -445,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppEscalasRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/ebd': {
+      id: '/app/ebd'
+      path: '/ebd'
+      fullPath: '/app/ebd'
+      preLoaderRoute: typeof AppEbdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/departments': {
       id: '/app/departments'
       path: '/departments'
@@ -486,6 +527,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/financeiro/'
       preLoaderRoute: typeof AppFinanceiroIndexRouteImport
       parentRoute: typeof AppFinanceiroRoute
+    }
+    '/app/ebd/': {
+      id: '/app/ebd/'
+      path: '/'
+      fullPath: '/app/ebd/'
+      preLoaderRoute: typeof AppEbdIndexRouteImport
+      parentRoute: typeof AppEbdRoute
     }
     '/app/checkin/': {
       id: '/app/checkin/'
@@ -529,6 +577,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFinanceiroCentrosRouteImport
       parentRoute: typeof AppFinanceiroRoute
     }
+    '/app/ebd/$classId': {
+      id: '/app/ebd/$classId'
+      path: '/$classId'
+      fullPath: '/app/ebd/$classId'
+      preLoaderRoute: typeof AppEbdClassIdRouteImport
+      parentRoute: typeof AppEbdRoute
+    }
     '/app/checkin/$scheduleId': {
       id: '/app/checkin/$scheduleId'
       path: '/$scheduleId'
@@ -559,6 +614,19 @@ const AppCheckinRouteChildren: AppCheckinRouteChildren = {
 const AppCheckinRouteWithChildren = AppCheckinRoute._addFileChildren(
   AppCheckinRouteChildren,
 )
+
+interface AppEbdRouteChildren {
+  AppEbdClassIdRoute: typeof AppEbdClassIdRoute
+  AppEbdIndexRoute: typeof AppEbdIndexRoute
+}
+
+const AppEbdRouteChildren: AppEbdRouteChildren = {
+  AppEbdClassIdRoute: AppEbdClassIdRoute,
+  AppEbdIndexRoute: AppEbdIndexRoute,
+}
+
+const AppEbdRouteWithChildren =
+  AppEbdRoute._addFileChildren(AppEbdRouteChildren)
 
 interface AppFinanceiroRouteChildren {
   AppFinanceiroCentrosRoute: typeof AppFinanceiroCentrosRoute
@@ -611,6 +679,7 @@ interface AppRouteChildren {
   AppCheckinRoute: typeof AppCheckinRouteWithChildren
   AppComprasRoute: typeof AppComprasRoute
   AppDepartmentsRoute: typeof AppDepartmentsRoute
+  AppEbdRoute: typeof AppEbdRouteWithChildren
   AppEscalasRoute: typeof AppEscalasRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppMembersRoute: typeof AppMembersRouteWithChildren
@@ -625,6 +694,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCheckinRoute: AppCheckinRouteWithChildren,
   AppComprasRoute: AppComprasRoute,
   AppDepartmentsRoute: AppDepartmentsRoute,
+  AppEbdRoute: AppEbdRouteWithChildren,
   AppEscalasRoute: AppEscalasRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppMembersRoute: AppMembersRouteWithChildren,
