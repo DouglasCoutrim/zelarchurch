@@ -10,6 +10,7 @@ import {
   ClipboardCheck,
   Boxes,
   BarChart3,
+  ShoppingCart,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -58,6 +59,7 @@ const sections: Section[] = [
       { title: "Atas", url: "/app/atas", icon: FileText },
       { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
       { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },
+      { title: "Compras", url: "/app/compras", icon: ShoppingCart },
       { title: "Relatórios", url: "/app/relatorios", icon: BarChart3 },
     ],
   },
