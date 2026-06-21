@@ -10,15 +10,9 @@
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/__l5e/assets-v1/f0b395c8-c334-4a0d-a41a-0b67f422973f/favicon-zelar.svg",
       "type": "image/svg+xml",
       "sizes": "any",
-      "purpose": "any"
-    },
-    {
-      "src": "/apple-touch-icon.svg",
-      "type": "image/svg+xml",
-      "sizes": "180x180",
       "purpose": "any maskable"
     }
   ]
