@@ -26,6 +26,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/config/constants";
+import { InstallAppCTA } from "@/components/InstallAppCTA";
 import logoAsset from "@/assets/logo-zelar.svg.asset.json";
 import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
 
@@ -75,6 +76,7 @@ function Landing() {
       <TrustBar />
       <FeaturesZ />
       <ModulesBento />
+      <InstallAppCTA />
       <Testimonials />
       <Faq />
       <CtaSection />
@@ -197,15 +199,11 @@ function Hero() {
                 <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="h-12 border-[#1E3A5F]/20 bg-white/60 px-7 text-base text-[#1E3A5F] backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-[#1E3A5F]/40 hover:bg-white"
-            >
-              <Link to="/pricing">Ver planos</Link>
-            </Button>
+            <InstallAppCTA compact />
           </div>
+          <p className="mt-3 text-xs text-[#0f1f3a]/60">
+            Pastor/líder? <Link to="/register" className="font-medium text-[#1E3A5F] underline">Cadastre sua igreja</Link>. Membro? Instale o app e entre com o e-mail que sua igreja cadastrou.
+          </p>
           <div className="mt-8 flex items-center gap-6 text-xs text-[#0f1f3a]/60">
             <div className="flex items-center gap-2"><Lock className="h-3.5 w-3.5 text-[#1E3A5F]" /> LGPD</div>
             <div className="flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5 text-[#1E3A5F]" /> Dados criptografados</div>
