@@ -102,7 +102,7 @@ function SiteHeader() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center gap-2" aria-label={APP_NAME}>
-          <img src={logoAsset.url} alt={APP_NAME} className="h-9 w-auto" />
+          <img src={logoAsset.url} alt={APP_NAME} className="h-14 w-auto sm:h-16" />
         </Link>
         <nav className="hidden items-center gap-8 md:flex">
           {[
