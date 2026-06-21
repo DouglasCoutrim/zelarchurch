@@ -48,6 +48,7 @@ import { Route as AppFinanceiroContasRouteImport } from './routes/app.financeiro
 import { Route as AppFinanceiroCentrosRouteImport } from './routes/app.financeiro.centros'
 import { Route as AppEbdClassIdRouteImport } from './routes/app.ebd.$classId'
 import { Route as AppCheckinScheduleIdRouteImport } from './routes/app.checkin.$scheduleId'
+import { Route as AdminTenantsIdRouteImport } from './routes/admin.tenants.$id'
 import { Route as AppMembersIdEditRouteImport } from './routes/app.members.$id.edit'
 
 const SelectTenantRoute = SelectTenantRouteImport.update({
@@ -245,6 +246,11 @@ const AppCheckinScheduleIdRoute = AppCheckinScheduleIdRouteImport.update({
   path: '/$scheduleId',
   getParentRoute: () => AppCheckinRoute,
 } as any)
+const AdminTenantsIdRoute = AdminTenantsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminTenantsRoute,
+} as any)
 const AppMembersIdEditRoute = AppMembersIdEditRouteImport.update({
   id: '/edit',
   path: '/edit',
@@ -279,6 +285,7 @@ export interface FileRoutesByFullPath {
   '/app/settings': typeof AppSettingsRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
+  '/admin/tenants/$id': typeof AdminTenantsIdRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
   '/app/ebd/$classId': typeof AppEbdClassIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
@@ -314,6 +321,7 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AppSettingsRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
+  '/admin/tenants/$id': typeof AdminTenantsIdRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
   '/app/ebd/$classId': typeof AppEbdClassIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
@@ -357,6 +365,7 @@ export interface FileRoutesById {
   '/app/settings': typeof AppSettingsRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
+  '/admin/tenants/$id': typeof AdminTenantsIdRoute
   '/app/checkin/$scheduleId': typeof AppCheckinScheduleIdRoute
   '/app/ebd/$classId': typeof AppEbdClassIdRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
@@ -401,6 +410,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/admin/'
     | '/app/'
+    | '/admin/tenants/$id'
     | '/app/checkin/$scheduleId'
     | '/app/ebd/$classId'
     | '/app/financeiro/centros'
@@ -436,6 +446,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/admin'
     | '/app'
+    | '/admin/tenants/$id'
     | '/app/checkin/$scheduleId'
     | '/app/ebd/$classId'
     | '/app/financeiro/centros'
@@ -478,6 +489,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/admin/'
     | '/app/'
+    | '/admin/tenants/$id'
     | '/app/checkin/$scheduleId'
     | '/app/ebd/$classId'
     | '/app/financeiro/centros'
@@ -778,6 +790,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCheckinScheduleIdRouteImport
       parentRoute: typeof AppCheckinRoute
     }
+    '/admin/tenants/$id': {
+      id: '/admin/tenants/$id'
+      path: '/$id'
+      fullPath: '/admin/tenants/$id'
+      preLoaderRoute: typeof AdminTenantsIdRouteImport
+      parentRoute: typeof AdminTenantsRoute
+    }
     '/app/members/$id/edit': {
       id: '/app/members/$id/edit'
       path: '/edit'
@@ -789,10 +808,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminTenantsRouteChildren {
+  AdminTenantsIdRoute: typeof AdminTenantsIdRoute
   AdminTenantsIndexRoute: typeof AdminTenantsIndexRoute
 }
 
 const AdminTenantsRouteChildren: AdminTenantsRouteChildren = {
+  AdminTenantsIdRoute: AdminTenantsIdRoute,
   AdminTenantsIndexRoute: AdminTenantsIndexRoute,
 }
 
