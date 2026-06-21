@@ -18,6 +18,8 @@ async function loadTenantsForUser(userId: string): Promise<Tenant[]> {
   const rows = (data ?? []) as Array<{ tenant: Tenant | Tenant[] | null }>;
   return rows
     .flatMap((row) => (Array.isArray(row.tenant) ? row.tenant : row.tenant ? [row.tenant] : []));
+}
+
 
 async function hydrateTenants(userId: string) {
   const tenantStore = useTenantStore.getState();
