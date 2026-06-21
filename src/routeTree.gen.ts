@@ -40,6 +40,7 @@ import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
 import { Route as AppEbdIndexRouteImport } from './routes/app.ebd.index'
 import { Route as AppCheckinIndexRouteImport } from './routes/app.checkin.index'
+import { Route as AdminTenantsIndexRouteImport } from './routes/admin.tenants.index'
 import { Route as AppMembersNewRouteImport } from './routes/app.members.new'
 import { Route as AppMembersIdRouteImport } from './routes/app.members.$id'
 import { Route as AppFinanceiroRelatoriosRouteImport } from './routes/app.financeiro.relatorios'
@@ -204,6 +205,11 @@ const AppCheckinIndexRoute = AppCheckinIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppCheckinRoute,
 } as any)
+const AdminTenantsIndexRoute = AdminTenantsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminTenantsRoute,
+} as any)
 const AppMembersNewRoute = AppMembersNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -254,7 +260,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/tenants': typeof AdminTenantsRoute
+  '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
@@ -280,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/admin/tenants/': typeof AdminTenantsIndexRoute
   '/app/checkin/': typeof AppCheckinIndexRoute
   '/app/ebd/': typeof AppEbdIndexRoute
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
@@ -293,7 +300,6 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/tenants': typeof AdminTenantsRoute
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/compras': typeof AppComprasRoute
@@ -315,6 +321,7 @@ export interface FileRoutesByTo {
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/admin/tenants': typeof AdminTenantsIndexRoute
   '/app/checkin': typeof AppCheckinIndexRoute
   '/app/ebd': typeof AppEbdIndexRoute
   '/app/financeiro': typeof AppFinanceiroIndexRoute
@@ -331,7 +338,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/tenants': typeof AdminTenantsRoute
+  '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
@@ -357,6 +364,7 @@ export interface FileRoutesById {
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/admin/tenants/': typeof AdminTenantsIndexRoute
   '/app/checkin/': typeof AppCheckinIndexRoute
   '/app/ebd/': typeof AppEbdIndexRoute
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
@@ -400,6 +408,7 @@ export interface FileRouteTypes {
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/admin/tenants/'
     | '/app/checkin/'
     | '/app/ebd/'
     | '/app/financeiro/'
@@ -413,7 +422,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/admin/dashboard'
-    | '/admin/tenants'
     | '/app/atas'
     | '/app/auditoria'
     | '/app/compras'
@@ -435,6 +443,7 @@ export interface FileRouteTypes {
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/admin/tenants'
     | '/app/checkin'
     | '/app/ebd'
     | '/app/financeiro'
@@ -476,6 +485,7 @@ export interface FileRouteTypes {
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/admin/tenants/'
     | '/app/checkin/'
     | '/app/ebd/'
     | '/app/financeiro/'
@@ -712,6 +722,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCheckinIndexRouteImport
       parentRoute: typeof AppCheckinRoute
     }
+    '/admin/tenants/': {
+      id: '/admin/tenants/'
+      path: '/'
+      fullPath: '/admin/tenants/'
+      preLoaderRoute: typeof AdminTenantsIndexRouteImport
+      parentRoute: typeof AdminTenantsRoute
+    }
     '/app/members/new': {
       id: '/app/members/new'
       path: '/new'
@@ -771,15 +788,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminTenantsRouteChildren {
+  AdminTenantsIndexRoute: typeof AdminTenantsIndexRoute
+}
+
+const AdminTenantsRouteChildren: AdminTenantsRouteChildren = {
+  AdminTenantsIndexRoute: AdminTenantsIndexRoute,
+}
+
+const AdminTenantsRouteWithChildren = AdminTenantsRoute._addFileChildren(
+  AdminTenantsRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminDashboardRoute: typeof AdminDashboardRoute
-  AdminTenantsRoute: typeof AdminTenantsRoute
+  AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminDashboardRoute: AdminDashboardRoute,
-  AdminTenantsRoute: AdminTenantsRoute,
+  AdminTenantsRoute: AdminTenantsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
 
