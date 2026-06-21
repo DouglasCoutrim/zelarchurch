@@ -35,6 +35,7 @@ import { Route as AppCheckinRouteImport } from './routes/app.checkin'
 import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
 import { Route as AppAtasRouteImport } from './routes/app.atas'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminPlansRouteImport } from './routes/admin.plans'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminBillingRouteImport } from './routes/admin.billing'
@@ -184,6 +185,11 @@ const AdminTenantsRoute = AdminTenantsRouteImport.update({
   path: '/tenants',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPlansRoute = AdminPlansRouteImport.update({
   id: '/plans',
   path: '/plans',
@@ -287,6 +293,7 @@ export interface FileRoutesByFullPath {
   '/admin/billing': typeof AdminBillingRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/plans': typeof AdminPlansRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
@@ -331,6 +338,7 @@ export interface FileRoutesByTo {
   '/admin/billing': typeof AdminBillingRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/plans': typeof AdminPlansRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/compras': typeof AppComprasRoute
@@ -373,6 +381,7 @@ export interface FileRoutesById {
   '/admin/billing': typeof AdminBillingRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/plans': typeof AdminPlansRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
@@ -421,6 +430,7 @@ export interface FileRouteTypes {
     | '/admin/billing'
     | '/admin/dashboard'
     | '/admin/plans'
+    | '/admin/settings'
     | '/admin/tenants'
     | '/app/atas'
     | '/app/auditoria'
@@ -465,6 +475,7 @@ export interface FileRouteTypes {
     | '/admin/billing'
     | '/admin/dashboard'
     | '/admin/plans'
+    | '/admin/settings'
     | '/app/atas'
     | '/app/auditoria'
     | '/app/compras'
@@ -506,6 +517,7 @@ export interface FileRouteTypes {
     | '/admin/billing'
     | '/admin/dashboard'
     | '/admin/plans'
+    | '/admin/settings'
     | '/admin/tenants'
     | '/app/atas'
     | '/app/auditoria'
@@ -735,6 +747,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTenantsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/plans': {
       id: '/admin/plans'
       path: '/plans'
@@ -883,6 +902,7 @@ interface AdminRouteChildren {
   AdminBillingRoute: typeof AdminBillingRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminPlansRoute: typeof AdminPlansRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -892,6 +912,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBillingRoute: AdminBillingRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminPlansRoute: AdminPlansRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminTenantsRoute: AdminTenantsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
