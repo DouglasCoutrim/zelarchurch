@@ -97,9 +97,11 @@ function MembersList() {
               : "Gerencie os membros da sua igreja."}
           </p>
         </div>
-        <Button disabled={!canAddMember} title={!canAddMember ? "Limite do plano atingido" : undefined}>
-          <Plus className="mr-1 h-4 w-4" />
-          Novo membro
+        <Button asChild disabled={!canAddMember} title={!canAddMember ? "Limite do plano atingido" : undefined}>
+          <Link to="/app/members/new">
+            <Plus className="mr-1 h-4 w-4" />
+            Novo membro
+          </Link>
         </Button>
       </div>
 
