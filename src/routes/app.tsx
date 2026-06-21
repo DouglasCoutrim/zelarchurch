@@ -4,6 +4,7 @@ import { LogOut, Search } from "lucide-react";
 
 import { AppSidebar } from "@/components/AppSidebar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { NotificationBell } from "@/components/NotificationBell";
 import { TenantSwitcher } from "@/components/TenantSwitcher";
 import { Button } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -77,6 +78,7 @@ function AppLayout() {
                   ⌘K
                 </kbd>
               </button>
+              <NotificationBell />
               <Link
                 to="/app/profile"
                 className="hidden text-xs text-muted-foreground hover:underline sm:inline"
