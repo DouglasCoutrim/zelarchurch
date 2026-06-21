@@ -19,6 +19,7 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
+import { Route as AppEscalasRouteImport } from './routes/app.escalas'
 import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
@@ -79,6 +80,11 @@ const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
   path: '/financeiro',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEscalasRoute = AppEscalasRouteImport.update({
+  id: '/escalas',
+  path: '/escalas',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDepartmentsRoute = AppDepartmentsRouteImport.update({
   id: '/departments',
   path: '/departments',
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
+  '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
@@ -153,6 +160,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
+  '/app/escalas': typeof AppEscalasRoute
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
   '/app/financeiro/centros': typeof AppFinanceiroCentrosRoute
@@ -173,6 +181,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/select-tenant': typeof SelectTenantRoute
   '/app/departments': typeof AppDepartmentsRoute
+  '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/app/departments'
+    | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
     | '/app/settings'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/app/departments'
+    | '/app/escalas'
     | '/app/settings'
     | '/app'
     | '/app/financeiro/centros'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/select-tenant'
     | '/app/departments'
+    | '/app/escalas'
     | '/app/financeiro'
     | '/app/members'
     | '/app/settings'
@@ -328,6 +340,13 @@ declare module '@tanstack/react-router' {
       path: '/financeiro'
       fullPath: '/app/financeiro'
       preLoaderRoute: typeof AppFinanceiroRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/escalas': {
+      id: '/app/escalas'
+      path: '/escalas'
+      fullPath: '/app/escalas'
+      preLoaderRoute: typeof AppEscalasRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/departments': {
@@ -444,6 +463,7 @@ const AppMembersRouteWithChildren = AppMembersRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppDepartmentsRoute: typeof AppDepartmentsRoute
+  AppEscalasRoute: typeof AppEscalasRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppMembersRoute: typeof AppMembersRouteWithChildren
   AppSettingsRoute: typeof AppSettingsRoute
@@ -452,6 +472,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppDepartmentsRoute: AppDepartmentsRoute,
+  AppEscalasRoute: AppEscalasRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppMembersRoute: AppMembersRouteWithChildren,
   AppSettingsRoute: AppSettingsRoute,
@@ -471,13 +492,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
