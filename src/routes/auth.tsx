@@ -56,7 +56,8 @@ function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-muted/30 px-4 py-10">
+      <img src={logoAsset.url} alt="Zelar" className="mb-6 h-12 w-auto" />
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>{mode === "signin" ? "Entrar" : "Criar conta"}</CardTitle>
