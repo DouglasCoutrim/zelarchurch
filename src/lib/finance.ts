@@ -111,7 +111,132 @@ export async function listCostCenters(tenantId: string): Promise<CostCenter[]> {
   return (data ?? []) as CostCenter[];
 }
 
-// -------- Lançamentos --------
+export async function createCostCenter(
+  tenantId: string,
+  input: { name: string; description?: string | null },
+): Promise<CostCenter> {
+  const { data, error } = await supabase
+    .from("cost_centers")
+    .insert({ tenant_id: tenantId, is_active: true, ...input })
+    .select("*").single();
+  if (error) throw error;
+  return data as CostCenter;
+}
+
+export async function updateCostCenter(
+  id: string,
+  input: Partial<Pick<CostCenter, "name" | "description" | "is_active">>,
+): Promise<CostCenter> {
+  const { data, error } = await supabase
+    .from("cost_centers").update(input).eq("id", id).select("*").single();
+  if (error) throw error;
+  return data as CostCenter;
+}
+
+export async function deleteCostCenter(id: string): Promise<void> {
+  const { error } = await supabase.from("cost_centers").delete().eq("id", id);
+  if (error) throw error;
+}
+
+// -------- Recibos / comprovantes --------
+const RECEIPTS_BUCKET = "receipts";
+
+export async function uploadReceipt(
+  tenantId: string,
+  transactionId: string,
+  file: File,
+): Promise<string> {
+  const ext = file.name.split(".").pop() || "bin";
+  const path = `${tenantId}/${transactionId}/${Date.now()}.${ext}`;
+  const { error } = await supabase.storage
+    .from(RECEIPTS_BUCKET)
+    .upload(path, file, { upsert: true, contentType: file.type });
+  if (error) throw error;
+  return path;
+}
+
+export async function getReceiptUrl(path: string): Promise<string | null> {
+  const { data, error } = await supabase.storage
+    .from(RECEIPTS_BUCKET)
+    .createSignedUrl(path, 60 * 60);
+  if (error) return null;
+  return data.signedUrl;
+}
+
+export async function removeReceipt(path: string): Promise<void> {
+  await supabase.storage.from(RECEIPTS_BUCKET).remove([path]);
+}
+
+// -------- Relatórios --------
+export interface MonthlyPoint {
+  month: string; // YYYY-MM
+  receitas: number;
+  despesas: number;
+}
+
+export interface AccountBreakdownRow {
+  account_id: string | null;
+  account_name: string;
+  type: TransactionType;
+  total: number;
+}
+
+export async function getMonthlyReport(
+  tenantId: string,
+  from: string,
+  to: string,
+): Promise<MonthlyPoint[]> {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select("transaction_date, type, amount, status")
+    .eq("tenant_id", tenantId)
+    .is("deleted_at", null)
+    .neq("status", "cancelado")
+    .gte("transaction_date", from)
+    .lte("transaction_date", to)
+    .order("transaction_date", { ascending: true });
+  if (error) throw error;
+  const map = new Map<string, MonthlyPoint>();
+  for (const r of (data ?? []) as { transaction_date: string; type: string; amount: number }[]) {
+    const month = r.transaction_date.slice(0, 7);
+    const cur = map.get(month) ?? { month, receitas: 0, despesas: 0 };
+    const v = Number(r.amount) || 0;
+    if (r.type === "receita") cur.receitas += v;
+    else cur.despesas += v;
+    map.set(month, cur);
+  }
+  return Array.from(map.values()).sort((a, b) => a.month.localeCompare(b.month));
+}
+
+export async function getAccountBreakdown(
+  tenantId: string,
+  from: string,
+  to: string,
+): Promise<AccountBreakdownRow[]> {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select("amount, type, account:chart_of_accounts(id, name)")
+    .eq("tenant_id", tenantId)
+    .is("deleted_at", null)
+    .neq("status", "cancelado")
+    .gte("transaction_date", from)
+    .lte("transaction_date", to);
+  if (error) throw error;
+  type Acc = { id: string; name: string };
+  type Row = { amount: number; type: TransactionType; account: Acc | Acc[] | null };
+  const map = new Map<string, AccountBreakdownRow>();
+  for (const r of (data ?? []) as unknown as Row[]) {
+    const acc = Array.isArray(r.account) ? r.account[0] ?? null : r.account;
+    const id = acc?.id ?? "none";
+    const name = acc?.name ?? "Sem categoria";
+    const key = `${r.type}:${id}`;
+    const cur = map.get(key) ?? { account_id: acc?.id ?? null, account_name: name, type: r.type, total: 0 };
+    cur.total += Number(r.amount) || 0;
+    map.set(key, cur);
+  }
+  return Array.from(map.values()).sort((a, b) => b.total - a.total);
+}
+
 export interface ListTransactionsParams {
   tenantId: string;
   type?: TransactionType | "all";
@@ -166,6 +291,7 @@ export interface TransactionInput {
   transaction_date: string;
   due_date?: string | null;
   paid_at?: string | null;
+  receipt_url?: string | null;
 }
 
 export async function createTransaction(
