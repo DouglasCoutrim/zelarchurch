@@ -1,5 +1,17 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, Building2, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  Building2,
+  Settings,
+  Wallet,
+  CalendarDays,
+  FileText,
+  ClipboardCheck,
+  Boxes,
+  BarChart3,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import {
   Sidebar,
@@ -14,12 +26,45 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { APP_NAME } from "@/config/constants";
+import { cn } from "@/lib/utils";
 
-const items = [
-  { title: "Painel", url: "/app", icon: LayoutDashboard, exact: true },
-  { title: "Membros", url: "/app/members", icon: Users, exact: false },
-  { title: "Departamentos", url: "/app/departments", icon: Building2, exact: false },
-  { title: "Configurações", url: "/app/settings", icon: Settings, exact: false },
+type Item = {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+  exact?: boolean;
+  soon?: boolean;
+};
+
+type Section = { label: string; items: Item[] };
+
+const sections: Section[] = [
+  {
+    label: "Principal",
+    items: [{ title: "Painel", url: "/app", icon: LayoutDashboard, exact: true }],
+  },
+  {
+    label: "Gestão",
+    items: [
+      { title: "Membros", url: "/app/members", icon: Users },
+      { title: "Departamentos", url: "/app/departments", icon: Building2 },
+    ],
+  },
+  {
+    label: "Operação",
+    items: [
+      { title: "Financeiro", url: "/app/financeiro", icon: Wallet, soon: true },
+      { title: "Escalas", url: "/app/escalas", icon: CalendarDays, soon: true },
+      { title: "Atas", url: "/app/atas", icon: FileText, soon: true },
+      { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck, soon: true },
+      { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes, soon: true },
+      { title: "Relatórios", url: "/app/relatorios", icon: BarChart3, soon: true },
+    ],
+  },
+  {
+    label: "Sistema",
+    items: [{ title: "Configurações", url: "/app/settings", icon: Settings }],
+  },
 ];
 
 export function AppSidebar() {
@@ -27,7 +72,7 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const currentPath = useRouterState({ select: (r) => r.location.pathname });
 
-  const isActive = (url: string, exact: boolean) =>
+  const isActive = (url: string, exact?: boolean) =>
     exact ? currentPath === url : currentPath === url || currentPath.startsWith(url + "/");
 
   return (
@@ -41,23 +86,54 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Área de trabalho</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url, item.exact)}>
-                    <Link to={item.url} className="flex items-center gap-2">
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {sections.map((section) => (
+          <SidebarGroup key={section.label}>
+            <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  if (item.soon) {
+                    return (
+                      <SidebarMenuItem key={item.url}>
+                        <SidebarMenuButton
+                          disabled
+                          className="cursor-not-allowed opacity-60"
+                          tooltip={collapsed ? `${item.title} — em breve` : undefined}
+                        >
+                          <Icon className="h-4 w-4" />
+                          {!collapsed && (
+                            <span className="flex w-full items-center justify-between">
+                              <span>{item.title}</span>
+                              <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+                                em breve
+                              </span>
+                            </span>
+                          )}
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  }
+                  const active = isActive(item.url, item.exact);
+                  return (
+                    <SidebarMenuItem key={item.url}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={active}
+                        tooltip={collapsed ? item.title : undefined}
+                      >
+                        <Link to={item.url} className={cn("flex items-center gap-2")}>
+                          <Icon className="h-4 w-4" />
+                          {!collapsed && <span>{item.title}</span>}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
     </Sidebar>
   );
