@@ -12,11 +12,20 @@ import { fetchActivePlans, formatBRL } from "@/lib/plans";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: `Planos — ${APP_NAME}` },
-      { name: "description", content: "Planos e preços do Zelar para administração de igrejas." },
-      { property: "og:title", content: `Planos — ${APP_NAME}` },
-      { property: "og:description", content: "Escolha o plano ideal para sua igreja." },
+      { title: `Planos e preços — ${APP_NAME}` },
+      {
+        name: "description",
+        content:
+          "Conheça os planos do Zelar e escolha o ideal para sua igreja. Comece grátis por 14 dias, sem cartão de crédito.",
+      },
+      { property: "og:title", content: `Planos e preços — ${APP_NAME}` },
+      {
+        property: "og:description",
+        content: "Planos flexíveis para igrejas de todos os tamanhos. 14 dias grátis.",
+      },
+      { property: "og:url", content: "https://zelarchurch.lovable.app/pricing" },
     ],
+    links: [{ rel: "canonical", href: "https://zelarchurch.lovable.app/pricing" }],
   }),
   component: PricingPage,
 });

@@ -7,13 +7,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthStore } from "@/stores/authStore";
+import { APP_NAME } from "@/config/constants";
 import logoAsset from "@/assets/logo-zelar.svg.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Entrar" },
-      { name: "description", content: "Acesse sua área de trabalho." },
+      { title: `Entrar — ${APP_NAME}` },
+      {
+        name: "description",
+        content: "Acesse sua conta Zelar e gerencie sua igreja com facilidade.",
+      },
+      { name: "robots", content: "noindex,follow" },
     ],
   }),
   component: AuthPage,
