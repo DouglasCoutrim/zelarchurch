@@ -17,17 +17,26 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+          <span className="text-2xl font-bold">Z</span>
+        </div>
+        <h1 className="text-7xl font-bold tracking-tight text-foreground">404</h1>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Página não encontrada</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          A página que você procura não existe ou foi movida.
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            Voltar ao início
+          </Link>
+          <Link
+            to="/app"
+            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+          >
+            Ir para o app
           </Link>
         </div>
       </div>
@@ -46,10 +55,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          Esta página não pôde ser carregada
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          Algo deu errado do nosso lado. Tente novamente ou volte para o início.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -59,13 +68,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            Tentar novamente
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            Voltar ao início
           </a>
         </div>
       </div>
@@ -78,18 +87,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Zelar- Adminstraçã de Igrejas" },
-      { name: "description", content: "Heartfelt Connections is a platform for users to share and discover personal stories and experiences." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Zelar- Adminstraçã de Igrejas" },
-      { property: "og:description", content: "Heartfelt Connections is a platform for users to share and discover personal stories and experiences." },
+      { title: "Zelar — Sistema de gestão para igrejas" },
+      {
+        name: "description",
+        content:
+          "Plataforma completa para administrar membros, finanças, escalas, EBD e patrimônio da sua igreja. 14 dias grátis.",
+      },
+      { name: "author", content: "Zelar" },
+      { name: "theme-color", content: "#0F172A" },
+      { property: "og:title", content: "Zelar — Sistema de gestão para igrejas" },
+      {
+        property: "og:description",
+        content: "Toda a gestão da sua igreja em um só lugar. Comece grátis por 14 dias.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Zelar- Adminstraçã de Igrejas" },
-      { name: "twitter:description", content: "Heartfelt Connections is a platform for users to share and discover personal stories and experiences." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ba3ebb5a-cf3a-4adf-838c-160f66e1def2/id-preview-86c148fc--1eac348f-59b4-401d-8272-be9fd65d8e47.lovable.app-1781959277575.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ba3ebb5a-cf3a-4adf-838c-160f66e1def2/id-preview-86c148fc--1eac348f-59b4-401d-8272-be9fd65d8e47.lovable.app-1781959277575.png" },
+      { property: "og:locale", content: "pt_BR" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Zelar — Sistema de gestão para igrejas" },
+      {
+        name: "twitter:description",
+        content: "Toda a gestão da sua igreja em um só lugar. Comece grátis por 14 dias.",
+      },
     ],
     links: [
       {
@@ -106,7 +124,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
