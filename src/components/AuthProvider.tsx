@@ -15,10 +15,9 @@ async function loadTenantsForUser(userId: string): Promise<Tenant[]> {
     console.error("Falha ao carregar tenants:", error);
     return [];
   }
-  return ((data ?? [])
-    .map((row: { tenant: Tenant | null }) => row.tenant)
-    .filter(Boolean) as Tenant[]);
-}
+  const rows = (data ?? []) as Array<{ tenant: Tenant | Tenant[] | null }>;
+  return rows
+    .flatMap((row) => (Array.isArray(row.tenant) ? row.tenant : row.tenant ? [row.tenant] : []));
 
 async function hydrateTenants(userId: string) {
   const tenantStore = useTenantStore.getState();
