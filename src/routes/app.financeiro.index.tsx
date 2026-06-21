@@ -369,7 +369,9 @@ function TransactionDialog({
       qc.invalidateQueries({ queryKey: ["transactions"] });
       qc.invalidateQueries({ queryKey: ["finance-summary"] });
       onClose();
+      toast.success(initial ? "Lançamento atualizado" : "Lançamento criado");
     },
+    onError: (e: Error) => toast.error(e.message || "Erro ao salvar lançamento"),
   });
 
   async function openReceipt() {
