@@ -15,6 +15,7 @@ import {
   Megaphone,
   ShieldCheck,
   Bell,
+  History,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -74,6 +75,7 @@ const sections: Section[] = [
     label: "Sistema",
     items: [
       { title: "Notificações", url: "/app/notificacoes", icon: Bell },
+      { title: "Auditoria", url: "/app/auditoria", icon: History },
       { title: "Configurações", url: "/app/settings", icon: Settings },
     ],
   },
