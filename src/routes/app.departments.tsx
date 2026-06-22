@@ -41,6 +41,7 @@ function DepartmentsPage() {
   const [creating, setCreating] = useState(false);
   const [deleting, setDeleting] = useState<DepartmentWithCount | null>(null);
   const [linkOpen, setLinkOpen] = useState<DepartmentWithCount | null>(null);
+  const [instOpen, setInstOpen] = useState<DepartmentWithCount | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["departments", currentTenant?.id],
