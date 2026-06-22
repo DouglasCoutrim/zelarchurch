@@ -151,6 +151,7 @@ function MembersList() {
               <TableHead className="hidden md:table-cell">E-mail</TableHead>
               <TableHead className="hidden lg:table-cell">Telefone</TableHead>
               <TableHead className="hidden sm:table-cell">Tipo</TableHead>
+              <TableHead className="hidden md:table-cell">Congregação</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -158,7 +159,7 @@ function MembersList() {
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell colSpan={5}><Skeleton className="h-6 w-full" /></TableCell>
+                  <TableCell colSpan={6}><Skeleton className="h-6 w-full" /></TableCell>
                 </TableRow>
               ))
             ) : data && data.rows.length > 0 ? (
@@ -174,12 +175,15 @@ function MembersList() {
                   <TableCell className="hidden md:table-cell text-muted-foreground">{m.email ?? "—"}</TableCell>
                   <TableCell className="hidden lg:table-cell text-muted-foreground">{m.phone ?? "—"}</TableCell>
                   <TableCell className="hidden sm:table-cell text-muted-foreground">{m.member_type ?? "—"}</TableCell>
+                  <TableCell className="hidden md:table-cell text-muted-foreground">
+                    {m.congregation?.name ?? "Sede"}
+                  </TableCell>
                   <TableCell><StatusBadge status={m.status} /></TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-32 text-center text-sm text-muted-foreground">
+                <TableCell colSpan={6} className="h-32 text-center text-sm text-muted-foreground">
                   {search.q || search.status !== "all"
                     ? "Nenhum membro encontrado para esses filtros."
                     : "Nenhum membro ainda. Clique em \"Novo membro\" para começar."}

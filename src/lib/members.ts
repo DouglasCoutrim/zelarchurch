@@ -20,9 +20,10 @@ export async function listMembers(p: ListMembersParams): Promise<ListMembersResu
 
   let q = supabase
     .from("members")
-    .select("id, full_name, email, phone, status, member_type, photo_url, created_at", {
-      count: "exact",
-    })
+    .select(
+      "id, full_name, email, phone, status, member_type, photo_url, created_at, congregation_id, congregation:congregations!members_congregation_id_fkey(id, name)",
+      { count: "exact" },
+    )
     .eq("tenant_id", p.tenantId)
     .is("deleted_at", null)
     .order("full_name", { ascending: true })
@@ -36,5 +37,12 @@ export async function listMembers(p: ListMembersParams): Promise<ListMembersResu
 
   const { data, count, error } = await q;
   if (error) throw error;
-  return { rows: (data ?? []) as MemberListRow[], total: count ?? 0 };
+  const rows = (data ?? []).map((r: Record<string, unknown>) => {
+    const cg = r.congregation as { id: string; name: string } | { id: string; name: string }[] | null;
+    return {
+      ...r,
+      congregation: Array.isArray(cg) ? (cg[0] ?? null) : cg,
+    };
+  }) as unknown as MemberListRow[];
+  return { rows, total: count ?? 0 };
 }

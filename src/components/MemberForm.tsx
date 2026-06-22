@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { listCongregations } from "@/lib/congregations";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +26,7 @@ const EMPTY: MemberFormInput = {
   email: null, phone: null, whatsapp: null, address: null, photo_url: null,
   baptism_date: null, join_date: null, member_type: null, church_role: null,
   spiritual_gifts: null, status: "ativo" as MemberStatus, notes: null,
-  is_intercessor: false,
+  is_intercessor: false, congregation_id: null,
 };
 
 function toInput(m: MemberRecord): MemberFormInput {
@@ -39,6 +40,15 @@ export function MemberForm({ initial }: { initial?: MemberRecord }) {
   const currentTenant = useTenantStore((s) => s.currentTenant);
   const [form, setForm] = useState<MemberFormInput>(initial ? toInput(initial) : EMPTY);
   const [error, setError] = useState<string | null>(null);
+
+  const { data: congregations } = useQuery({
+    queryKey: ["congregations", currentTenant?.id],
+    enabled: !!currentTenant?.id,
+    queryFn: () => listCongregations(currentTenant!.id),
+  });
+  const activeCongregations = (congregations ?? []).filter(
+    (c) => c.is_active || c.id === form.congregation_id,
+  );
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -164,6 +174,24 @@ export function MemberForm({ initial }: { initial?: MemberRecord }) {
               ]} />
             <Field label="Cargo na igreja" value={form.church_role ?? ""}
               onChange={(v) => set("church_role", v || null)} />
+            <div className="space-y-1.5">
+              <Label>Congregação</Label>
+              <Select
+                value={form.congregation_id ?? "__sede"}
+                onValueChange={(v) => set("congregation_id", v === "__sede" ? null : v)}
+              >
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__sede">Sede</SelectItem>
+                  {activeCongregations.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                      {!c.is_active ? " (inativa)" : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <SelectField label="Status" value={form.status}
               onChange={(v) => set("status", v as MemberStatus)}
               options={MEMBER_STATUS_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
