@@ -185,6 +185,8 @@ function SchedulesPage() {
                     onEdit={() => setEditing(s)}
                     onDelete={() => setDeleting(s)}
                     onMembers={() => setLinkOpen(s)}
+                    onSend={() => sendMut.mutate(s.id)}
+                    sending={sendMut.isPending}
                   />
                 ))}
               </div>
