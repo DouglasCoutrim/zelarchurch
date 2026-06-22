@@ -20,9 +20,10 @@ export async function listMembers(p: ListMembersParams): Promise<ListMembersResu
 
   let q = supabase
     .from("members")
-    .select("id, full_name, email, phone, status, member_type, photo_url, created_at", {
-      count: "exact",
-    })
+    .select(
+      "id, full_name, email, phone, status, member_type, photo_url, created_at, congregation_id, congregation:congregations!members_congregation_id_fkey(id, name)",
+      { count: "exact" },
+    )
     .eq("tenant_id", p.tenantId)
     .is("deleted_at", null)
     .order("full_name", { ascending: true })
