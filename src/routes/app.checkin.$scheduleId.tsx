@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  ArrowLeft, Check, CheckCircle2, MapPin, Search, Undo2, UserPlus,
+  ArrowLeft, Check, CheckCircle2, MapPin, Navigation, Search, Undo2, UserPlus,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   getScheduleForCheckin, listParticipantsForCheckin,
   searchMembersForCheckin, checkInMember, undoCheckIn,
+  geoCheckIn, getCurrentPosition,
   type CheckinParticipant,
 } from "@/lib/checkins";
 import { useTenantStore } from "@/stores/tenantStore";
