@@ -25,6 +25,7 @@ import {
 import { useTenantStore } from "@/stores/tenantStore";
 import { usePlanLimit } from "@/hooks/usePlanLimit";
 import { DepartmentMembersDialog } from "@/components/DepartmentMembersDialog";
+import { DepartmentInstrumentsDialog } from "@/components/DepartmentInstrumentsDialog";
 
 export const Route = createFileRoute("/app/departments")({
   head: () => ({ meta: [{ title: "Departamentos" }] }),
