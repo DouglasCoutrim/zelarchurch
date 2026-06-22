@@ -35,6 +35,7 @@ import {
 } from "@/lib/finance";
 import { useTenantStore } from "@/stores/tenantStore";
 import { formatBRL } from "@/lib/plans";
+import { listCongregations } from "@/lib/congregations";
 
 export const Route = createFileRoute("/app/financeiro/")({
   component: TransactionsPage,
@@ -50,6 +51,7 @@ function TransactionsPage() {
 
   const [type, setType] = useState<TransactionType | "all">("all");
   const [status, setStatus] = useState<TransactionStatus | "all">("all");
+  const [congregation, setCongregation] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 20;
@@ -58,14 +60,22 @@ function TransactionsPage() {
   const [creating, setCreating] = useState(false);
   const [deleting, setDeleting] = useState<TransactionRow | null>(null);
 
-  const summary = useQuery({
-    queryKey: ["finance-summary", tenant?.id],
+  const congregationsQ = useQuery({
+    queryKey: ["congregations", tenant?.id],
     enabled: !!tenant?.id,
-    queryFn: () => getFinanceSummary(tenant!.id),
+    queryFn: () => listCongregations(tenant!.id),
+  });
+
+  const congregationId = congregation === "all" ? null : congregation;
+
+  const summary = useQuery({
+    queryKey: ["finance-summary", tenant?.id, { congregationId }],
+    enabled: !!tenant?.id,
+    queryFn: () => getFinanceSummary(tenant!.id, undefined, undefined, congregationId),
   });
 
   const list = useQuery({
-    queryKey: ["transactions", tenant?.id, { type, status, search, page }],
+    queryKey: ["transactions", tenant?.id, { type, status, search, page, congregationId }],
     enabled: !!tenant?.id,
     queryFn: () =>
       listTransactions({
@@ -75,6 +85,7 @@ function TransactionsPage() {
         search,
         page,
         pageSize,
+        congregationId,
       }),
   });
 
@@ -148,6 +159,20 @@ function TransactionsPage() {
               {TRANSACTION_STATUS_OPTIONS.map((o) => (
                 <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
               ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1">
+          <Label>Congregação</Label>
+          <Select value={congregation} onValueChange={(v) => { setPage(1); setCongregation(v); }}>
+            <SelectTrigger className="w-48"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas (consolidado)</SelectItem>
+              {(congregationsQ.data ?? [])
+                .filter((c) => c.is_active)
+                .map((c) => (
+                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>
@@ -319,6 +344,11 @@ function TransactionDialog({
     enabled: !!tenant?.id && open,
     queryFn: () => listCostCenters(tenant!.id),
   });
+  const congregationsQ = useQuery({
+    queryKey: ["congregations", tenant?.id],
+    enabled: !!tenant?.id && open,
+    queryFn: () => listCongregations(tenant!.id),
+  });
 
   const [form, setForm] = useState<TransactionInput>(() => ({
     type: initial?.type ?? "receita",
@@ -328,6 +358,7 @@ function TransactionDialog({
     notes: initial?.notes ?? "",
     account_id: initial?.account_id ?? null,
     cost_center_id: initial?.cost_center_id ?? null,
+    congregation_id: initial?.congregation_id ?? null,
     payment_method: initial?.payment_method ?? "",
     transaction_date: initial?.transaction_date ?? todayISO(),
     due_date: initial?.due_date ?? null,
@@ -350,6 +381,7 @@ function TransactionDialog({
         payment_method: form.payment_method?.trim() ? form.payment_method : null,
         account_id: form.account_id || null,
         cost_center_id: form.cost_center_id || null,
+        congregation_id: form.congregation_id || null,
         due_date: form.due_date || null,
       };
       if (removingReceipt) payload.receipt_url = null;
@@ -482,6 +514,26 @@ function TransactionDialog({
               </Select>
             </div>
           )}
+          <div className="space-y-1">
+            <Label>Congregação</Label>
+            <Select
+              value={form.congregation_id ?? "__sede"}
+              onValueChange={(v) => set("congregation_id", v === "__sede" ? null : v)}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__sede">Sede (sem congregação)</SelectItem>
+                {(congregationsQ.data ?? [])
+                  .filter((c) => c.is_active || c.id === form.congregation_id)
+                  .map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                      {!c.is_active ? " (inativa)" : ""}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
           <div className="space-y-1">
             <Label>Forma de pagamento</Label>
             <Input

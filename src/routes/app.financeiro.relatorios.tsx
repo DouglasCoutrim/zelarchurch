@@ -15,8 +15,12 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
   getMonthlyReport, getAccountBreakdown, getFinanceSummary,
 } from "@/lib/finance";
+import { listCongregations } from "@/lib/congregations";
 import { useTenantStore } from "@/stores/tenantStore";
 import { formatBRL } from "@/lib/plans";
 
@@ -36,21 +40,29 @@ function ReportsPage() {
   const tenant = useTenantStore((s) => s.currentTenant);
   const [from, setFrom] = useState<string>(startOfYearISO());
   const [to, setTo] = useState<string>(todayISO());
+  const [congregation, setCongregation] = useState<string>("all");
+  const congregationId = congregation === "all" ? null : congregation;
+
+  const congregationsQ = useQuery({
+    queryKey: ["congregations", tenant?.id],
+    enabled: !!tenant?.id,
+    queryFn: () => listCongregations(tenant!.id),
+  });
 
   const summary = useQuery({
-    queryKey: ["finance-summary", tenant?.id, { from, to }],
+    queryKey: ["finance-summary", tenant?.id, { from, to, congregationId }],
     enabled: !!tenant?.id,
-    queryFn: () => getFinanceSummary(tenant!.id, from, to),
+    queryFn: () => getFinanceSummary(tenant!.id, from, to, congregationId),
   });
   const monthly = useQuery({
-    queryKey: ["finance-monthly", tenant?.id, { from, to }],
+    queryKey: ["finance-monthly", tenant?.id, { from, to, congregationId }],
     enabled: !!tenant?.id,
-    queryFn: () => getMonthlyReport(tenant!.id, from, to),
+    queryFn: () => getMonthlyReport(tenant!.id, from, to, congregationId),
   });
   const breakdown = useQuery({
-    queryKey: ["finance-breakdown", tenant?.id, { from, to }],
+    queryKey: ["finance-breakdown", tenant?.id, { from, to, congregationId }],
     enabled: !!tenant?.id,
-    queryFn: () => getAccountBreakdown(tenant!.id, from, to),
+    queryFn: () => getAccountBreakdown(tenant!.id, from, to, congregationId),
   });
 
   const receitas = useMemo(
@@ -80,6 +92,20 @@ function ReportsPage() {
         <div className="space-y-1">
           <Label>Até</Label>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+        </div>
+        <div className="space-y-1">
+          <Label>Congregação</Label>
+          <Select value={congregation} onValueChange={setCongregation}>
+            <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas (consolidado)</SelectItem>
+              {(congregationsQ.data ?? [])
+                .filter((c) => c.is_active)
+                .map((c) => (
+                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
