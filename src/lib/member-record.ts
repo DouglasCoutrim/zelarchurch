@@ -32,6 +32,7 @@ export interface MemberRecord {
   spiritual_gifts: string[] | null;
   status: MemberStatus;
   notes: string | null;
+  is_intercessor: boolean;
   created_at: string;
 }
 
