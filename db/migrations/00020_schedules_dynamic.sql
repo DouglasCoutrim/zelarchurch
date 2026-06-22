@@ -1,5 +1,24 @@
 -- Escalas dinâmicas: instrumentos, geração automática, substituições, assiduidade.
 
+-- Garante is_department_leader caso 00019 ainda não tenha sido aplicada.
+CREATE OR REPLACE FUNCTION public.is_department_leader(_department_id UUID)
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.departments d
+    JOIN public.members m ON m.id = d.leader_id
+    WHERE d.id = _department_id
+      AND m.user_id = auth.uid()
+  );
+$$;
+GRANT EXECUTE ON FUNCTION public.is_department_leader(UUID) TO authenticated;
+
+
 -- ===== Instrumentos por departamento =====
 CREATE TABLE IF NOT EXISTS public.department_instruments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
