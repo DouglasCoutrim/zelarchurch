@@ -515,6 +515,26 @@ function TransactionDialog({
             </div>
           )}
           <div className="space-y-1">
+            <Label>Congregação</Label>
+            <Select
+              value={form.congregation_id ?? "__sede"}
+              onValueChange={(v) => set("congregation_id", v === "__sede" ? null : v)}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__sede">Sede (sem congregação)</SelectItem>
+                {(congregationsQ.data ?? [])
+                  .filter((c) => c.is_active || c.id === form.congregation_id)
+                  .map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                      {!c.is_active ? " (inativa)" : ""}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1">
             <Label>Forma de pagamento</Label>
             <Input
               value={form.payment_method ?? ""}
