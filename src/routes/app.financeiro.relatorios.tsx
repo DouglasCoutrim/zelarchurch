@@ -40,21 +40,29 @@ function ReportsPage() {
   const tenant = useTenantStore((s) => s.currentTenant);
   const [from, setFrom] = useState<string>(startOfYearISO());
   const [to, setTo] = useState<string>(todayISO());
+  const [congregation, setCongregation] = useState<string>("all");
+  const congregationId = congregation === "all" ? null : congregation;
+
+  const congregationsQ = useQuery({
+    queryKey: ["congregations", tenant?.id],
+    enabled: !!tenant?.id,
+    queryFn: () => listCongregations(tenant!.id),
+  });
 
   const summary = useQuery({
-    queryKey: ["finance-summary", tenant?.id, { from, to }],
+    queryKey: ["finance-summary", tenant?.id, { from, to, congregationId }],
     enabled: !!tenant?.id,
-    queryFn: () => getFinanceSummary(tenant!.id, from, to),
+    queryFn: () => getFinanceSummary(tenant!.id, from, to, congregationId),
   });
   const monthly = useQuery({
-    queryKey: ["finance-monthly", tenant?.id, { from, to }],
+    queryKey: ["finance-monthly", tenant?.id, { from, to, congregationId }],
     enabled: !!tenant?.id,
-    queryFn: () => getMonthlyReport(tenant!.id, from, to),
+    queryFn: () => getMonthlyReport(tenant!.id, from, to, congregationId),
   });
   const breakdown = useQuery({
-    queryKey: ["finance-breakdown", tenant?.id, { from, to }],
+    queryKey: ["finance-breakdown", tenant?.id, { from, to, congregationId }],
     enabled: !!tenant?.id,
-    queryFn: () => getAccountBreakdown(tenant!.id, from, to),
+    queryFn: () => getAccountBreakdown(tenant!.id, from, to, congregationId),
   });
 
   const receitas = useMemo(
