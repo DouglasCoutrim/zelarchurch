@@ -34,6 +34,7 @@ import {
 import { APP_NAME } from "@/config/constants";
 import { cn } from "@/lib/utils";
 import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
+import logoAsset from "@/assets/logo-zelar.svg.asset.json";
 
 type Item = {
   title: string;
