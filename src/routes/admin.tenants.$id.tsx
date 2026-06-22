@@ -38,6 +38,36 @@ async function loadTenant(id: string): Promise<AdminTenantDetail> {
   return data as AdminTenantDetail;
 }
 
+interface CongregationsSummary {
+  current: number;
+  max: number | null;
+  planName: string | null;
+}
+
+async function loadCongregationsSummary(
+  tenantId: string,
+  planId: string | null,
+): Promise<CongregationsSummary> {
+  const countQ = supabase
+    .from("congregations")
+    .select("id", { count: "exact", head: true })
+    .eq("tenant_id", tenantId);
+
+  const planQ = planId
+    ? supabase.from("plans").select("name, max_congregations").eq("id", planId).maybeSingle()
+    : Promise.resolve({ data: null, error: null } as { data: null; error: null });
+
+  const [{ count, error: cErr }, planRes] = await Promise.all([countQ, planQ]);
+  if (cErr) throw cErr;
+  if (planRes.error) throw planRes.error;
+
+  return {
+    current: count ?? 0,
+    max: (planRes.data?.max_congregations ?? null) as number | null,
+    planName: (planRes.data?.name ?? null) as string | null,
+  };
+}
+
 function TenantDetail() {
   const { id } = Route.useParams();
   const qc = useQueryClient();
