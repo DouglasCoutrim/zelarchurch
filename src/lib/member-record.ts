@@ -33,6 +33,7 @@ export interface MemberRecord {
   status: MemberStatus;
   notes: string | null;
   is_intercessor: boolean;
+  congregation_id: string | null;
   created_at: string;
 }
 
