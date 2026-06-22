@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Bell, CheckCheck } from "lucide-react";
 
@@ -19,6 +19,8 @@ import {
   type Notification,
 } from "@/lib/notifications";
 import { cn } from "@/lib/utils";
+import notificationSoundAsset from "@/assets/notification.mp3.asset.json";
+
 
 export function NotificationBell() {
   const navigate = useNavigate();
@@ -29,6 +31,32 @@ export function NotificationBell() {
 
   const [items, setItems] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+
+  useEffect(() => {
+    const audio = new Audio(notificationSoundAsset.url);
+    audio.preload = "auto";
+    audio.volume = 0.7;
+    audioRef.current = audio;
+    return () => {
+      audioRef.current = null;
+    };
+  }, []);
+
+  function playSound() {
+    const audio = audioRef.current;
+    if (!audio) return;
+    try {
+      audio.currentTime = 0;
+      void audio.play().catch(() => {
+        /* autoplay blocked until user interacts */
+      });
+    } catch {
+      /* silent */
+    }
+  }
+
 
   const unread = items.filter((n) => !n.read_at).length;
 
@@ -53,7 +81,20 @@ export function NotificationBell() {
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${userId}`,
+        },
+        () => {
+          playSound();
+          load();
+        },
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
           schema: "public",
           table: "notifications",
           filter: `user_id=eq.${userId}`,
@@ -62,6 +103,7 @@ export function NotificationBell() {
           load();
         },
       )
+
       .subscribe();
     return () => {
       supabase.removeChannel(channel);
