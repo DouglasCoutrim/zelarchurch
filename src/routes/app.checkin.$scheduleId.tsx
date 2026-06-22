@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  ArrowLeft, Check, CheckCircle2, MapPin, Search, Undo2, UserPlus,
+  ArrowLeft, Check, CheckCircle2, MapPin, Navigation, Search, Undo2, UserPlus,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   getScheduleForCheckin, listParticipantsForCheckin,
   searchMembersForCheckin, checkInMember, undoCheckIn,
+  geoCheckIn, getCurrentPosition,
   type CheckinParticipant,
 } from "@/lib/checkins";
 import { useTenantStore } from "@/stores/tenantStore";
@@ -72,6 +74,21 @@ function CheckinScreen() {
   const undoMut = useMutation({
     mutationFn: (memberId: string) => undoCheckIn(scheduleId, memberId),
     onSuccess: invalidate,
+  });
+
+  const geoMut = useMutation({
+    mutationFn: async () => {
+      const pos = await getCurrentPosition();
+      return geoCheckIn(scheduleId, pos.coords.latitude, pos.coords.longitude);
+    },
+    onSuccess: (res) => {
+      toast.success(`Check-in registrado a ${res.distance_meters} m da igreja.`);
+      invalidate();
+    },
+    onError: (e: unknown) => {
+      const msg = e instanceof Error ? e.message : "Erro ao registrar check-in";
+      toast.error(msg);
+    },
   });
 
   const filtered = useMemo(() => {
@@ -133,6 +150,28 @@ function CheckinScreen() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="border-primary/30 bg-primary/5">
+        <CardContent className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
+            <p className="flex items-center gap-2 font-medium">
+              <Navigation className="h-4 w-4 text-primary" />
+              Check-in por localização
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Permita o acesso à sua localização. Válido apenas até 200 m da igreja.
+            </p>
+          </div>
+          <Button
+            size="lg"
+            onClick={() => geoMut.mutate()}
+            disabled={geoMut.isPending}
+          >
+            <Navigation className="mr-1 h-4 w-4" />
+            {geoMut.isPending ? "Localizando..." : "Fazer check-in agora"}
+          </Button>
+        </CardContent>
+      </Card>
 
       <div className="flex flex-wrap gap-2">
         <div className="relative grow">

@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader2, Save, Shield, ShieldOff, UserCheck, UserX } from "lucide-react";
+import { Loader2, MapPin, Save, Shield, ShieldOff, UserCheck, UserX } from "lucide-react";
+import { getCurrentPosition } from "@/lib/checkins";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -75,6 +76,10 @@ function SettingsPage() {
   const [timezone, setTimezone] = useState("America/Sao_Paulo");
   const [language, setLanguage] = useState("pt-BR");
   const [currency, setCurrency] = useState("BRL");
+  const [latitude, setLatitude] = useState<string>("");
+  const [longitude, setLongitude] = useState<string>("");
+  const [radius, setRadius] = useState<string>("200");
+  const [locating, setLocating] = useState(false);
 
   useEffect(() => {
     if (!currentTenant) return;
@@ -95,6 +100,9 @@ function SettingsPage() {
         setTimezone(t.settings?.timezone ?? "America/Sao_Paulo");
         setLanguage(t.settings?.language ?? "pt-BR");
         setCurrency(t.settings?.currency ?? "BRL");
+        setLatitude(t.latitude != null ? String(t.latitude) : "");
+        setLongitude(t.longitude != null ? String(t.longitude) : "");
+        setRadius(String(t.checkin_radius_meters ?? 200));
       })
       .catch((e) => toast.error(e.message ?? "Erro ao carregar configurações"))
       .finally(() => setLoading(false));
@@ -114,6 +122,9 @@ function SettingsPage() {
         website: website.trim() || null,
         logo_url: logoUrl.trim() || null,
         primary_color: primaryColor,
+        latitude: latitude.trim() ? Number(latitude) : null,
+        longitude: longitude.trim() ? Number(longitude) : null,
+        checkin_radius_meters: radius.trim() ? Math.max(10, Number(radius)) : 200,
         settings: { timezone, language, currency },
       });
       setTenant(updated);
@@ -224,7 +235,69 @@ function SettingsPage() {
               </div>
             </CardContent>
           </Card>
+
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle>Localização da igreja (check-in)</CardTitle>
+              <CardDescription>
+                Define o ponto de referência. O check-in só será aceito dentro do raio configurado.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4 md:grid-cols-3">
+              <div className="space-y-2">
+                <Label>Latitude</Label>
+                <Input
+                  inputMode="decimal"
+                  placeholder="-23.5505"
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Longitude</Label>
+                <Input
+                  inputMode="decimal"
+                  placeholder="-46.6333"
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Raio (metros)</Label>
+                <Input
+                  type="number"
+                  min={10}
+                  value={radius}
+                  onChange={(e) => setRadius(e.target.value)}
+                />
+              </div>
+              <div className="md:col-span-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={locating}
+                  onClick={async () => {
+                    setLocating(true);
+                    try {
+                      const pos = await getCurrentPosition();
+                      setLatitude(String(pos.coords.latitude));
+                      setLongitude(String(pos.coords.longitude));
+                      toast.success("Localização capturada. Clique em Salvar.");
+                    } catch (e) {
+                      toast.error(e instanceof Error ? e.message : "Erro ao obter localização");
+                    } finally {
+                      setLocating(false);
+                    }
+                  }}
+                >
+                  <MapPin className="h-4 w-4" />
+                  {locating ? "Obtendo..." : "Usar minha localização atual"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
+
 
         <TabsContent value="regional" className="mt-4">
           <Card>
