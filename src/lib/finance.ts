@@ -217,8 +217,9 @@ export async function getAccountBreakdown(
   tenantId: string,
   from: string,
   to: string,
+  congregationId?: string | null,
 ): Promise<AccountBreakdownRow[]> {
-  const { data, error } = await supabase
+  let q = supabase
     .from("transactions")
     .select("amount, type, account:chart_of_accounts(id, name)")
     .eq("tenant_id", tenantId)
@@ -226,6 +227,8 @@ export async function getAccountBreakdown(
     .neq("status", "cancelado")
     .gte("transaction_date", from)
     .lte("transaction_date", to);
+  if (congregationId) q = q.eq("congregation_id", congregationId);
+  const { data, error } = await q;
   if (error) throw error;
   type Acc = { id: string; name: string };
   type Row = { amount: number; type: TransactionType; account: Acc | Acc[] | null };
@@ -249,6 +252,7 @@ export interface ListTransactionsParams {
   from?: string; // YYYY-MM-DD
   to?: string;
   search?: string;
+  congregationId?: string | null;
   page?: number;
   pageSize?: number;
 }
@@ -256,13 +260,13 @@ export interface ListTransactionsParams {
 export async function listTransactions(
   params: ListTransactionsParams,
 ): Promise<{ rows: TransactionRow[]; total: number }> {
-  const { tenantId, type, status, from, to, search } = params;
+  const { tenantId, type, status, from, to, search, congregationId } = params;
   const page = params.page ?? 1;
   const pageSize = params.pageSize ?? 20;
   let q = supabase
     .from("transactions")
     .select(
-      "*, account:chart_of_accounts(id, name, code), cost_center:cost_centers(id, name)",
+      "*, account:chart_of_accounts(id, name, code), cost_center:cost_centers(id, name), congregation:congregations!transactions_congregation_id_fkey(id, name)",
       { count: "exact" },
     )
     .eq("tenant_id", tenantId)
@@ -274,13 +278,18 @@ export async function listTransactions(
   if (from) q = q.gte("transaction_date", from);
   if (to) q = q.lte("transaction_date", to);
   if (search && search.trim()) q = q.ilike("description", `%${search.trim()}%`);
+  if (congregationId) q = q.eq("congregation_id", congregationId);
 
   const start = (page - 1) * pageSize;
   q = q.range(start, start + pageSize - 1);
 
   const { data, error, count } = await q;
   if (error) throw error;
-  return { rows: (data ?? []) as unknown as TransactionRow[], total: count ?? 0 };
+  const rows = (data ?? []).map((r: Record<string, unknown>) => {
+    const cg = r.congregation as { id: string; name: string } | { id: string; name: string }[] | null;
+    return { ...r, congregation: Array.isArray(cg) ? (cg[0] ?? null) : cg };
+  }) as unknown as TransactionRow[];
+  return { rows, total: count ?? 0 };
 }
 
 export interface TransactionInput {
@@ -291,6 +300,7 @@ export interface TransactionInput {
   notes?: string | null;
   account_id?: string | null;
   cost_center_id?: string | null;
+  congregation_id?: string | null;
   member_id?: string | null;
   payment_method?: string | null;
   transaction_date: string;
