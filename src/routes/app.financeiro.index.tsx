@@ -162,6 +162,21 @@ function TransactionsPage() {
             </SelectContent>
           </Select>
         </div>
+        <div className="space-y-1">
+          <Label>Congregação</Label>
+          <Select value={congregation} onValueChange={(v) => { setPage(1); setCongregation(v); }}>
+            <SelectTrigger className="w-48"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas (consolidado)</SelectItem>
+              <SelectItem value="__sede">Sede</SelectItem>
+              {(congregationsQ.data ?? [])
+                .filter((c) => c.is_active)
+                .map((c) => (
+                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        </div>
         <Button onClick={() => setCreating(true)}>
           <Plus className="mr-1 h-4 w-4" /> Novo lançamento
         </Button>
