@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Building2, Sparkles, Save } from "lucide-react";
+import { ArrowLeft, Building2, Sparkles, Save, Church } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,12 +38,48 @@ async function loadTenant(id: string): Promise<AdminTenantDetail> {
   return data as AdminTenantDetail;
 }
 
+interface CongregationsSummary {
+  current: number;
+  max: number | null;
+  planName: string | null;
+}
+
+async function loadCongregationsSummary(
+  tenantId: string,
+  planId: string | null,
+): Promise<CongregationsSummary> {
+  const countQ = supabase
+    .from("congregations")
+    .select("id", { count: "exact", head: true })
+    .eq("tenant_id", tenantId);
+
+  const planQ = planId
+    ? supabase.from("plans").select("name, max_congregations").eq("id", planId).maybeSingle()
+    : Promise.resolve({ data: null, error: null } as { data: null; error: null });
+
+  const [{ count, error: cErr }, planRes] = await Promise.all([countQ, planQ]);
+  if (cErr) throw cErr;
+  if (planRes.error) throw planRes.error;
+
+  return {
+    current: count ?? 0,
+    max: (planRes.data?.max_congregations ?? null) as number | null,
+    planName: (planRes.data?.name ?? null) as string | null,
+  };
+}
+
 function TenantDetail() {
   const { id } = Route.useParams();
   const qc = useQueryClient();
   const { data: tenant, isLoading } = useQuery({
     queryKey: ["admin-tenant", id],
     queryFn: () => loadTenant(id),
+  });
+
+  const { data: congSummary } = useQuery({
+    queryKey: ["admin-tenant-congregations", id, tenant?.plan_id ?? null],
+    enabled: !!tenant,
+    queryFn: () => loadCongregationsSummary(id, tenant?.plan_id ?? null),
   });
 
   const [form, setForm] = useState({
@@ -121,6 +157,34 @@ function TenantDetail() {
           </p>
         </div>
       </header>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Church className="h-4 w-4 text-primary" /> Congregações
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 sm:grid-cols-3">
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Atual</p>
+            <p className="text-2xl font-bold">{congSummary?.current ?? "—"}</p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Limite do plano</p>
+            <p className="text-2xl font-bold">
+              {congSummary
+                ? congSummary.max === null
+                  ? "Ilimitado"
+                  : String(congSummary.max)
+                : "—"}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Plano</p>
+            <p className="text-base font-medium">{congSummary?.planName ?? "—"}</p>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

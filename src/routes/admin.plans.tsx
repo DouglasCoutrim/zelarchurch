@@ -1,9 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreditCard } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { formatBRL } from "@/lib/plans";
 
@@ -20,16 +24,87 @@ interface PlanRow {
   price_monthly: number;
   max_members: number;
   max_departments: number;
+  max_congregations: number | null;
   is_active: boolean;
 }
 
 async function loadPlans() {
   const { data, error } = await supabase
     .from("plans")
-    .select("id, name, slug, description, price_monthly, max_members, max_departments, is_active")
+    .select(
+      "id, name, slug, description, price_monthly, max_members, max_departments, max_congregations, is_active",
+    )
     .order("price_monthly", { ascending: true });
   if (error) throw error;
   return (data ?? []) as PlanRow[];
+}
+
+function formatCongregations(value: number | null): string {
+  if (value === null) return "Ilimitado";
+  if (value === 0) return "Nenhuma";
+  return String(value);
+}
+
+function MaxCongregationsEditor({ plan }: { plan: PlanRow }) {
+  const qc = useQueryClient();
+  const [value, setValue] = useState<string>(
+    plan.max_congregations === null ? "" : String(plan.max_congregations),
+  );
+
+  useEffect(() => {
+    setValue(plan.max_congregations === null ? "" : String(plan.max_congregations));
+  }, [plan.max_congregations]);
+
+  const save = useMutation({
+    mutationFn: async (raw: string) => {
+      const next = raw.trim() === "" ? null : Number(raw);
+      if (next !== null && (!Number.isInteger(next) || next < 0)) {
+        throw new Error("Use um número inteiro maior ou igual a zero.");
+      }
+      const { error } = await supabase
+        .from("plans")
+        .update({ max_congregations: next })
+        .eq("id", plan.id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-plans"] }),
+  });
+
+  const current = plan.max_congregations === null ? "" : String(plan.max_congregations);
+
+  return (
+    <div className="space-y-1.5 pt-2">
+      <Label htmlFor={`maxcong-${plan.id}`} className="text-xs">
+        Máximo de congregações
+      </Label>
+      <div className="flex items-center gap-2">
+        <Input
+          id={`maxcong-${plan.id}`}
+          type="number"
+          min={0}
+          step={1}
+          placeholder="Vazio = ilimitado"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="h-8 w-40"
+        />
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => save.mutate(value)}
+          disabled={save.isPending || value === current}
+        >
+          {save.isPending ? "Salvando…" : "Salvar"}
+        </Button>
+      </div>
+      <p className="text-[11px] text-muted-foreground">
+        Atual: {formatCongregations(plan.max_congregations)} · deixe vazio para ilimitado.
+      </p>
+      {save.isError && (
+        <p className="text-[11px] text-destructive">{(save.error as Error).message}</p>
+      )}
+    </div>
+  );
 }
 
 function AdminPlans() {
@@ -72,8 +147,9 @@ function AdminPlans() {
                     {p.price_monthly > 0 ? formatBRL(p.price_monthly) : "Sob consulta"}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Até {p.max_members.toLocaleString("pt-BR")} membros · {p.max_departments} departamentos
+                    Até {p.max_members.toLocaleString("pt-BR")} membros · {p.max_departments} departamentos · {formatCongregations(p.max_congregations)} congregações
                   </p>
+                  <MaxCongregationsEditor plan={p} />
                 </CardContent>
               </Card>
             ))}
