@@ -19,6 +19,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppRelatoriosRouteImport } from './routes/app.relatorios'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
@@ -105,6 +106,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -318,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -359,6 +366,7 @@ export interface FileRoutesByTo {
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -408,6 +416,7 @@ export interface FileRoutesById {
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -458,6 +467,7 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/invite/$token'
     | '/admin/'
     | '/app/'
     | '/admin/tenants/$id'
@@ -499,6 +509,7 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/invite/$token'
     | '/admin'
     | '/app'
     | '/admin/tenants/$id'
@@ -547,6 +558,7 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/invite/$token'
     | '/admin/'
     | '/app/'
     | '/admin/tenants/$id'
@@ -574,6 +586,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   RegisterRoute: typeof RegisterRoute
   SelectTenantRoute: typeof SelectTenantRoute
+  InviteTokenRoute: typeof InviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -647,6 +660,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/app/settings': {
       id: '/app/settings'
@@ -1063,6 +1083,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   RegisterRoute: RegisterRoute,
   SelectTenantRoute: SelectTenantRoute,
+  InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -15,6 +15,7 @@ import { useTenantStore } from "@/stores/tenantStore";
 
 const searchSchema = z.object({
   plan: z.string().optional(),
+  invite: z.string().optional(),
 });
 
 export const Route = createFileRoute("/register")({
