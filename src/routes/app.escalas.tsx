@@ -29,6 +29,9 @@ import {
 import { listDepartments } from "@/lib/departments";
 import { useTenantStore } from "@/stores/tenantStore";
 import { ScheduleMembersDialog } from "@/components/ScheduleMembersDialog";
+import { ScheduleGeneratorDialog } from "@/components/ScheduleGeneratorDialog";
+import { sendSchedule } from "@/lib/scheduleGenerator";
+import { Send } from "lucide-react";
 
 export const Route = createFileRoute("/app/escalas")({
   head: () => ({ meta: [{ title: "Escalas" }] }),
