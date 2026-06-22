@@ -302,7 +302,7 @@ function JoinForm({ church, onBack }: { church: Church; onBack: () => void }) {
         id: church.id,
         name: church.name,
         slug: church.slug,
-        plan_id: null as unknown as string,
+        plan_id: null,
         created_at: new Date().toISOString(),
       });
 
