@@ -35,8 +35,15 @@ export const Route = createFileRoute("/register")({
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { plan: planParam } = Route.useSearch();
+  const { plan: planParam, invite: inviteParam } = Route.useSearch();
   const { data: plans } = useQuery({ queryKey: ["plans", "public"], queryFn: fetchActivePlans });
+
+  useEffect(() => {
+    if (inviteParam) {
+      navigate({ to: "/invite/$token", params: { token: inviteParam }, replace: true });
+    }
+  }, [inviteParam, navigate]);
+
 
   const [form, setForm] = useState({
     pastor_name: "",
