@@ -25,6 +25,7 @@ const EMPTY: MemberFormInput = {
   email: null, phone: null, whatsapp: null, address: null, photo_url: null,
   baptism_date: null, join_date: null, member_type: null, church_role: null,
   spiritual_gifts: null, status: "ativo" as MemberStatus, notes: null,
+  is_intercessor: false,
 };
 
 function toInput(m: MemberRecord): MemberFormInput {
@@ -179,10 +180,29 @@ export function MemberForm({ initial }: { initial?: MemberRecord }) {
         </TabsContent>
 
         <TabsContent value="obs">
-          <Card><CardContent className="pt-6">
-            <Label htmlFor="notes">Observações</Label>
-            <Textarea id="notes" rows={6} value={form.notes ?? ""}
-              onChange={(e) => set("notes", e.target.value || null)} />
+          <Card><CardContent className="space-y-4 pt-6">
+            <div className="flex items-center justify-between rounded-md border p-3">
+              <div>
+                <Label htmlFor="is_intercessor" className="font-medium">
+                  Intercessor
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Receberá notificações de pedidos de oração da igreja.
+                </p>
+              </div>
+              <input
+                id="is_intercessor"
+                type="checkbox"
+                className="h-5 w-5 accent-primary"
+                checked={!!form.is_intercessor}
+                onChange={(e) => set("is_intercessor", e.target.checked)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="notes">Observações</Label>
+              <Textarea id="notes" rows={6} value={form.notes ?? ""}
+                onChange={(e) => set("notes", e.target.value || null)} />
+            </div>
           </CardContent></Card>
         </TabsContent>
       </Tabs>
