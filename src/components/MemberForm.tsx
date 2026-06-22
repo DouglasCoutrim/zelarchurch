@@ -174,6 +174,24 @@ export function MemberForm({ initial }: { initial?: MemberRecord }) {
               ]} />
             <Field label="Cargo na igreja" value={form.church_role ?? ""}
               onChange={(v) => set("church_role", v || null)} />
+            <div className="space-y-1.5">
+              <Label>Congregação</Label>
+              <Select
+                value={form.congregation_id ?? "__sede"}
+                onValueChange={(v) => set("congregation_id", v === "__sede" ? null : v)}
+              >
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__sede">Sede</SelectItem>
+                  {activeCongregations.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                      {!c.is_active ? " (inativa)" : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <SelectField label="Status" value={form.status}
               onChange={(v) => set("status", v as MemberStatus)}
               options={MEMBER_STATUS_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
