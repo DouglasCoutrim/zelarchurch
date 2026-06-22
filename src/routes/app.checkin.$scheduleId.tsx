@@ -151,6 +151,28 @@ function CheckinScreen() {
         </Card>
       </div>
 
+      <Card className="border-primary/30 bg-primary/5">
+        <CardContent className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
+            <p className="flex items-center gap-2 font-medium">
+              <Navigation className="h-4 w-4 text-primary" />
+              Check-in por localização
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Permita o acesso à sua localização. Válido apenas até 200 m da igreja.
+            </p>
+          </div>
+          <Button
+            size="lg"
+            onClick={() => geoMut.mutate()}
+            disabled={geoMut.isPending}
+          >
+            <Navigation className="mr-1 h-4 w-4" />
+            {geoMut.isPending ? "Localizando..." : "Fazer check-in agora"}
+          </Button>
+        </CardContent>
+      </Card>
+
       <div className="flex flex-wrap gap-2">
         <div className="relative grow">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
