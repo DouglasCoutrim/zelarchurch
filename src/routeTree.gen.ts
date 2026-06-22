@@ -38,6 +38,7 @@ import { Route as AppEbdRouteImport } from './routes/app.ebd'
 import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
 import { Route as AppConvocacoesRouteImport } from './routes/app.convocacoes'
 import { Route as AppConselhoFiscalRouteImport } from './routes/app.conselho-fiscal'
+import { Route as AppCongregationsRouteImport } from './routes/app.congregations'
 import { Route as AppComprasRouteImport } from './routes/app.compras'
 import { Route as AppCheckinRouteImport } from './routes/app.checkin'
 import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
@@ -211,6 +212,11 @@ const AppConselhoFiscalRoute = AppConselhoFiscalRouteImport.update({
   path: '/conselho-fiscal',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCongregationsRoute = AppCongregationsRouteImport.update({
+  id: '/congregations',
+  path: '/congregations',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppComprasRoute = AppComprasRouteImport.update({
   id: '/compras',
   path: '/compras',
@@ -366,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/compras': typeof AppComprasRoute
+  '/app/congregations': typeof AppCongregationsRoute
   '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
   '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
@@ -420,6 +427,7 @@ export interface FileRoutesByTo {
   '/app/atas': typeof AppAtasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/compras': typeof AppComprasRoute
+  '/app/congregations': typeof AppCongregationsRoute
   '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
   '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
@@ -475,6 +483,7 @@ export interface FileRoutesById {
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/checkin': typeof AppCheckinRouteWithChildren
   '/app/compras': typeof AppComprasRoute
+  '/app/congregations': typeof AppCongregationsRoute
   '/app/conselho-fiscal': typeof AppConselhoFiscalRoute
   '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
@@ -535,6 +544,7 @@ export interface FileRouteTypes {
     | '/app/auditoria'
     | '/app/checkin'
     | '/app/compras'
+    | '/app/congregations'
     | '/app/conselho-fiscal'
     | '/app/convocacoes'
     | '/app/departments'
@@ -589,6 +599,7 @@ export interface FileRouteTypes {
     | '/app/atas'
     | '/app/auditoria'
     | '/app/compras'
+    | '/app/congregations'
     | '/app/conselho-fiscal'
     | '/app/convocacoes'
     | '/app/departments'
@@ -643,6 +654,7 @@ export interface FileRouteTypes {
     | '/app/auditoria'
     | '/app/checkin'
     | '/app/compras'
+    | '/app/congregations'
     | '/app/conselho-fiscal'
     | '/app/convocacoes'
     | '/app/departments'
@@ -899,6 +911,13 @@ declare module '@tanstack/react-router' {
       path: '/conselho-fiscal'
       fullPath: '/app/conselho-fiscal'
       preLoaderRoute: typeof AppConselhoFiscalRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/congregations': {
+      id: '/app/congregations'
+      path: '/congregations'
+      fullPath: '/app/congregations'
+      preLoaderRoute: typeof AppCongregationsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/compras': {
@@ -1223,6 +1242,7 @@ interface AppRouteChildren {
   AppAuditoriaRoute: typeof AppAuditoriaRoute
   AppCheckinRoute: typeof AppCheckinRouteWithChildren
   AppComprasRoute: typeof AppComprasRoute
+  AppCongregationsRoute: typeof AppCongregationsRoute
   AppConselhoFiscalRoute: typeof AppConselhoFiscalRoute
   AppConvocacoesRoute: typeof AppConvocacoesRoute
   AppDepartmentsRoute: typeof AppDepartmentsRoute
@@ -1248,6 +1268,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAuditoriaRoute: AppAuditoriaRoute,
   AppCheckinRoute: AppCheckinRouteWithChildren,
   AppComprasRoute: AppComprasRoute,
+  AppCongregationsRoute: AppCongregationsRoute,
   AppConselhoFiscalRoute: AppConselhoFiscalRoute,
   AppConvocacoesRoute: AppConvocacoesRoute,
   AppDepartmentsRoute: AppDepartmentsRoute,

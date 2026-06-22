@@ -58,6 +58,7 @@ const sections: Section[] = [
     items: [
       { title: "Membros", url: "/app/members", icon: Users },
       { title: "Departamentos", url: "/app/departments", icon: Building2 },
+      { title: "Congregações", url: "/app/congregations", icon: Building2 },
       { title: "Códigos de acesso", url: "/app/invitations", icon: QrCode },
     ],
   },
