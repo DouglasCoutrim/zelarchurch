@@ -261,9 +261,16 @@ function ScheduleCard({
               <p className="text-xs text-muted-foreground">{schedule.event_type}</p>
             )}
           </div>
-          {schedule.department && (
-            <Badge variant="outline">{schedule.department.name}</Badge>
-          )}
+          <div className="flex items-center gap-1">
+            {schedule.status && (
+              <Badge variant={schedule.status === "sent" ? "default" : "outline"} className="text-[10px]">
+                {schedule.status === "sent" ? "enviada" : schedule.status === "approved" ? "aprovada" : "rascunho"}
+              </Badge>
+            )}
+            {schedule.department && (
+              <Badge variant="outline">{schedule.department.name}</Badge>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
