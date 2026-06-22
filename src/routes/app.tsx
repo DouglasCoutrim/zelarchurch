@@ -4,6 +4,7 @@ import { LogOut, Search } from "lucide-react";
 
 import { AppSidebar } from "@/components/AppSidebar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { InviteMemberButton } from "@/components/InviteMemberButton";
 import { NotificationBell } from "@/components/NotificationBell";
 import { TenantSwitcher } from "@/components/TenantSwitcher";
 import { Button } from "@/components/ui/button";
@@ -84,6 +85,7 @@ function AppLayout() {
                   ⌘K
                 </kbd>
               </button>
+              <InviteMemberButton />
               <NotificationBell />
               <Link
                 to="/app/profile"
