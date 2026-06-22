@@ -81,7 +81,20 @@ export function NotificationBell() {
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${userId}`,
+        },
+        () => {
+          playSound();
+          load();
+        },
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
           schema: "public",
           table: "notifications",
           filter: `user_id=eq.${userId}`,
@@ -90,6 +103,7 @@ export function NotificationBell() {
           load();
         },
       )
+
       .subscribe();
     return () => {
       supabase.removeChannel(channel);
