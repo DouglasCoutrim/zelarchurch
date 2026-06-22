@@ -24,6 +24,8 @@ import { usePlanLimit } from "@/hooks/usePlanLimit";
 import { useTenantStore } from "@/stores/tenantStore";
 import { useAuthStore } from "@/stores/authStore";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { getCongregationsUsage } from "@/lib/congregations";
 import { loadDashboard, type DashboardStats, type RecentTransaction, type UpcomingSchedule } from "@/lib/dashboard";
 
 export const Route = createFileRoute("/app/")({
@@ -58,6 +60,12 @@ function Dashboard() {
       })
       .finally(() => setLoading(false));
   }, [currentTenant?.id, session?.user.id]);
+
+  const { data: congUsage } = useQuery({
+    queryKey: ["congregations-usage", currentTenant?.id],
+    enabled: !!currentTenant?.id,
+    queryFn: () => getCongregationsUsage(currentTenant!.id),
+  });
 
   const enabledFeatures = usage
     ? Object.entries(usage.features).filter(([, on]) => on).map(([k]) => k)
@@ -238,7 +246,7 @@ function Dashboard() {
       </div>
 
       {/* Plano */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <UsageCard
           title="Membros"
           description="Cadastrados na sua igreja"
@@ -257,6 +265,34 @@ function Dashboard() {
           loading={planLoading}
           near={deptsNear}
         />
+        <Card>
+          <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0">
+            <div>
+              <CardTitle>Congregações</CardTitle>
+              <CardDescription>Filiais vinculadas</CardDescription>
+            </div>
+            <Building2 className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {!congUsage ? (
+              <Skeleton className="h-8 w-24" />
+            ) : (
+              <>
+                <p className="text-2xl font-bold">
+                  {congUsage.max === null
+                    ? `${congUsage.current} (ilimitado)`
+                    : `${congUsage.current} de ${congUsage.max}`}
+                </p>
+                <Link
+                  to="/app/congregations"
+                  className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                >
+                  Gerenciar <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </>
+            )}
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0">
             <div>
