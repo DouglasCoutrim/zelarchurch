@@ -32,7 +32,7 @@ export function NotificationBell() {
   const [items, setItems] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const initialLoadRef = useRef(true);
+
 
   useEffect(() => {
     const audio = new Audio(notificationSoundAsset.url);
