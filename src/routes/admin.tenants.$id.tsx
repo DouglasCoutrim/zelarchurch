@@ -160,6 +160,34 @@ function TenantDetail() {
 
       <Card>
         <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Church className="h-4 w-4 text-primary" /> Congregações
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 sm:grid-cols-3">
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Atual</p>
+            <p className="text-2xl font-bold">{congSummary?.current ?? "—"}</p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Limite do plano</p>
+            <p className="text-2xl font-bold">
+              {congSummary
+                ? congSummary.max === null
+                  ? "Ilimitado"
+                  : String(congSummary.max)
+                : "—"}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Plano</p>
+            <p className="text-base font-medium">{congSummary?.planName ?? "—"}</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Cortesia</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
