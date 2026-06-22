@@ -30,6 +30,7 @@ import {
   ASSET_CONDITION_OPTIONS, type Patrimony, type PatrimonyInput,
 } from "@/lib/patrimony";
 import { useTenantStore } from "@/stores/tenantStore";
+import { ImageUploadField } from "@/components/ImageUploadField";
 
 export const Route = createFileRoute("/app/patrimonio")({
   head: () => ({ meta: [{ title: "Patrimônio" }] }),
