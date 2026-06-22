@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { QrScanButton } from "@/components/QrScanButton";
 import logoAsset from "@/assets/logo-zelar.svg.asset.json";
 
 export const Route = createFileRoute("/onboarding")({
@@ -104,16 +105,23 @@ function OnboardingPage() {
       <div className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-brand-gold/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-2xl">
-        <header className="mb-6 flex items-center justify-between">
+        <header className="mb-6 flex items-center justify-between gap-2">
           <Link to="/" aria-label={APP_NAME}>
             <img src={logoAsset.url} alt={APP_NAME} className="h-12 w-auto" />
           </Link>
-          <Link
-            to="/auth"
-            className="text-sm font-medium text-muted-foreground hover:text-primary"
-          >
-            Já tenho conta
-          </Link>
+          <div className="flex items-center gap-2">
+            <QrScanButton
+              onDetected={(code) =>
+                navigate({ to: "/join/$code", params: { code } })
+              }
+            />
+            <Link
+              to="/auth"
+              className="text-sm font-medium text-muted-foreground hover:text-primary"
+            >
+              Já tenho conta
+            </Link>
+          </div>
         </header>
 
         {!selected ? (
