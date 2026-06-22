@@ -62,6 +62,7 @@ import { Route as AppEbdClassIdRouteImport } from './routes/app.ebd.$classId'
 import { Route as AppCheckinScheduleIdRouteImport } from './routes/app.checkin.$scheduleId'
 import { Route as AdminTenantsIdRouteImport } from './routes/admin.tenants.$id'
 import { Route as AppMembersIdEditRouteImport } from './routes/app.members.$id.edit'
+import { Route as AppMembersIdCarteirinhaRouteImport } from './routes/app.members.$id.carteirinha'
 
 const SelectTenantRoute = SelectTenantRouteImport.update({
   id: '/select-tenant',
@@ -328,6 +329,11 @@ const AppMembersIdEditRoute = AppMembersIdEditRouteImport.update({
   path: '/edit',
   getParentRoute: () => AppMembersIdRoute,
 } as any)
+const AppMembersIdCarteirinhaRoute = AppMembersIdCarteirinhaRouteImport.update({
+  id: '/carteirinha',
+  path: '/carteirinha',
+  getParentRoute: () => AppMembersIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -382,6 +388,7 @@ export interface FileRoutesByFullPath {
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
   '/app/oracao/': typeof AppOracaoIndexRoute
+  '/app/members/$id/carteirinha': typeof AppMembersIdCarteirinhaRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -429,6 +436,7 @@ export interface FileRoutesByTo {
   '/app/financeiro': typeof AppFinanceiroIndexRoute
   '/app/members': typeof AppMembersIndexRoute
   '/app/oracao': typeof AppOracaoIndexRoute
+  '/app/members/$id/carteirinha': typeof AppMembersIdCarteirinhaRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
 export interface FileRoutesById {
@@ -485,6 +493,7 @@ export interface FileRoutesById {
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
   '/app/oracao/': typeof AppOracaoIndexRoute
+  '/app/members/$id/carteirinha': typeof AppMembersIdCarteirinhaRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
 export interface FileRouteTypes {
@@ -542,6 +551,7 @@ export interface FileRouteTypes {
     | '/app/financeiro/'
     | '/app/members/'
     | '/app/oracao/'
+    | '/app/members/$id/carteirinha'
     | '/app/members/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -589,6 +599,7 @@ export interface FileRouteTypes {
     | '/app/financeiro'
     | '/app/members'
     | '/app/oracao'
+    | '/app/members/$id/carteirinha'
     | '/app/members/$id/edit'
   id:
     | '__root__'
@@ -644,6 +655,7 @@ export interface FileRouteTypes {
     | '/app/financeiro/'
     | '/app/members/'
     | '/app/oracao/'
+    | '/app/members/$id/carteirinha'
     | '/app/members/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -1033,6 +1045,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMembersIdEditRouteImport
       parentRoute: typeof AppMembersIdRoute
     }
+    '/app/members/$id/carteirinha': {
+      id: '/app/members/$id/carteirinha'
+      path: '/carteirinha'
+      fullPath: '/app/members/$id/carteirinha'
+      preLoaderRoute: typeof AppMembersIdCarteirinhaRouteImport
+      parentRoute: typeof AppMembersIdRoute
+    }
   }
 }
 
@@ -1118,10 +1137,12 @@ const AppFinanceiroRouteWithChildren = AppFinanceiroRoute._addFileChildren(
 )
 
 interface AppMembersIdRouteChildren {
+  AppMembersIdCarteirinhaRoute: typeof AppMembersIdCarteirinhaRoute
   AppMembersIdEditRoute: typeof AppMembersIdEditRoute
 }
 
 const AppMembersIdRouteChildren: AppMembersIdRouteChildren = {
+  AppMembersIdCarteirinhaRoute: AppMembersIdCarteirinhaRoute,
   AppMembersIdEditRoute: AppMembersIdEditRoute,
 }
 
