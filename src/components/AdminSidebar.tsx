@@ -21,6 +21,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import logoAsset from "@/assets/logo-zelar.svg.asset.json";
+import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
 
 type Item = { title: string; url: string; icon: LucideIcon; exact?: boolean };
 
@@ -56,18 +58,17 @@ export function AdminSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b border-sidebar-border/60 px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md gradient-gold text-[#1b3a6b] font-bold shadow-md">
-            Z
-          </span>
-          {!collapsed && (
-            <div className="flex flex-col leading-tight">
-              <span className="font-semibold tracking-tight">Zelar</span>
-              <span className="text-[10px] uppercase tracking-wider text-brand-gold">
+      <SidebarHeader className="border-b border-sidebar-border/60 px-3 py-4">
+        <div className="flex flex-col items-center gap-1">
+          {collapsed ? (
+            <img src={faviconAsset.url} alt="Zelar" className="h-9 w-9 rounded-md object-contain" />
+          ) : (
+            <>
+              <img src={logoAsset.url} alt="Zelar" className="h-14 w-auto" />
+              <span className="text-[10px] uppercase tracking-[0.18em] text-brand-gold">
                 Super Admin
               </span>
-            </div>
+            </>
           )}
         </div>
       </SidebarHeader>

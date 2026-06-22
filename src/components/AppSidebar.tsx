@@ -34,6 +34,7 @@ import {
 import { APP_NAME } from "@/config/constants";
 import { cn } from "@/lib/utils";
 import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
+import logoAsset from "@/assets/logo-zelar.svg.asset.json";
 
 type Item = {
   title: string;
@@ -92,14 +93,17 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b px-4 py-3">
-        <div className="flex items-center gap-2">
-          <img
-            src={faviconAsset.url}
-            alt={APP_NAME}
-            className="h-8 w-8 shrink-0 rounded-md object-contain"
-          />
-          {!collapsed && <span className="truncate font-semibold">{APP_NAME}</span>}
+      <SidebarHeader className="border-b px-3 py-4">
+        <div className="flex items-center justify-center">
+          {collapsed ? (
+            <img
+              src={faviconAsset.url}
+              alt={APP_NAME}
+              className="h-9 w-9 shrink-0 rounded-md object-contain"
+            />
+          ) : (
+            <img src={logoAsset.url} alt={APP_NAME} className="h-14 w-auto" />
+          )}
         </div>
       </SidebarHeader>
       <SidebarContent>

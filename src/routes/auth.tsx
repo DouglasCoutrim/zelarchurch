@@ -68,9 +68,8 @@ function AuthPage() {
         <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-brand-emerald/20 blur-3xl" />
 
         <div className="relative z-10 flex h-full flex-col justify-between p-12 text-white">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logoAsset.url} alt="Zelar" className="h-10 w-auto" />
-            <span className="text-lg font-semibold tracking-tight">{APP_NAME}</span>
+          <Link to="/" className="flex items-center" aria-label={APP_NAME}>
+            <img src={logoAsset.url} alt={APP_NAME} className="h-16 w-auto" />
           </Link>
 
           <div className="max-w-md space-y-6 page-enter">
@@ -100,7 +99,7 @@ function AuthPage() {
       <main className="relative flex items-center justify-center gradient-mesh px-4 py-10">
         <div className="w-full max-w-md page-enter">
           <Link to="/" className="mb-6 flex items-center justify-center gap-2 lg:hidden">
-            <img src={logoAsset.url} alt={APP_NAME} className="h-10 w-auto" />
+            <img src={logoAsset.url} alt={APP_NAME} className="h-16 w-auto" />
           </Link>
           <div className="rounded-2xl glass-strong p-8 shadow-elevated">
             <div className="mb-6 space-y-1">
