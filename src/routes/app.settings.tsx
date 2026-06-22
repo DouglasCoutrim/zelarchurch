@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader2, Save, Shield, ShieldOff, UserCheck, UserX } from "lucide-react";
+import { Loader2, MapPin, Save, Shield, ShieldOff, UserCheck, UserX } from "lucide-react";
+import { getCurrentPosition } from "@/lib/checkins";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
