@@ -24,6 +24,8 @@ import { usePlanLimit } from "@/hooks/usePlanLimit";
 import { useTenantStore } from "@/stores/tenantStore";
 import { useAuthStore } from "@/stores/authStore";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { getCongregationsUsage } from "@/lib/congregations";
 import { loadDashboard, type DashboardStats, type RecentTransaction, type UpcomingSchedule } from "@/lib/dashboard";
 
 export const Route = createFileRoute("/app/")({
