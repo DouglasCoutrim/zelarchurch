@@ -264,6 +264,7 @@ function Dashboard() {
           max={usage?.maxDepartments}
           loading={planLoading}
           near={deptsNear}
+        />
         <Card>
           <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0">
             <div>
