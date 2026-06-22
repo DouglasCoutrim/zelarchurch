@@ -22,6 +22,9 @@ import {
   TrendingUp,
   Lock,
   Quote,
+  MapPin,
+  Ticket,
+  QrCode,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
