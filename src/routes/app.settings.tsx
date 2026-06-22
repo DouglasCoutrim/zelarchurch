@@ -278,16 +278,13 @@ function SettingsPage() {
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label>URL do logo</Label>
-                <Input value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} placeholder="https://..." />
-                {logoUrl && (
-                  <img
-                    src={logoUrl}
-                    alt="Logo preview"
-                    className="mt-2 h-16 w-16 rounded border object-contain"
-                    onError={(e) => ((e.currentTarget.style.display = "none"))}
-                  />
-                )}
+                <ImageUploadField
+                  label="Logo da igreja"
+                  value={logoUrl || null}
+                  onChange={(v) => setLogoUrl(v ?? "")}
+                  maxSize={512}
+                  shape="square"
+                />
               </div>
               <div className="space-y-2">
                 <Label>Cor principal</Label>
