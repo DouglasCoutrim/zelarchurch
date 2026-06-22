@@ -46,7 +46,7 @@ export async function getTenant(tenantId: string): Promise<TenantFull> {
   const { data, error } = await supabase
     .from("tenants")
     .select(
-      "id,name,slug,cnpj,email,phone,city,state,website,logo_url,primary_color,settings,created_at,updated_at",
+      "id,name,slug,cnpj,email,phone,city,state,website,logo_url,primary_color,latitude,longitude,checkin_radius_meters,settings,created_at,updated_at",
     )
     .eq("id", tenantId)
     .single();
@@ -63,7 +63,7 @@ export async function updateTenant(
     .update(input)
     .eq("id", tenantId)
     .select(
-      "id,name,slug,cnpj,email,phone,city,state,website,logo_url,primary_color,settings,created_at,updated_at",
+      "id,name,slug,cnpj,email,phone,city,state,website,logo_url,primary_color,latitude,longitude,checkin_radius_meters,settings,created_at,updated_at",
     )
     .single();
   if (error) throw error;
