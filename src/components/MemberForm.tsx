@@ -25,6 +25,7 @@ const EMPTY: MemberFormInput = {
   email: null, phone: null, whatsapp: null, address: null, photo_url: null,
   baptism_date: null, join_date: null, member_type: null, church_role: null,
   spiritual_gifts: null, status: "ativo" as MemberStatus, notes: null,
+  is_intercessor: false,
 };
 
 function toInput(m: MemberRecord): MemberFormInput {
