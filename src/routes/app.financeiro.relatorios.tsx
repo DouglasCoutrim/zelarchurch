@@ -15,8 +15,12 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
   getMonthlyReport, getAccountBreakdown, getFinanceSummary,
 } from "@/lib/finance";
+import { listCongregations } from "@/lib/congregations";
 import { useTenantStore } from "@/stores/tenantStore";
 import { formatBRL } from "@/lib/plans";
 
