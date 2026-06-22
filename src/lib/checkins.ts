@@ -176,6 +176,45 @@ export async function checkInMember(input: {
   return data as CheckinRow;
 }
 
+export interface GeoCheckinResult {
+  checkin_id: string;
+  member_id: string;
+  distance_meters: number;
+  radius_meters: number;
+  checked_in_at: string;
+}
+
+export async function geoCheckIn(
+  scheduleId: string,
+  lat: number,
+  lng: number,
+): Promise<GeoCheckinResult> {
+  const { data, error } = await supabase.rpc("geo_checkin", {
+    p_schedule_id: scheduleId,
+    p_lat: lat,
+    p_lng: lng,
+  });
+  if (error) throw error;
+  return data as GeoCheckinResult;
+}
+
+export function getCurrentPosition(): Promise<GeolocationPosition> {
+  return new Promise((resolve, reject) => {
+    if (!("geolocation" in navigator)) {
+      reject(new Error("Seu dispositivo não suporta geolocalização."));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(resolve, (err) => {
+      const msgs: Record<number, string> = {
+        1: "Permissão de localização negada. Habilite no navegador para fazer check-in.",
+        2: "Não foi possível obter sua localização. Verifique o GPS.",
+        3: "Tempo esgotado ao obter localização. Tente novamente.",
+      };
+      reject(new Error(msgs[err.code] ?? err.message));
+    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+  });
+}
+
 export async function undoCheckIn(
   scheduleId: string,
   memberId: string,
