@@ -73,6 +73,7 @@ function Landing() {
     <div className="min-h-screen overflow-x-hidden bg-[#fafaf7] text-[#0f1f3a]">
       <SiteHeader />
       <Hero />
+      <JoinMethods />
       <TrustBar />
       <FeaturesZ />
       <ModulesBento />
