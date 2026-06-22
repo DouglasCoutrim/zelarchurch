@@ -40,6 +40,7 @@ export interface Transaction {
   notes: string | null;
   account_id: string | null;
   cost_center_id: string | null;
+  congregation_id: string | null;
   member_id: string | null;
   payment_method: string | null;
   transaction_date: string;
@@ -54,6 +55,7 @@ export interface Transaction {
 export interface TransactionRow extends Transaction {
   account?: { id: string; name: string; code: string } | null;
   cost_center?: { id: string; name: string } | null;
+  congregation?: { id: string; name: string } | null;
 }
 
 // -------- Plano de contas --------
