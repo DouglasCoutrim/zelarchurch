@@ -155,6 +155,13 @@ function DepartmentsPage() {
         departmentName={linkOpen?.name ?? ""}
       />
 
+      <DepartmentInstrumentsDialog
+        open={!!instOpen}
+        onOpenChange={(v) => { if (!v) setInstOpen(null); }}
+        departmentId={instOpen?.id ?? null}
+        departmentName={instOpen?.name ?? ""}
+      />
+
       <AlertDialog open={!!deleting} onOpenChange={(v) => { if (!v) setDeleting(null); }}>
         <AlertDialogContent>
           <AlertDialogHeader>
