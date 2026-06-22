@@ -26,6 +26,7 @@ import {
   type TenantFull,
 } from "@/lib/tenantSettings";
 import { useTenantStore } from "@/stores/tenantStore";
+import { ImageUploadField } from "@/components/ImageUploadField";
 
 export const Route = createFileRoute("/app/settings")({
   head: () => ({ meta: [{ title: "Configurações" }] }),
