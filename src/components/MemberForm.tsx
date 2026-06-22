@@ -41,6 +41,15 @@ export function MemberForm({ initial }: { initial?: MemberRecord }) {
   const [form, setForm] = useState<MemberFormInput>(initial ? toInput(initial) : EMPTY);
   const [error, setError] = useState<string | null>(null);
 
+  const { data: congregations } = useQuery({
+    queryKey: ["congregations", currentTenant?.id],
+    enabled: !!currentTenant?.id,
+    queryFn: () => listCongregations(currentTenant!.id),
+  });
+  const activeCongregations = (congregations ?? []).filter(
+    (c) => c.is_active || c.id === form.congregation_id,
+  );
+
   const mutation = useMutation({
     mutationFn: async () => {
       if (!currentTenant?.id) throw new Error("Sem área de trabalho ativa");
