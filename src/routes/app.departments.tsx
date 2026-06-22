@@ -120,6 +120,9 @@ function DepartmentsPage() {
                   <span className="ml-auto text-xs text-muted-foreground">Gerenciar →</span>
                 </button>
                 <div className="flex justify-end gap-1">
+                  <Button size="sm" variant="ghost" onClick={() => setInstOpen(d)} title="Instrumentos">
+                    <Music className="h-4 w-4" />
+                  </Button>
                   <Button size="sm" variant="ghost" onClick={() => setEditing(d)}>
                     <Pencil className="h-4 w-4" />
                   </Button>
