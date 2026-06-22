@@ -19,13 +19,16 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as JoinCodeRouteImport } from './routes/join.$code'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as AppWelcomeRouteImport } from './routes/app.welcome'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppRelatoriosRouteImport } from './routes/app.relatorios'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppPatrimonioRouteImport } from './routes/app.patrimonio'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
 import { Route as AppMembersRouteImport } from './routes/app.members'
+import { Route as AppInvitationsRouteImport } from './routes/app.invitations'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
 import { Route as AppEscalasRouteImport } from './routes/app.escalas'
 import { Route as AppEbdRouteImport } from './routes/app.ebd'
@@ -107,10 +110,20 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const JoinCodeRoute = JoinCodeRouteImport.update({
+  id: '/join/$code',
+  path: '/join/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppWelcomeRoute = AppWelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -140,6 +153,11 @@ const AppNotificacoesRoute = AppNotificacoesRouteImport.update({
 const AppMembersRoute = AppMembersRouteImport.update({
   id: '/members',
   path: '/members',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInvitationsRoute = AppInvitationsRouteImport.update({
+  id: '/invitations',
+  path: '/invitations',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
@@ -318,13 +336,16 @@ export interface FileRoutesByFullPath {
   '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
+  '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/welcome': typeof AppWelcomeRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/join/$code': typeof JoinCodeRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -361,12 +382,15 @@ export interface FileRoutesByTo {
   '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/escalas': typeof AppEscalasRoute
+  '/app/invitations': typeof AppInvitationsRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/welcome': typeof AppWelcomeRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/join/$code': typeof JoinCodeRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -410,13 +434,16 @@ export interface FileRoutesById {
   '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
+  '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/welcome': typeof AppWelcomeRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/join/$code': typeof JoinCodeRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -461,13 +488,16 @@ export interface FileRouteTypes {
     | '/app/ebd'
     | '/app/escalas'
     | '/app/financeiro'
+    | '/app/invitations'
     | '/app/members'
     | '/app/notificacoes'
     | '/app/patrimonio'
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/app/welcome'
     | '/invite/$token'
+    | '/join/$code'
     | '/admin/'
     | '/app/'
     | '/admin/tenants/$id'
@@ -504,12 +534,15 @@ export interface FileRouteTypes {
     | '/app/convocacoes'
     | '/app/departments'
     | '/app/escalas'
+    | '/app/invitations'
     | '/app/notificacoes'
     | '/app/patrimonio'
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/app/welcome'
     | '/invite/$token'
+    | '/join/$code'
     | '/admin'
     | '/app'
     | '/admin/tenants/$id'
@@ -552,13 +585,16 @@ export interface FileRouteTypes {
     | '/app/ebd'
     | '/app/escalas'
     | '/app/financeiro'
+    | '/app/invitations'
     | '/app/members'
     | '/app/notificacoes'
     | '/app/patrimonio'
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/app/welcome'
     | '/invite/$token'
+    | '/join/$code'
     | '/admin/'
     | '/app/'
     | '/admin/tenants/$id'
@@ -587,6 +623,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   SelectTenantRoute: typeof SelectTenantRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  JoinCodeRoute: typeof JoinCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -661,12 +698,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/join/$code': {
+      id: '/join/$code'
+      path: '/join/$code'
+      fullPath: '/join/$code'
+      preLoaderRoute: typeof JoinCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/app/welcome': {
+      id: '/app/welcome'
+      path: '/welcome'
+      fullPath: '/app/welcome'
+      preLoaderRoute: typeof AppWelcomeRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/settings': {
       id: '/app/settings'
@@ -708,6 +759,13 @@ declare module '@tanstack/react-router' {
       path: '/members'
       fullPath: '/app/members'
       preLoaderRoute: typeof AppMembersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/invitations': {
+      id: '/app/invitations'
+      path: '/invitations'
+      fullPath: '/app/invitations'
+      preLoaderRoute: typeof AppInvitationsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/financeiro': {
@@ -1043,12 +1101,14 @@ interface AppRouteChildren {
   AppEbdRoute: typeof AppEbdRouteWithChildren
   AppEscalasRoute: typeof AppEscalasRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
+  AppInvitationsRoute: typeof AppInvitationsRoute
   AppMembersRoute: typeof AppMembersRouteWithChildren
   AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppPatrimonioRoute: typeof AppPatrimonioRoute
   AppProfileRoute: typeof AppProfileRoute
   AppRelatoriosRoute: typeof AppRelatoriosRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppWelcomeRoute: typeof AppWelcomeRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
@@ -1063,12 +1123,14 @@ const AppRouteChildren: AppRouteChildren = {
   AppEbdRoute: AppEbdRouteWithChildren,
   AppEscalasRoute: AppEscalasRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
+  AppInvitationsRoute: AppInvitationsRoute,
   AppMembersRoute: AppMembersRouteWithChildren,
   AppNotificacoesRoute: AppNotificacoesRoute,
   AppPatrimonioRoute: AppPatrimonioRoute,
   AppProfileRoute: AppProfileRoute,
   AppRelatoriosRoute: AppRelatoriosRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppWelcomeRoute: AppWelcomeRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
@@ -1084,6 +1146,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   SelectTenantRoute: SelectTenantRoute,
   InviteTokenRoute: InviteTokenRoute,
+  JoinCodeRoute: JoinCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

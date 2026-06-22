@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Bell,
   History,
+  QrCode,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -56,6 +57,7 @@ const sections: Section[] = [
     items: [
       { title: "Membros", url: "/app/members", icon: Users },
       { title: "Departamentos", url: "/app/departments", icon: Building2 },
+      { title: "Códigos de acesso", url: "/app/invitations", icon: QrCode },
     ],
   },
   {

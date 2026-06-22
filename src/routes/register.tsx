@@ -16,6 +16,7 @@ import { useTenantStore } from "@/stores/tenantStore";
 const searchSchema = z.object({
   plan: z.string().optional(),
   invite: z.string().optional(),
+  code: z.string().optional(),
 });
 
 export const Route = createFileRoute("/register")({
@@ -35,14 +36,19 @@ export const Route = createFileRoute("/register")({
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { plan: planParam, invite: inviteParam } = Route.useSearch();
+  const { plan: planParam, invite: inviteParam, code: codeParam } = Route.useSearch();
   const { data: plans } = useQuery({ queryKey: ["plans", "public"], queryFn: fetchActivePlans });
 
   useEffect(() => {
+    if (codeParam) {
+      navigate({ to: "/join/$code", params: { code: codeParam }, replace: true });
+      return;
+    }
     if (inviteParam) {
       navigate({ to: "/invite/$token", params: { token: inviteParam }, replace: true });
     }
-  }, [inviteParam, navigate]);
+  }, [codeParam, inviteParam, navigate]);
+
 
 
   const [form, setForm] = useState({
