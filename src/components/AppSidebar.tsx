@@ -66,6 +66,8 @@ const sections: Section[] = [
     items: [
       { title: "Financeiro", url: "/app/financeiro", icon: Wallet },
       { title: "Escalas", url: "/app/escalas", icon: CalendarDays },
+      { title: "Minhas escalas", url: "/app/minhas-escalas", icon: CalendarDays },
+      { title: "Assiduidade", url: "/app/escalas-relatorios", icon: BarChart3 },
       { title: "EBD", url: "/app/ebd", icon: GraduationCap },
       { title: "Atas", url: "/app/atas", icon: FileText },
       { title: "Convocações", url: "/app/convocacoes", icon: Megaphone },

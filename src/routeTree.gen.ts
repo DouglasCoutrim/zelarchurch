@@ -28,9 +28,11 @@ import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppPatrimonioRouteImport } from './routes/app.patrimonio'
 import { Route as AppOracaoRouteImport } from './routes/app.oracao'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
+import { Route as AppMinhasEscalasRouteImport } from './routes/app.minhas-escalas'
 import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppInvitationsRouteImport } from './routes/app.invitations'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
+import { Route as AppEscalasRelatoriosRouteImport } from './routes/app.escalas-relatorios'
 import { Route as AppEscalasRouteImport } from './routes/app.escalas'
 import { Route as AppEbdRouteImport } from './routes/app.ebd'
 import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
@@ -159,6 +161,11 @@ const AppNotificacoesRoute = AppNotificacoesRouteImport.update({
   path: '/notificacoes',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMinhasEscalasRoute = AppMinhasEscalasRouteImport.update({
+  id: '/minhas-escalas',
+  path: '/minhas-escalas',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMembersRoute = AppMembersRouteImport.update({
   id: '/members',
   path: '/members',
@@ -172,6 +179,11 @@ const AppInvitationsRoute = AppInvitationsRouteImport.update({
 const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
   id: '/financeiro',
   path: '/financeiro',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEscalasRelatoriosRoute = AppEscalasRelatoriosRouteImport.update({
+  id: '/escalas-relatorios',
+  path: '/escalas-relatorios',
   getParentRoute: () => AppRoute,
 } as any)
 const AppEscalasRoute = AppEscalasRouteImport.update({
@@ -359,9 +371,11 @@ export interface FileRoutesByFullPath {
   '/app/departments': typeof AppDepartmentsRoute
   '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
+  '/app/escalas-relatorios': typeof AppEscalasRelatoriosRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
+  '/app/minhas-escalas': typeof AppMinhasEscalasRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/oracao': typeof AppOracaoRouteWithChildren
   '/app/patrimonio': typeof AppPatrimonioRoute
@@ -410,7 +424,9 @@ export interface FileRoutesByTo {
   '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/escalas': typeof AppEscalasRoute
+  '/app/escalas-relatorios': typeof AppEscalasRelatoriosRoute
   '/app/invitations': typeof AppInvitationsRoute
+  '/app/minhas-escalas': typeof AppMinhasEscalasRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
@@ -464,9 +480,11 @@ export interface FileRoutesById {
   '/app/departments': typeof AppDepartmentsRoute
   '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
+  '/app/escalas-relatorios': typeof AppEscalasRelatoriosRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
+  '/app/minhas-escalas': typeof AppMinhasEscalasRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/oracao': typeof AppOracaoRouteWithChildren
   '/app/patrimonio': typeof AppPatrimonioRoute
@@ -522,9 +540,11 @@ export interface FileRouteTypes {
     | '/app/departments'
     | '/app/ebd'
     | '/app/escalas'
+    | '/app/escalas-relatorios'
     | '/app/financeiro'
     | '/app/invitations'
     | '/app/members'
+    | '/app/minhas-escalas'
     | '/app/notificacoes'
     | '/app/oracao'
     | '/app/patrimonio'
@@ -573,7 +593,9 @@ export interface FileRouteTypes {
     | '/app/convocacoes'
     | '/app/departments'
     | '/app/escalas'
+    | '/app/escalas-relatorios'
     | '/app/invitations'
+    | '/app/minhas-escalas'
     | '/app/notificacoes'
     | '/app/patrimonio'
     | '/app/profile'
@@ -626,9 +648,11 @@ export interface FileRouteTypes {
     | '/app/departments'
     | '/app/ebd'
     | '/app/escalas'
+    | '/app/escalas-relatorios'
     | '/app/financeiro'
     | '/app/invitations'
     | '/app/members'
+    | '/app/minhas-escalas'
     | '/app/notificacoes'
     | '/app/oracao'
     | '/app/patrimonio'
@@ -807,6 +831,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotificacoesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/minhas-escalas': {
+      id: '/app/minhas-escalas'
+      path: '/minhas-escalas'
+      fullPath: '/app/minhas-escalas'
+      preLoaderRoute: typeof AppMinhasEscalasRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/members': {
       id: '/app/members'
       path: '/members'
@@ -826,6 +857,13 @@ declare module '@tanstack/react-router' {
       path: '/financeiro'
       fullPath: '/app/financeiro'
       preLoaderRoute: typeof AppFinanceiroRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/escalas-relatorios': {
+      id: '/app/escalas-relatorios'
+      path: '/escalas-relatorios'
+      fullPath: '/app/escalas-relatorios'
+      preLoaderRoute: typeof AppEscalasRelatoriosRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/escalas': {
@@ -1190,9 +1228,11 @@ interface AppRouteChildren {
   AppDepartmentsRoute: typeof AppDepartmentsRoute
   AppEbdRoute: typeof AppEbdRouteWithChildren
   AppEscalasRoute: typeof AppEscalasRoute
+  AppEscalasRelatoriosRoute: typeof AppEscalasRelatoriosRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppInvitationsRoute: typeof AppInvitationsRoute
   AppMembersRoute: typeof AppMembersRouteWithChildren
+  AppMinhasEscalasRoute: typeof AppMinhasEscalasRoute
   AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppOracaoRoute: typeof AppOracaoRouteWithChildren
   AppPatrimonioRoute: typeof AppPatrimonioRoute
@@ -1213,9 +1253,11 @@ const AppRouteChildren: AppRouteChildren = {
   AppDepartmentsRoute: AppDepartmentsRoute,
   AppEbdRoute: AppEbdRouteWithChildren,
   AppEscalasRoute: AppEscalasRoute,
+  AppEscalasRelatoriosRoute: AppEscalasRelatoriosRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppInvitationsRoute: AppInvitationsRoute,
   AppMembersRoute: AppMembersRouteWithChildren,
+  AppMinhasEscalasRoute: AppMinhasEscalasRoute,
   AppNotificacoesRoute: AppNotificacoesRoute,
   AppOracaoRoute: AppOracaoRouteWithChildren,
   AppPatrimonioRoute: AppPatrimonioRoute,

@@ -29,6 +29,9 @@ import {
 import { listDepartments } from "@/lib/departments";
 import { useTenantStore } from "@/stores/tenantStore";
 import { ScheduleMembersDialog } from "@/components/ScheduleMembersDialog";
+import { ScheduleGeneratorDialog } from "@/components/ScheduleGeneratorDialog";
+import { sendSchedule } from "@/lib/scheduleGenerator";
+import { Send } from "lucide-react";
 
 export const Route = createFileRoute("/app/escalas")({
   head: () => ({ meta: [{ title: "Escalas" }] }),
@@ -62,6 +65,12 @@ function SchedulesPage() {
   const [creating, setCreating] = useState(false);
   const [deleting, setDeleting] = useState<ScheduleWithMeta | null>(null);
   const [linkOpen, setLinkOpen] = useState<ScheduleWithMeta | null>(null);
+  const [autoGen, setAutoGen] = useState(false);
+
+  const sendMut = useMutation({
+    mutationFn: (id: string) => sendSchedule(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["schedules"] }),
+  });
 
   const departmentsQ = useQuery({
     queryKey: ["departments", tenant?.id],
@@ -108,10 +117,23 @@ function SchedulesPage() {
             Organize cultos, ensaios e eventos com a equipe escalada.
           </p>
         </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="mr-1 h-4 w-4" /> Nova escala
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setAutoGen(true)}>
+            Gerar automática
+          </Button>
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="mr-1 h-4 w-4" /> Nova escala
+          </Button>
+        </div>
       </div>
+
+      {autoGen && (
+        <ScheduleGeneratorDialog
+          open={autoGen}
+          onClose={() => { setAutoGen(false); qc.invalidateQueries({ queryKey: ["schedules"] }); }}
+          departments={departmentsQ.data ?? []}
+        />
+      )}
 
       <div className="flex flex-wrap items-end gap-3">
         <div className="space-y-1">
@@ -163,6 +185,8 @@ function SchedulesPage() {
                     onEdit={() => setEditing(s)}
                     onDelete={() => setDeleting(s)}
                     onMembers={() => setLinkOpen(s)}
+                    onSend={() => sendMut.mutate(s.id)}
+                    sending={sendMut.isPending}
                   />
                 ))}
               </div>
@@ -212,12 +236,14 @@ function SchedulesPage() {
 }
 
 function ScheduleCard({
-  schedule, onEdit, onDelete, onMembers,
+  schedule, onEdit, onDelete, onMembers, onSend, sending,
 }: {
   schedule: ScheduleWithMeta;
   onEdit: () => void;
   onDelete: () => void;
   onMembers: () => void;
+  onSend: () => void;
+  sending: boolean;
 }) {
   const start = new Date(schedule.starts_at);
   const end = new Date(schedule.ends_at);
@@ -235,9 +261,16 @@ function ScheduleCard({
               <p className="text-xs text-muted-foreground">{schedule.event_type}</p>
             )}
           </div>
-          {schedule.department && (
-            <Badge variant="outline">{schedule.department.name}</Badge>
-          )}
+          <div className="flex items-center gap-1">
+            {schedule.status && (
+              <Badge variant={schedule.status === "sent" ? "default" : "outline"} className="text-[10px]">
+                {schedule.status === "sent" ? "enviada" : schedule.status === "approved" ? "aprovada" : "rascunho"}
+              </Badge>
+            )}
+            {schedule.department && (
+              <Badge variant="outline">{schedule.department.name}</Badge>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -262,6 +295,11 @@ function ScheduleCard({
             <Button variant="outline" size="sm" onClick={onMembers}>
               <Users className="mr-1 h-4 w-4" /> Equipe
             </Button>
+            {schedule.status !== "sent" && (
+              <Button variant="default" size="sm" onClick={onSend} disabled={sending}>
+                <Send className="mr-1 h-4 w-4" /> Enviar
+              </Button>
+            )}
             <Button variant="ghost" size="icon" onClick={onEdit}>
               <Pencil className="h-4 w-4" />
             </Button>

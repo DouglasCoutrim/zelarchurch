@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Users, Pencil, Trash2, AlertTriangle } from "lucide-react";
+import { Plus, Users, Pencil, Trash2, AlertTriangle, Music } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,7 @@ import {
 import { useTenantStore } from "@/stores/tenantStore";
 import { usePlanLimit } from "@/hooks/usePlanLimit";
 import { DepartmentMembersDialog } from "@/components/DepartmentMembersDialog";
+import { DepartmentInstrumentsDialog } from "@/components/DepartmentInstrumentsDialog";
 
 export const Route = createFileRoute("/app/departments")({
   head: () => ({ meta: [{ title: "Departamentos" }] }),
@@ -40,6 +41,7 @@ function DepartmentsPage() {
   const [creating, setCreating] = useState(false);
   const [deleting, setDeleting] = useState<DepartmentWithCount | null>(null);
   const [linkOpen, setLinkOpen] = useState<DepartmentWithCount | null>(null);
+  const [instOpen, setInstOpen] = useState<DepartmentWithCount | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["departments", currentTenant?.id],
@@ -118,6 +120,9 @@ function DepartmentsPage() {
                   <span className="ml-auto text-xs text-muted-foreground">Gerenciar →</span>
                 </button>
                 <div className="flex justify-end gap-1">
+                  <Button size="sm" variant="ghost" onClick={() => setInstOpen(d)} title="Instrumentos">
+                    <Music className="h-4 w-4" />
+                  </Button>
                   <Button size="sm" variant="ghost" onClick={() => setEditing(d)}>
                     <Pencil className="h-4 w-4" />
                   </Button>
@@ -148,6 +153,13 @@ function DepartmentsPage() {
         onOpenChange={(v) => { if (!v) setLinkOpen(null); }}
         departmentId={linkOpen?.id ?? null}
         departmentName={linkOpen?.name ?? ""}
+      />
+
+      <DepartmentInstrumentsDialog
+        open={!!instOpen}
+        onOpenChange={(v) => { if (!v) setInstOpen(null); }}
+        departmentId={instOpen?.id ?? null}
+        departmentName={instOpen?.name ?? ""}
       />
 
       <AlertDialog open={!!deleting} onOpenChange={(v) => { if (!v) setDeleting(null); }}>

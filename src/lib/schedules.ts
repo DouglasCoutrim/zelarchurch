@@ -19,6 +19,8 @@ export interface Schedule {
   ends_at: string;
   recurrence: string | null;
   notes: string | null;
+  status?: "draft" | "approved" | "sent";
+  generation_type?: "manual" | "automatic";
   created_at: string;
 }
 
