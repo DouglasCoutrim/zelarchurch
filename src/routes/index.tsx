@@ -224,6 +224,117 @@ function Hero() {
   );
 }
 
+/* ---------------- Join Methods ---------------- */
+function JoinMethods() {
+  const [code, setCode] = useState("");
+  const navigate = useNavigate();
+  function handleCodeSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const trimmed = code.trim();
+    if (!trimmed) return;
+    // Detect invite token (long) vs access code (ZLR-XXXX)
+    if (/^ZLR-/i.test(trimmed)) {
+      navigate({ to: "/join/$code", params: { code: trimmed.toUpperCase() } });
+    } else if (trimmed.length >= 20) {
+      // Likely an invite token or full URL
+      const tokenMatch = trimmed.match(/(?:invite\/|token=)?([a-f0-9-]{20,})/i);
+      const token = tokenMatch?.[1] ?? trimmed;
+      navigate({ to: "/invite/$token", params: { token } });
+    } else {
+      navigate({ to: "/join/$code", params: { code: trimmed.toUpperCase() } });
+    }
+  }
+  return (
+    <section id="entrar" className="relative py-20 sm:py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#1E3A5F]/15 bg-white/60 px-4 py-1.5 text-xs font-medium text-[#1E3A5F] backdrop-blur-md">
+            <Sparkles className="h-3.5 w-3.5 text-[#C8963E]" /> Para membros
+          </div>
+          <h2 className="text-balance text-3xl font-bold tracking-tight text-[#1E3A5F] sm:text-4xl">
+            Entre na sua igreja em segundos
+          </h2>
+          <p className="mt-3 text-[#0f1f3a]/70">
+            Escolha a forma mais prática para você acessar o Zelar da sua comunidade.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {/* Encontrar igreja */}
+          <Link
+            to="/onboarding"
+            className="group rounded-2xl border border-[#1E3A5F]/10 bg-white p-7 shadow-sm transition-all hover:-translate-y-1 hover:border-[#C8963E]/40 hover:shadow-xl"
+          >
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1E3A5F]/10 text-[#1E3A5F]">
+              <MapPin className="h-6 w-6" />
+            </div>
+            <h3 className="text-lg font-semibold text-[#1E3A5F]">Encontrar minha igreja</h3>
+            <p className="mt-2 text-sm text-[#0f1f3a]/70">
+              Selecione seu estado e cidade para localizar a sua igreja cadastrada no Zelar.
+            </p>
+            <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-[#C8963E] group-hover:gap-2 transition-all">
+              Começar <ArrowRight className="h-4 w-4" />
+            </span>
+          </Link>
+
+          {/* Tenho um convite */}
+          <div className="rounded-2xl border border-[#1E3A5F]/10 bg-white p-7 shadow-sm">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#C8963E]/15 text-[#C8963E]">
+              <Ticket className="h-6 w-6" />
+            </div>
+            <h3 className="text-lg font-semibold text-[#1E3A5F]">Tenho um convite</h3>
+            <p className="mt-2 text-sm text-[#0f1f3a]/70">
+              Cole abaixo o link ou código que você recebeu da sua igreja.
+            </p>
+            <form onSubmit={handleCodeSubmit} className="mt-4 flex gap-2">
+              <input
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="ZLR-XXXX ou link"
+                className="min-w-0 flex-1 rounded-lg border border-[#1E3A5F]/15 bg-white px-3 py-2 text-sm outline-none transition focus:border-[#C8963E] focus:ring-2 focus:ring-[#C8963E]/20"
+              />
+              <Button
+                type="submit"
+                size="sm"
+                className="bg-[#1E3A5F] text-white hover:bg-[#152a47]"
+              >
+                Entrar
+              </Button>
+            </form>
+          </div>
+
+          {/* Escanear QR */}
+          <Link
+            to="/onboarding"
+            className="group rounded-2xl border border-[#1E3A5F]/10 bg-white p-7 shadow-sm transition-all hover:-translate-y-1 hover:border-[#C8963E]/40 hover:shadow-xl"
+          >
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1E3A5F]/10 text-[#1E3A5F]">
+              <QrCode className="h-6 w-6" />
+            </div>
+            <h3 className="text-lg font-semibold text-[#1E3A5F]">Escanear QR Code</h3>
+            <p className="mt-2 text-sm text-[#0f1f3a]/70">
+              Use a câmera para ler o QR Code exibido pela sua igreja e entrar de imediato.
+            </p>
+            <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-[#C8963E] group-hover:gap-2 transition-all">
+              Abrir leitor <ArrowRight className="h-4 w-4" />
+            </span>
+          </Link>
+        </div>
+
+        <p className="mt-10 text-center text-sm text-[#0f1f3a]/60">
+          É pastor ou líder?{" "}
+          <Link to="/register" className="font-medium text-[#1E3A5F] underline">
+            Cadastre sua igreja
+          </Link>
+          .
+        </p>
+      </div>
+    </section>
+  );
+}
+
+
+
 function FloatingDashboard() {
   return (
     <motion.div
