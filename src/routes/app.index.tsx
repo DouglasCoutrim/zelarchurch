@@ -61,6 +61,12 @@ function Dashboard() {
       .finally(() => setLoading(false));
   }, [currentTenant?.id, session?.user.id]);
 
+  const { data: congUsage } = useQuery({
+    queryKey: ["congregations-usage", currentTenant?.id],
+    enabled: !!currentTenant?.id,
+    queryFn: () => getCongregationsUsage(currentTenant!.id),
+  });
+
   const enabledFeatures = usage
     ? Object.entries(usage.features).filter(([, on]) => on).map(([k]) => k)
     : [];
