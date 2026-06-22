@@ -18,6 +18,7 @@ import {
   type MemberAddress, type MemberFormInput, type MemberRecord,
 } from "@/lib/member-record";
 import { useTenantStore } from "@/stores/tenantStore";
+import { ImageUploadField } from "@/components/ImageUploadField";
 
 const EMPTY: MemberFormInput = {
   full_name: "", cpf: null, rg: null, birth_date: null, gender: null, marital_status: null,
