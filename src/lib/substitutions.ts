@@ -151,7 +151,8 @@ export async function escalateToLeader(
     .eq("id", s.schedule_id)
     .single();
   type D = { leader_id: string | null; name: string };
-  const dep = Array.isArray(sch?.department) ? sch?.department[0] : (sch?.department as D | null);
+  const depRaw = sch?.department as D | D[] | null | undefined;
+  const dep = Array.isArray(depRaw) ? depRaw[0] : depRaw ?? null;
   if (!dep?.leader_id) return;
   const { data: leader } = await supabase.from("members").select("user_id").eq("id", dep.leader_id).single();
   const { data: req } = await supabase.from("members").select("full_name").eq("id", s.requester_member_id).single();
