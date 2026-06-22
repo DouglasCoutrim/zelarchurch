@@ -28,6 +28,7 @@ import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppPatrimonioRouteImport } from './routes/app.patrimonio'
 import { Route as AppOracaoRouteImport } from './routes/app.oracao'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
+import { Route as AppMinhasEscalasRouteImport } from './routes/app.minhas-escalas'
 import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppInvitationsRouteImport } from './routes/app.invitations'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
@@ -157,6 +158,11 @@ const AppOracaoRoute = AppOracaoRouteImport.update({
 const AppNotificacoesRoute = AppNotificacoesRouteImport.update({
   id: '/notificacoes',
   path: '/notificacoes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMinhasEscalasRoute = AppMinhasEscalasRouteImport.update({
+  id: '/minhas-escalas',
+  path: '/minhas-escalas',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMembersRoute = AppMembersRouteImport.update({
@@ -362,6 +368,7 @@ export interface FileRoutesByFullPath {
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
+  '/app/minhas-escalas': typeof AppMinhasEscalasRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/oracao': typeof AppOracaoRouteWithChildren
   '/app/patrimonio': typeof AppPatrimonioRoute
@@ -411,6 +418,7 @@ export interface FileRoutesByTo {
   '/app/departments': typeof AppDepartmentsRoute
   '/app/escalas': typeof AppEscalasRoute
   '/app/invitations': typeof AppInvitationsRoute
+  '/app/minhas-escalas': typeof AppMinhasEscalasRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
@@ -467,6 +475,7 @@ export interface FileRoutesById {
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
+  '/app/minhas-escalas': typeof AppMinhasEscalasRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/oracao': typeof AppOracaoRouteWithChildren
   '/app/patrimonio': typeof AppPatrimonioRoute
@@ -525,6 +534,7 @@ export interface FileRouteTypes {
     | '/app/financeiro'
     | '/app/invitations'
     | '/app/members'
+    | '/app/minhas-escalas'
     | '/app/notificacoes'
     | '/app/oracao'
     | '/app/patrimonio'
@@ -574,6 +584,7 @@ export interface FileRouteTypes {
     | '/app/departments'
     | '/app/escalas'
     | '/app/invitations'
+    | '/app/minhas-escalas'
     | '/app/notificacoes'
     | '/app/patrimonio'
     | '/app/profile'
@@ -629,6 +640,7 @@ export interface FileRouteTypes {
     | '/app/financeiro'
     | '/app/invitations'
     | '/app/members'
+    | '/app/minhas-escalas'
     | '/app/notificacoes'
     | '/app/oracao'
     | '/app/patrimonio'
@@ -805,6 +817,13 @@ declare module '@tanstack/react-router' {
       path: '/notificacoes'
       fullPath: '/app/notificacoes'
       preLoaderRoute: typeof AppNotificacoesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/minhas-escalas': {
+      id: '/app/minhas-escalas'
+      path: '/minhas-escalas'
+      fullPath: '/app/minhas-escalas'
+      preLoaderRoute: typeof AppMinhasEscalasRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/members': {
@@ -1193,6 +1212,7 @@ interface AppRouteChildren {
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppInvitationsRoute: typeof AppInvitationsRoute
   AppMembersRoute: typeof AppMembersRouteWithChildren
+  AppMinhasEscalasRoute: typeof AppMinhasEscalasRoute
   AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppOracaoRoute: typeof AppOracaoRouteWithChildren
   AppPatrimonioRoute: typeof AppPatrimonioRoute
@@ -1216,6 +1236,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppInvitationsRoute: AppInvitationsRoute,
   AppMembersRoute: AppMembersRouteWithChildren,
+  AppMinhasEscalasRoute: AppMinhasEscalasRoute,
   AppNotificacoesRoute: AppNotificacoesRoute,
   AppOracaoRoute: AppOracaoRouteWithChildren,
   AppPatrimonioRoute: AppPatrimonioRoute,
