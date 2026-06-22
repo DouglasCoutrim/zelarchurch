@@ -168,7 +168,6 @@ function TransactionsPage() {
             <SelectTrigger className="w-48"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todas (consolidado)</SelectItem>
-              <SelectItem value="__sede">Sede</SelectItem>
               {(congregationsQ.data ?? [])
                 .filter((c) => c.is_active)
                 .map((c) => (
