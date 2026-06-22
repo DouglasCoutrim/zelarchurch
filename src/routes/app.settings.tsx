@@ -294,7 +294,10 @@ function SettingsPage() {
                   {locating ? "Obtendo..." : "Usar minha localização atual"}
                 </Button>
               </div>
+            </CardContent>
+          </Card>
         </TabsContent>
+
 
         <TabsContent value="regional" className="mt-4">
           <Card>
