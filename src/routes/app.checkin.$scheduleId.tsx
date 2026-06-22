@@ -76,6 +76,21 @@ function CheckinScreen() {
     onSuccess: invalidate,
   });
 
+  const geoMut = useMutation({
+    mutationFn: async () => {
+      const pos = await getCurrentPosition();
+      return geoCheckIn(scheduleId, pos.coords.latitude, pos.coords.longitude);
+    },
+    onSuccess: (res) => {
+      toast.success(`Check-in registrado a ${res.distance_meters} m da igreja.`);
+      invalidate();
+    },
+    onError: (e: unknown) => {
+      const msg = e instanceof Error ? e.message : "Erro ao registrar check-in";
+      toast.error(msg);
+    },
+  });
+
   const filtered = useMemo(() => {
     const term = filter.trim().toLowerCase();
     if (!term) return participantsQ.data ?? [];
