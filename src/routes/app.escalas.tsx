@@ -65,6 +65,12 @@ function SchedulesPage() {
   const [creating, setCreating] = useState(false);
   const [deleting, setDeleting] = useState<ScheduleWithMeta | null>(null);
   const [linkOpen, setLinkOpen] = useState<ScheduleWithMeta | null>(null);
+  const [autoGen, setAutoGen] = useState(false);
+
+  const sendMut = useMutation({
+    mutationFn: (id: string) => sendSchedule(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["schedules"] }),
+  });
 
   const departmentsQ = useQuery({
     queryKey: ["departments", tenant?.id],
