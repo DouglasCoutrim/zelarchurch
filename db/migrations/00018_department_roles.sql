@@ -19,13 +19,41 @@ GRANT ALL ON public.department_roles TO service_role;
 
 ALTER TABLE public.department_roles ENABLE ROW LEVEL SECURITY;
 
-DROP POLICY IF EXISTS "department_roles_tenant_isolation" ON public.department_roles;
-CREATE POLICY "department_roles_tenant_isolation"
-  ON public.department_roles
-  FOR ALL
-  TO authenticated
-  USING (tenant_id = public.current_tenant_id())
-  WITH CHECK (tenant_id = public.current_tenant_id());
+-- Membros do tenant podem ler as funções
+DROP POLICY IF EXISTS "department_roles_select" ON public.department_roles;
+CREATE POLICY "department_roles_select" ON public.department_roles
+FOR SELECT TO authenticated
+USING (
+  EXISTS (
+    SELECT 1 FROM public.tenant_users tu
+    WHERE tu.tenant_id = department_roles.tenant_id
+      AND tu.user_id = auth.uid()
+      AND tu.is_active = true
+  )
+);
+
+-- Apenas owner/admin podem gerenciar funções
+DROP POLICY IF EXISTS "department_roles_write" ON public.department_roles;
+CREATE POLICY "department_roles_write" ON public.department_roles
+FOR ALL TO authenticated
+USING (
+  EXISTS (
+    SELECT 1 FROM public.tenant_users tu
+    WHERE tu.tenant_id = department_roles.tenant_id
+      AND tu.user_id = auth.uid()
+      AND tu.is_active = true
+      AND (tu.is_owner = true OR tu.is_admin = true)
+  )
+)
+WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.tenant_users tu
+    WHERE tu.tenant_id = department_roles.tenant_id
+      AND tu.user_id = auth.uid()
+      AND tu.is_active = true
+      AND (tu.is_owner = true OR tu.is_admin = true)
+  )
+);
 
 -- Add role_id to member_departments
 ALTER TABLE public.member_departments
