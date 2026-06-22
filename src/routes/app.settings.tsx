@@ -100,6 +100,9 @@ function SettingsPage() {
         setTimezone(t.settings?.timezone ?? "America/Sao_Paulo");
         setLanguage(t.settings?.language ?? "pt-BR");
         setCurrency(t.settings?.currency ?? "BRL");
+        setLatitude(t.latitude != null ? String(t.latitude) : "");
+        setLongitude(t.longitude != null ? String(t.longitude) : "");
+        setRadius(String(t.checkin_radius_meters ?? 200));
       })
       .catch((e) => toast.error(e.message ?? "Erro ao carregar configurações"))
       .finally(() => setLoading(false));
