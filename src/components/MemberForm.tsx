@@ -116,8 +116,15 @@ export function MemberForm({ initial }: { initial?: MemberRecord }) {
             <Field label="Telefone" value={form.phone ?? ""} onChange={(v) => set("phone", v || null)} />
             <Field label="WhatsApp" value={form.whatsapp ?? ""}
               onChange={(v) => set("whatsapp", v || null)} />
-            <Field label="URL da foto" value={form.photo_url ?? ""}
-              onChange={(v) => set("photo_url", v || null)} />
+            <div className="sm:col-span-2">
+              <ImageUploadField
+                label="Foto do membro"
+                value={form.photo_url}
+                onChange={(v) => set("photo_url", v)}
+                maxSize={512}
+                shape="circle"
+              />
+            </div>
           </CardContent></Card>
         </TabsContent>
 
