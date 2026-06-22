@@ -88,7 +88,8 @@ function CongregationsPage() {
   });
 
   const canAdd = canAddCongregation(usage);
-  const limitReached = !!usage && usage.max !== null && usage.current >= usage.max;
+  const limitReached = !!usage && usage.max !== null && usage.current === usage.max;
+  const overLimit = !!usage && usage.max !== null && usage.current > usage.max;
 
   return (
     <div className="space-y-6">
@@ -118,7 +119,19 @@ function CongregationsPage() {
         </TooltipProvider>
       </div>
 
-      {limitReached && (
+      {overLimit && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Limite do plano excedido</AlertTitle>
+          <AlertDescription>
+            Seu plano atual permite {usage?.max} congregações, mas você possui {usage?.current}.
+            As congregações existentes continuam funcionando normalmente, mas não será possível
+            cadastrar novas até que o plano seja ajustado ou congregações sejam desativadas.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {limitReached && !overLimit && (
         <Alert>
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Limite do plano atingido</AlertTitle>
