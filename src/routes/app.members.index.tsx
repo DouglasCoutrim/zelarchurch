@@ -151,6 +151,7 @@ function MembersList() {
               <TableHead className="hidden md:table-cell">E-mail</TableHead>
               <TableHead className="hidden lg:table-cell">Telefone</TableHead>
               <TableHead className="hidden sm:table-cell">Tipo</TableHead>
+              <TableHead className="hidden md:table-cell">Congregação</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
