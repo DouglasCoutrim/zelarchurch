@@ -26,6 +26,7 @@ import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppRelatoriosRouteImport } from './routes/app.relatorios'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppPatrimonioRouteImport } from './routes/app.patrimonio'
+import { Route as AppOracaoRouteImport } from './routes/app.oracao'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
 import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppInvitationsRouteImport } from './routes/app.invitations'
@@ -143,6 +144,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
 const AppPatrimonioRoute = AppPatrimonioRouteImport.update({
   id: '/patrimonio',
   path: '/patrimonio',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOracaoRoute = AppOracaoRouteImport.update({
+  id: '/oracao',
+  path: '/oracao',
   getParentRoute: () => AppRoute,
 } as any)
 const AppNotificacoesRoute = AppNotificacoesRouteImport.update({
@@ -339,6 +345,7 @@ export interface FileRoutesByFullPath {
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/notificacoes': typeof AppNotificacoesRoute
+  '/app/oracao': typeof AppOracaoRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -384,6 +391,7 @@ export interface FileRoutesByTo {
   '/app/escalas': typeof AppEscalasRoute
   '/app/invitations': typeof AppInvitationsRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
+  '/app/oracao': typeof AppOracaoRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/notificacoes': typeof AppNotificacoesRoute
+  '/app/oracao': typeof AppOracaoRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -491,6 +500,7 @@ export interface FileRouteTypes {
     | '/app/invitations'
     | '/app/members'
     | '/app/notificacoes'
+    | '/app/oracao'
     | '/app/patrimonio'
     | '/app/profile'
     | '/app/relatorios'
@@ -536,6 +546,7 @@ export interface FileRouteTypes {
     | '/app/escalas'
     | '/app/invitations'
     | '/app/notificacoes'
+    | '/app/oracao'
     | '/app/patrimonio'
     | '/app/profile'
     | '/app/relatorios'
@@ -588,6 +599,7 @@ export interface FileRouteTypes {
     | '/app/invitations'
     | '/app/members'
     | '/app/notificacoes'
+    | '/app/oracao'
     | '/app/patrimonio'
     | '/app/profile'
     | '/app/relatorios'
@@ -745,6 +757,13 @@ declare module '@tanstack/react-router' {
       path: '/patrimonio'
       fullPath: '/app/patrimonio'
       preLoaderRoute: typeof AppPatrimonioRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/oracao': {
+      id: '/app/oracao'
+      path: '/oracao'
+      fullPath: '/app/oracao'
+      preLoaderRoute: typeof AppOracaoRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/notificacoes': {
@@ -1104,6 +1123,7 @@ interface AppRouteChildren {
   AppInvitationsRoute: typeof AppInvitationsRoute
   AppMembersRoute: typeof AppMembersRouteWithChildren
   AppNotificacoesRoute: typeof AppNotificacoesRoute
+  AppOracaoRoute: typeof AppOracaoRoute
   AppPatrimonioRoute: typeof AppPatrimonioRoute
   AppProfileRoute: typeof AppProfileRoute
   AppRelatoriosRoute: typeof AppRelatoriosRoute
@@ -1126,6 +1146,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppInvitationsRoute: AppInvitationsRoute,
   AppMembersRoute: AppMembersRouteWithChildren,
   AppNotificacoesRoute: AppNotificacoesRoute,
+  AppOracaoRoute: AppOracaoRoute,
   AppPatrimonioRoute: AppPatrimonioRoute,
   AppProfileRoute: AppProfileRoute,
   AppRelatoriosRoute: AppRelatoriosRoute,
