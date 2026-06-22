@@ -64,8 +64,7 @@ function SelectTenantPage() {
     <div className="relative flex min-h-screen flex-col items-center justify-center gradient-mesh px-4 py-10">
       <div className="absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
       <Link to="/" className="mb-8 flex items-center gap-2 page-enter">
-        <img src={logoAsset.url} alt={APP_NAME} className="h-10 w-auto" />
-        <span className="text-lg font-semibold tracking-tight">{APP_NAME}</span>
+        <img src={logoAsset.url} alt={APP_NAME} className="h-16 w-auto" />
       </Link>
 
       <div className="relative w-full max-w-lg rounded-2xl glass-strong p-8 shadow-elevated page-enter">
