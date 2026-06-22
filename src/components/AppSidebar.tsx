@@ -17,6 +17,7 @@ import {
   Bell,
   History,
   QrCode,
+  HandHeart,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
