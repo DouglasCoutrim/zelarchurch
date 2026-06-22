@@ -73,6 +73,7 @@ const sections: Section[] = [
       { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
       { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },
       { title: "Compras", url: "/app/compras", icon: ShoppingCart },
+      { title: "Pedidos de oração", url: "/app/oracao", icon: HandHeart },
       { title: "Relatórios", url: "/app/relatorios", icon: BarChart3 },
     ],
   },
