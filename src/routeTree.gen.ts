@@ -19,7 +19,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as JoinCodeRouteImport } from './routes/join.$code'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as AppWelcomeRouteImport } from './routes/app.welcome'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppRelatoriosRouteImport } from './routes/app.relatorios'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
@@ -107,10 +109,20 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const JoinCodeRoute = JoinCodeRouteImport.update({
+  id: '/join/$code',
+  path: '/join/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppWelcomeRoute = AppWelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -324,7 +336,9 @@ export interface FileRoutesByFullPath {
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/welcome': typeof AppWelcomeRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/join/$code': typeof JoinCodeRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -366,7 +380,9 @@ export interface FileRoutesByTo {
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/welcome': typeof AppWelcomeRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/join/$code': typeof JoinCodeRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -416,7 +432,9 @@ export interface FileRoutesById {
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/welcome': typeof AppWelcomeRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/join/$code': typeof JoinCodeRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/admin/tenants/$id': typeof AdminTenantsIdRoute
@@ -467,7 +485,9 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/app/welcome'
     | '/invite/$token'
+    | '/join/$code'
     | '/admin/'
     | '/app/'
     | '/admin/tenants/$id'
@@ -509,7 +529,9 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/app/welcome'
     | '/invite/$token'
+    | '/join/$code'
     | '/admin'
     | '/app'
     | '/admin/tenants/$id'
@@ -558,7 +580,9 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/relatorios'
     | '/app/settings'
+    | '/app/welcome'
     | '/invite/$token'
+    | '/join/$code'
     | '/admin/'
     | '/app/'
     | '/admin/tenants/$id'
@@ -587,6 +611,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   SelectTenantRoute: typeof SelectTenantRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  JoinCodeRoute: typeof JoinCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -661,12 +686,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/join/$code': {
+      id: '/join/$code'
+      path: '/join/$code'
+      fullPath: '/join/$code'
+      preLoaderRoute: typeof JoinCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/app/welcome': {
+      id: '/app/welcome'
+      path: '/welcome'
+      fullPath: '/app/welcome'
+      preLoaderRoute: typeof AppWelcomeRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/settings': {
       id: '/app/settings'
@@ -1049,6 +1088,7 @@ interface AppRouteChildren {
   AppProfileRoute: typeof AppProfileRoute
   AppRelatoriosRoute: typeof AppRelatoriosRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppWelcomeRoute: typeof AppWelcomeRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
@@ -1069,6 +1109,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProfileRoute: AppProfileRoute,
   AppRelatoriosRoute: AppRelatoriosRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppWelcomeRoute: AppWelcomeRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
@@ -1084,6 +1125,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   SelectTenantRoute: SelectTenantRoute,
   InviteTokenRoute: InviteTokenRoute,
+  JoinCodeRoute: JoinCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
