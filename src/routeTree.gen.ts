@@ -52,6 +52,7 @@ import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.
 import { Route as AppEbdIndexRouteImport } from './routes/app.ebd.index'
 import { Route as AppCheckinIndexRouteImport } from './routes/app.checkin.index'
 import { Route as AdminTenantsIndexRouteImport } from './routes/admin.tenants.index'
+import { Route as AppOracaoNovoRouteImport } from './routes/app.oracao.novo'
 import { Route as AppMembersNewRouteImport } from './routes/app.members.new'
 import { Route as AppMembersIdRouteImport } from './routes/app.members.$id'
 import { Route as AppFinanceiroRelatoriosRouteImport } from './routes/app.financeiro.relatorios'
@@ -277,6 +278,11 @@ const AdminTenantsIndexRoute = AdminTenantsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminTenantsRoute,
 } as any)
+const AppOracaoNovoRoute = AppOracaoNovoRouteImport.update({
+  id: '/novo',
+  path: '/novo',
+  getParentRoute: () => AppOracaoRoute,
+} as any)
 const AppMembersNewRoute = AppMembersNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -369,6 +375,7 @@ export interface FileRoutesByFullPath {
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/oracao/novo': typeof AppOracaoNovoRoute
   '/admin/tenants/': typeof AdminTenantsIndexRoute
   '/app/checkin/': typeof AppCheckinIndexRoute
   '/app/ebd/': typeof AppEbdIndexRoute
@@ -415,6 +422,7 @@ export interface FileRoutesByTo {
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/oracao/novo': typeof AppOracaoNovoRoute
   '/admin/tenants': typeof AdminTenantsIndexRoute
   '/app/checkin': typeof AppCheckinIndexRoute
   '/app/ebd': typeof AppEbdIndexRoute
@@ -470,6 +478,7 @@ export interface FileRoutesById {
   '/app/financeiro/relatorios': typeof AppFinanceiroRelatoriosRoute
   '/app/members/$id': typeof AppMembersIdRouteWithChildren
   '/app/members/new': typeof AppMembersNewRoute
+  '/app/oracao/novo': typeof AppOracaoNovoRoute
   '/admin/tenants/': typeof AdminTenantsIndexRoute
   '/app/checkin/': typeof AppCheckinIndexRoute
   '/app/ebd/': typeof AppEbdIndexRoute
@@ -526,6 +535,7 @@ export interface FileRouteTypes {
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/oracao/novo'
     | '/admin/tenants/'
     | '/app/checkin/'
     | '/app/ebd/'
@@ -572,6 +582,7 @@ export interface FileRouteTypes {
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/oracao/novo'
     | '/admin/tenants'
     | '/app/checkin'
     | '/app/ebd'
@@ -626,6 +637,7 @@ export interface FileRouteTypes {
     | '/app/financeiro/relatorios'
     | '/app/members/$id'
     | '/app/members/new'
+    | '/app/oracao/novo'
     | '/admin/tenants/'
     | '/app/checkin/'
     | '/app/ebd/'
@@ -951,6 +963,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTenantsIndexRouteImport
       parentRoute: typeof AdminTenantsRoute
     }
+    '/app/oracao/novo': {
+      id: '/app/oracao/novo'
+      path: '/novo'
+      fullPath: '/app/oracao/novo'
+      preLoaderRoute: typeof AppOracaoNovoRouteImport
+      parentRoute: typeof AppOracaoRoute
+    }
     '/app/members/new': {
       id: '/app/members/new'
       path: '/new'
@@ -1127,10 +1146,12 @@ const AppMembersRouteWithChildren = AppMembersRoute._addFileChildren(
 )
 
 interface AppOracaoRouteChildren {
+  AppOracaoNovoRoute: typeof AppOracaoNovoRoute
   AppOracaoIndexRoute: typeof AppOracaoIndexRoute
 }
 
 const AppOracaoRouteChildren: AppOracaoRouteChildren = {
+  AppOracaoNovoRoute: AppOracaoNovoRoute,
   AppOracaoIndexRoute: AppOracaoIndexRoute,
 }
 
