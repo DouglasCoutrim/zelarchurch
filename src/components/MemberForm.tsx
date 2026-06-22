@@ -18,6 +18,7 @@ import {
   type MemberAddress, type MemberFormInput, type MemberRecord,
 } from "@/lib/member-record";
 import { useTenantStore } from "@/stores/tenantStore";
+import { ImageUploadField } from "@/components/ImageUploadField";
 
 const EMPTY: MemberFormInput = {
   full_name: "", cpf: null, rg: null, birth_date: null, gender: null, marital_status: null,
@@ -115,8 +116,15 @@ export function MemberForm({ initial }: { initial?: MemberRecord }) {
             <Field label="Telefone" value={form.phone ?? ""} onChange={(v) => set("phone", v || null)} />
             <Field label="WhatsApp" value={form.whatsapp ?? ""}
               onChange={(v) => set("whatsapp", v || null)} />
-            <Field label="URL da foto" value={form.photo_url ?? ""}
-              onChange={(v) => set("photo_url", v || null)} />
+            <div className="sm:col-span-2">
+              <ImageUploadField
+                label="Foto do membro"
+                value={form.photo_url}
+                onChange={(v) => set("photo_url", v)}
+                maxSize={512}
+                shape="circle"
+              />
+            </div>
           </CardContent></Card>
         </TabsContent>
 
