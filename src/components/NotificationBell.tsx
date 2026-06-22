@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Bell, CheckCheck } from "lucide-react";
 
@@ -19,6 +19,8 @@ import {
   type Notification,
 } from "@/lib/notifications";
 import { cn } from "@/lib/utils";
+import notificationSoundAsset from "@/assets/notification.mp3.asset.json";
+
 
 export function NotificationBell() {
   const navigate = useNavigate();
