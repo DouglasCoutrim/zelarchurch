@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, Pencil, Mail, Phone, MapPin, Calendar } from "lucide-react";
+import { ChevronLeft, Pencil, Mail, Phone, MapPin, Calendar, IdCard } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,11 +30,18 @@ function MemberProfile() {
           <Link to="/app/members"><ChevronLeft className="mr-1 h-4 w-4" />Membros</Link>
         </Button>
         {m && (
-          <Button asChild size="sm">
-            <Link to="/app/members/$id/edit" params={{ id }}>
-              <Pencil className="mr-1 h-4 w-4" />Editar
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button asChild size="sm" variant="outline">
+              <Link to="/app/members/$id/carteirinha" params={{ id }}>
+                <IdCard className="mr-1 h-4 w-4" />Carteirinha
+              </Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link to="/app/members/$id/edit" params={{ id }}>
+                <Pencil className="mr-1 h-4 w-4" />Editar
+              </Link>
+            </Button>
+          </div>
         )}
       </div>
 
