@@ -369,9 +369,13 @@ function PatrimonyDialog({
                 onChange={(e) => update("supplier", e.target.value)} />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <Label htmlFor="photo">URL da foto</Label>
-              <Textarea id="photo" rows={2} value={form.photo_url ?? ""}
-                onChange={(e) => update("photo_url", e.target.value)} />
+              <ImageUploadField
+                label="Foto do item"
+                value={form.photo_url}
+                onChange={(v) => update("photo_url", v)}
+                maxSize={1024}
+                shape="wide"
+              />
             </div>
           </div>
           {mut.error && (
