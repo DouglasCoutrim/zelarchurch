@@ -21,6 +21,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import logoAsset from "@/assets/logo-zelar.svg.asset.json";
+import faviconAsset from "@/assets/favicon-zelar.svg.asset.json";
 
 type Item = { title: string; url: string; icon: LucideIcon; exact?: boolean };
 
