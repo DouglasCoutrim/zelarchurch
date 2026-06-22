@@ -344,6 +344,11 @@ function TransactionDialog({
     enabled: !!tenant?.id && open,
     queryFn: () => listCostCenters(tenant!.id),
   });
+  const congregationsQ = useQuery({
+    queryKey: ["congregations", tenant?.id],
+    enabled: !!tenant?.id && open,
+    queryFn: () => listCongregations(tenant!.id),
+  });
 
   const [form, setForm] = useState<TransactionInput>(() => ({
     type: initial?.type ?? "receita",
@@ -353,6 +358,7 @@ function TransactionDialog({
     notes: initial?.notes ?? "",
     account_id: initial?.account_id ?? null,
     cost_center_id: initial?.cost_center_id ?? null,
+    congregation_id: initial?.congregation_id ?? null,
     payment_method: initial?.payment_method ?? "",
     transaction_date: initial?.transaction_date ?? todayISO(),
     due_date: initial?.due_date ?? null,
