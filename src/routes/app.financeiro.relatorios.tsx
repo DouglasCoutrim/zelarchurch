@@ -93,6 +93,20 @@ function ReportsPage() {
           <Label>Até</Label>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
         </div>
+        <div className="space-y-1">
+          <Label>Congregação</Label>
+          <Select value={congregation} onValueChange={setCongregation}>
+            <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas (consolidado)</SelectItem>
+              {(congregationsQ.data ?? [])
+                .filter((c) => c.is_active)
+                .map((c) => (
+                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
