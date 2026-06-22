@@ -18,6 +18,9 @@ export interface TenantFull {
   website: string | null;
   logo_url: string | null;
   primary_color: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  checkin_radius_meters: number | null;
   settings: TenantSettingsData;
   created_at: string;
   updated_at: string;
@@ -33,6 +36,9 @@ export interface TenantUpdateInput {
   website?: string | null;
   logo_url?: string | null;
   primary_color?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  checkin_radius_meters?: number | null;
   settings?: TenantSettingsData;
 }
 
