@@ -37,5 +37,12 @@ export async function listMembers(p: ListMembersParams): Promise<ListMembersResu
 
   const { data, count, error } = await q;
   if (error) throw error;
-  return { rows: (data ?? []) as MemberListRow[], total: count ?? 0 };
+  const rows = (data ?? []).map((r: Record<string, unknown>) => {
+    const cg = r.congregation as { id: string; name: string } | { id: string; name: string }[] | null;
+    return {
+      ...r,
+      congregation: Array.isArray(cg) ? (cg[0] ?? null) : cg,
+    };
+  }) as unknown as MemberListRow[];
+  return { rows, total: count ?? 0 };
 }
