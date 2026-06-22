@@ -381,6 +381,7 @@ function TransactionDialog({
         payment_method: form.payment_method?.trim() ? form.payment_method : null,
         account_id: form.account_id || null,
         cost_center_id: form.cost_center_id || null,
+        congregation_id: form.congregation_id || null,
         due_date: form.due_date || null,
       };
       if (removingReceipt) payload.receipt_url = null;
