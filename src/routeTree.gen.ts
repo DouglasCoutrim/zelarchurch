@@ -32,6 +32,7 @@ import { Route as AppMinhasEscalasRouteImport } from './routes/app.minhas-escala
 import { Route as AppMembersRouteImport } from './routes/app.members'
 import { Route as AppInvitationsRouteImport } from './routes/app.invitations'
 import { Route as AppFinanceiroRouteImport } from './routes/app.financeiro'
+import { Route as AppEscalasRelatoriosRouteImport } from './routes/app.escalas-relatorios'
 import { Route as AppEscalasRouteImport } from './routes/app.escalas'
 import { Route as AppEbdRouteImport } from './routes/app.ebd'
 import { Route as AppDepartmentsRouteImport } from './routes/app.departments'
@@ -178,6 +179,11 @@ const AppInvitationsRoute = AppInvitationsRouteImport.update({
 const AppFinanceiroRoute = AppFinanceiroRouteImport.update({
   id: '/financeiro',
   path: '/financeiro',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEscalasRelatoriosRoute = AppEscalasRelatoriosRouteImport.update({
+  id: '/escalas-relatorios',
+  path: '/escalas-relatorios',
   getParentRoute: () => AppRoute,
 } as any)
 const AppEscalasRoute = AppEscalasRouteImport.update({
@@ -365,6 +371,7 @@ export interface FileRoutesByFullPath {
   '/app/departments': typeof AppDepartmentsRoute
   '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
+  '/app/escalas-relatorios': typeof AppEscalasRelatoriosRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
@@ -417,6 +424,7 @@ export interface FileRoutesByTo {
   '/app/convocacoes': typeof AppConvocacoesRoute
   '/app/departments': typeof AppDepartmentsRoute
   '/app/escalas': typeof AppEscalasRoute
+  '/app/escalas-relatorios': typeof AppEscalasRelatoriosRoute
   '/app/invitations': typeof AppInvitationsRoute
   '/app/minhas-escalas': typeof AppMinhasEscalasRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
@@ -472,6 +480,7 @@ export interface FileRoutesById {
   '/app/departments': typeof AppDepartmentsRoute
   '/app/ebd': typeof AppEbdRouteWithChildren
   '/app/escalas': typeof AppEscalasRoute
+  '/app/escalas-relatorios': typeof AppEscalasRelatoriosRoute
   '/app/financeiro': typeof AppFinanceiroRouteWithChildren
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
@@ -531,6 +540,7 @@ export interface FileRouteTypes {
     | '/app/departments'
     | '/app/ebd'
     | '/app/escalas'
+    | '/app/escalas-relatorios'
     | '/app/financeiro'
     | '/app/invitations'
     | '/app/members'
@@ -583,6 +593,7 @@ export interface FileRouteTypes {
     | '/app/convocacoes'
     | '/app/departments'
     | '/app/escalas'
+    | '/app/escalas-relatorios'
     | '/app/invitations'
     | '/app/minhas-escalas'
     | '/app/notificacoes'
@@ -637,6 +648,7 @@ export interface FileRouteTypes {
     | '/app/departments'
     | '/app/ebd'
     | '/app/escalas'
+    | '/app/escalas-relatorios'
     | '/app/financeiro'
     | '/app/invitations'
     | '/app/members'
@@ -845,6 +857,13 @@ declare module '@tanstack/react-router' {
       path: '/financeiro'
       fullPath: '/app/financeiro'
       preLoaderRoute: typeof AppFinanceiroRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/escalas-relatorios': {
+      id: '/app/escalas-relatorios'
+      path: '/escalas-relatorios'
+      fullPath: '/app/escalas-relatorios'
+      preLoaderRoute: typeof AppEscalasRelatoriosRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/escalas': {
@@ -1209,6 +1228,7 @@ interface AppRouteChildren {
   AppDepartmentsRoute: typeof AppDepartmentsRoute
   AppEbdRoute: typeof AppEbdRouteWithChildren
   AppEscalasRoute: typeof AppEscalasRoute
+  AppEscalasRelatoriosRoute: typeof AppEscalasRelatoriosRoute
   AppFinanceiroRoute: typeof AppFinanceiroRouteWithChildren
   AppInvitationsRoute: typeof AppInvitationsRoute
   AppMembersRoute: typeof AppMembersRouteWithChildren
@@ -1233,6 +1253,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDepartmentsRoute: AppDepartmentsRoute,
   AppEbdRoute: AppEbdRouteWithChildren,
   AppEscalasRoute: AppEscalasRoute,
+  AppEscalasRelatoriosRoute: AppEscalasRelatoriosRoute,
   AppFinanceiroRoute: AppFinanceiroRouteWithChildren,
   AppInvitationsRoute: AppInvitationsRoute,
   AppMembersRoute: AppMembersRouteWithChildren,
