@@ -295,6 +295,11 @@ function ScheduleCard({
             <Button variant="outline" size="sm" onClick={onMembers}>
               <Users className="mr-1 h-4 w-4" /> Equipe
             </Button>
+            {schedule.status !== "sent" && (
+              <Button variant="default" size="sm" onClick={onSend} disabled={sending}>
+                <Send className="mr-1 h-4 w-4" /> Enviar
+              </Button>
+            )}
             <Button variant="ghost" size="icon" onClick={onEdit}>
               <Pencil className="h-4 w-4" />
             </Button>
