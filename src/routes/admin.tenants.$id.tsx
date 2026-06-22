@@ -76,6 +76,12 @@ function TenantDetail() {
     queryFn: () => loadTenant(id),
   });
 
+  const { data: congSummary } = useQuery({
+    queryKey: ["admin-tenant-congregations", id, tenant?.plan_id ?? null],
+    enabled: !!tenant,
+    queryFn: () => loadCongregationsSummary(id, tenant?.plan_id ?? null),
+  });
+
   const [form, setForm] = useState({
     is_courtesy: false,
     courtesy_until: "",
