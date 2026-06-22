@@ -99,7 +99,7 @@ function AuthPage() {
       <main className="relative flex items-center justify-center gradient-mesh px-4 py-10">
         <div className="w-full max-w-md page-enter">
           <Link to="/" className="mb-6 flex items-center justify-center gap-2 lg:hidden">
-            <img src={logoAsset.url} alt={APP_NAME} className="h-10 w-auto" />
+            <img src={logoAsset.url} alt={APP_NAME} className="h-16 w-auto" />
           </Link>
           <div className="rounded-2xl glass-strong p-8 shadow-elevated">
             <div className="mb-6 space-y-1">
