@@ -117,10 +117,23 @@ function SchedulesPage() {
             Organize cultos, ensaios e eventos com a equipe escalada.
           </p>
         </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="mr-1 h-4 w-4" /> Nova escala
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setAutoGen(true)}>
+            Gerar automática
+          </Button>
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="mr-1 h-4 w-4" /> Nova escala
+          </Button>
+        </div>
       </div>
+
+      {autoGen && (
+        <ScheduleGeneratorDialog
+          open={autoGen}
+          onClose={() => { setAutoGen(false); qc.invalidateQueries({ queryKey: ["schedules"] }); }}
+          departments={departmentsQ.data ?? []}
+        />
+      )}
 
       <div className="flex flex-wrap items-end gap-3">
         <div className="space-y-1">
