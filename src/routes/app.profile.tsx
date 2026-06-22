@@ -170,12 +170,12 @@ function ProfilePage() {
                       />
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="avatar">URL do avatar</Label>
-                      <Input
-                        id="avatar"
-                        placeholder="https://…"
-                        value={profile.avatar_url ?? ""}
-                        onChange={(e) => setProfile({ ...profile, avatar_url: e.target.value })}
+                      <ImageUploadField
+                        label="Foto de perfil"
+                        value={profile.avatar_url}
+                        onChange={(v) => setProfile({ ...profile, avatar_url: v ?? "" })}
+                        maxSize={384}
+                        shape="circle"
                       />
                     </div>
                   </div>
