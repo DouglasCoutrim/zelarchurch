@@ -2,7 +2,7 @@
   "name": "Zelar — Sistema de gestão para igrejas",
   "short_name": "Zelar",
   "description": "Plataforma completa para administrar membros, finanças, escalas, EBD e patrimônio da sua igreja.",
-  "start_url": "/auth",
+  "start_url": "/onboarding",
   "scope": "/",
   "display": "standalone",
   "background_color": "#0F172A",
