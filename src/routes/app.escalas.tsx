@@ -236,12 +236,14 @@ function SchedulesPage() {
 }
 
 function ScheduleCard({
-  schedule, onEdit, onDelete, onMembers,
+  schedule, onEdit, onDelete, onMembers, onSend, sending,
 }: {
   schedule: ScheduleWithMeta;
   onEdit: () => void;
   onDelete: () => void;
   onMembers: () => void;
+  onSend: () => void;
+  sending: boolean;
 }) {
   const start = new Date(schedule.starts_at);
   const end = new Date(schedule.ends_at);
