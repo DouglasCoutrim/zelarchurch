@@ -348,6 +348,7 @@ export async function getFinanceSummary(
   tenantId: string,
   from?: string,
   to?: string,
+  congregationId?: string | null,
 ): Promise<{ receitas: number; despesas: number; saldo: number; pendente: number }> {
   let q = supabase
     .from("transactions")
@@ -356,6 +357,7 @@ export async function getFinanceSummary(
     .is("deleted_at", null);
   if (from) q = q.gte("transaction_date", from);
   if (to) q = q.lte("transaction_date", to);
+  if (congregationId) q = q.eq("congregation_id", congregationId);
   const { data, error } = await q;
   if (error) throw error;
   let receitas = 0,
