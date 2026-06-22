@@ -51,6 +51,7 @@ function TransactionsPage() {
 
   const [type, setType] = useState<TransactionType | "all">("all");
   const [status, setStatus] = useState<TransactionStatus | "all">("all");
+  const [congregation, setCongregation] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 20;
@@ -59,14 +60,22 @@ function TransactionsPage() {
   const [creating, setCreating] = useState(false);
   const [deleting, setDeleting] = useState<TransactionRow | null>(null);
 
-  const summary = useQuery({
-    queryKey: ["finance-summary", tenant?.id],
+  const congregationsQ = useQuery({
+    queryKey: ["congregations", tenant?.id],
     enabled: !!tenant?.id,
-    queryFn: () => getFinanceSummary(tenant!.id),
+    queryFn: () => listCongregations(tenant!.id),
+  });
+
+  const congregationId = congregation === "all" ? null : congregation;
+
+  const summary = useQuery({
+    queryKey: ["finance-summary", tenant?.id, { congregationId }],
+    enabled: !!tenant?.id,
+    queryFn: () => getFinanceSummary(tenant!.id, undefined, undefined, congregationId),
   });
 
   const list = useQuery({
-    queryKey: ["transactions", tenant?.id, { type, status, search, page }],
+    queryKey: ["transactions", tenant?.id, { type, status, search, page, congregationId }],
     enabled: !!tenant?.id,
     queryFn: () =>
       listTransactions({
@@ -76,6 +85,7 @@ function TransactionsPage() {
         search,
         page,
         pageSize,
+        congregationId,
       }),
   });
 
