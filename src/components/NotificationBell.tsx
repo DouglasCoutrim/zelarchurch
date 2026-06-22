@@ -31,6 +31,32 @@ export function NotificationBell() {
 
   const [items, setItems] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const initialLoadRef = useRef(true);
+
+  useEffect(() => {
+    const audio = new Audio(notificationSoundAsset.url);
+    audio.preload = "auto";
+    audio.volume = 0.7;
+    audioRef.current = audio;
+    return () => {
+      audioRef.current = null;
+    };
+  }, []);
+
+  function playSound() {
+    const audio = audioRef.current;
+    if (!audio) return;
+    try {
+      audio.currentTime = 0;
+      void audio.play().catch(() => {
+        /* autoplay blocked until user interacts */
+      });
+    } catch {
+      /* silent */
+    }
+  }
+
 
   const unread = items.filter((n) => !n.read_at).length;
 
