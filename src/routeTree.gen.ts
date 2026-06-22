@@ -46,6 +46,7 @@ import { Route as AdminPlansRouteImport } from './routes/admin.plans'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminBillingRouteImport } from './routes/admin.billing'
 import { Route as AdminAdminsRouteImport } from './routes/admin.admins'
+import { Route as AppOracaoIndexRouteImport } from './routes/app.oracao.index'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppFinanceiroIndexRouteImport } from './routes/app.financeiro.index'
 import { Route as AppEbdIndexRouteImport } from './routes/app.ebd.index'
@@ -246,6 +247,11 @@ const AdminAdminsRoute = AdminAdminsRouteImport.update({
   path: '/admins',
   getParentRoute: () => AdminRoute,
 } as any)
+const AppOracaoIndexRoute = AppOracaoIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppOracaoRoute,
+} as any)
 const AppMembersIndexRoute = AppMembersIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -345,7 +351,7 @@ export interface FileRoutesByFullPath {
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/notificacoes': typeof AppNotificacoesRoute
-  '/app/oracao': typeof AppOracaoRoute
+  '/app/oracao': typeof AppOracaoRouteWithChildren
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -368,6 +374,7 @@ export interface FileRoutesByFullPath {
   '/app/ebd/': typeof AppEbdIndexRoute
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
+  '/app/oracao/': typeof AppOracaoIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -391,7 +398,6 @@ export interface FileRoutesByTo {
   '/app/escalas': typeof AppEscalasRoute
   '/app/invitations': typeof AppInvitationsRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
-  '/app/oracao': typeof AppOracaoRoute
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -414,6 +420,7 @@ export interface FileRoutesByTo {
   '/app/ebd': typeof AppEbdIndexRoute
   '/app/financeiro': typeof AppFinanceiroIndexRoute
   '/app/members': typeof AppMembersIndexRoute
+  '/app/oracao': typeof AppOracaoIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
 export interface FileRoutesById {
@@ -445,7 +452,7 @@ export interface FileRoutesById {
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRouteWithChildren
   '/app/notificacoes': typeof AppNotificacoesRoute
-  '/app/oracao': typeof AppOracaoRoute
+  '/app/oracao': typeof AppOracaoRouteWithChildren
   '/app/patrimonio': typeof AppPatrimonioRoute
   '/app/profile': typeof AppProfileRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -468,6 +475,7 @@ export interface FileRoutesById {
   '/app/ebd/': typeof AppEbdIndexRoute
   '/app/financeiro/': typeof AppFinanceiroIndexRoute
   '/app/members/': typeof AppMembersIndexRoute
+  '/app/oracao/': typeof AppOracaoIndexRoute
   '/app/members/$id/edit': typeof AppMembersIdEditRoute
 }
 export interface FileRouteTypes {
@@ -523,6 +531,7 @@ export interface FileRouteTypes {
     | '/app/ebd/'
     | '/app/financeiro/'
     | '/app/members/'
+    | '/app/oracao/'
     | '/app/members/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -546,7 +555,6 @@ export interface FileRouteTypes {
     | '/app/escalas'
     | '/app/invitations'
     | '/app/notificacoes'
-    | '/app/oracao'
     | '/app/patrimonio'
     | '/app/profile'
     | '/app/relatorios'
@@ -569,6 +577,7 @@ export interface FileRouteTypes {
     | '/app/ebd'
     | '/app/financeiro'
     | '/app/members'
+    | '/app/oracao'
     | '/app/members/$id/edit'
   id:
     | '__root__'
@@ -622,6 +631,7 @@ export interface FileRouteTypes {
     | '/app/ebd/'
     | '/app/financeiro/'
     | '/app/members/'
+    | '/app/oracao/'
     | '/app/members/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -899,6 +909,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/app/oracao/': {
+      id: '/app/oracao/'
+      path: '/'
+      fullPath: '/app/oracao/'
+      preLoaderRoute: typeof AppOracaoIndexRouteImport
+      parentRoute: typeof AppOracaoRoute
+    }
     '/app/members/': {
       id: '/app/members/'
       path: '/'
@@ -1109,6 +1126,18 @@ const AppMembersRouteWithChildren = AppMembersRoute._addFileChildren(
   AppMembersRouteChildren,
 )
 
+interface AppOracaoRouteChildren {
+  AppOracaoIndexRoute: typeof AppOracaoIndexRoute
+}
+
+const AppOracaoRouteChildren: AppOracaoRouteChildren = {
+  AppOracaoIndexRoute: AppOracaoIndexRoute,
+}
+
+const AppOracaoRouteWithChildren = AppOracaoRoute._addFileChildren(
+  AppOracaoRouteChildren,
+)
+
 interface AppRouteChildren {
   AppAtasRoute: typeof AppAtasRoute
   AppAuditoriaRoute: typeof AppAuditoriaRoute
@@ -1123,7 +1152,7 @@ interface AppRouteChildren {
   AppInvitationsRoute: typeof AppInvitationsRoute
   AppMembersRoute: typeof AppMembersRouteWithChildren
   AppNotificacoesRoute: typeof AppNotificacoesRoute
-  AppOracaoRoute: typeof AppOracaoRoute
+  AppOracaoRoute: typeof AppOracaoRouteWithChildren
   AppPatrimonioRoute: typeof AppPatrimonioRoute
   AppProfileRoute: typeof AppProfileRoute
   AppRelatoriosRoute: typeof AppRelatoriosRoute
@@ -1146,7 +1175,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppInvitationsRoute: AppInvitationsRoute,
   AppMembersRoute: AppMembersRouteWithChildren,
   AppNotificacoesRoute: AppNotificacoesRoute,
-  AppOracaoRoute: AppOracaoRoute,
+  AppOracaoRoute: AppOracaoRouteWithChildren,
   AppPatrimonioRoute: AppPatrimonioRoute,
   AppProfileRoute: AppProfileRoute,
   AppRelatoriosRoute: AppRelatoriosRoute,
