@@ -187,8 +187,9 @@ export async function getMonthlyReport(
   tenantId: string,
   from: string,
   to: string,
+  congregationId?: string | null,
 ): Promise<MonthlyPoint[]> {
-  const { data, error } = await supabase
+  let q = supabase
     .from("transactions")
     .select("transaction_date, type, amount, status")
     .eq("tenant_id", tenantId)
@@ -197,6 +198,8 @@ export async function getMonthlyReport(
     .gte("transaction_date", from)
     .lte("transaction_date", to)
     .order("transaction_date", { ascending: true });
+  if (congregationId) q = q.eq("congregation_id", congregationId);
+  const { data, error } = await q;
   if (error) throw error;
   const map = new Map<string, MonthlyPoint>();
   for (const r of (data ?? []) as { transaction_date: string; type: string; amount: number }[]) {
