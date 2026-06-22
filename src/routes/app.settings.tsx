@@ -122,6 +122,9 @@ function SettingsPage() {
         website: website.trim() || null,
         logo_url: logoUrl.trim() || null,
         primary_color: primaryColor,
+        latitude: latitude.trim() ? Number(latitude) : null,
+        longitude: longitude.trim() ? Number(longitude) : null,
+        checkin_radius_meters: radius.trim() ? Math.max(10, Number(radius)) : 200,
         settings: { timezone, language, currency },
       });
       setTenant(updated);
