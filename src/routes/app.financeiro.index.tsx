@@ -35,6 +35,7 @@ import {
 } from "@/lib/finance";
 import { useTenantStore } from "@/stores/tenantStore";
 import { formatBRL } from "@/lib/plans";
+import { listCongregations } from "@/lib/congregations";
 
 export const Route = createFileRoute("/app/financeiro/")({
   component: TransactionsPage,
