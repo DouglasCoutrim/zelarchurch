@@ -499,7 +499,7 @@ function ModulesBento() {
 
         {/* Bento */}
         <div className="mt-16 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:grid-rows-2">
-          <BentoCard className="lg:col-span-2 lg:row-span-2 bg-gradient-to-br from-[#1E3A5F] to-[#2a5587] text-white" big>
+          <BentoCard className="col-span-2 lg:col-span-2 lg:row-span-2 bg-gradient-to-br from-[#1E3A5F] to-[#2a5587] text-white" big>
             <div className="flex h-full flex-col justify-between">
               <div>
                 <div className="inline-flex rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#C8963E] backdrop-blur">
