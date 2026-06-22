@@ -32,7 +32,7 @@ function AppLayout() {
   useEffect(() => {
     if (loading) return;
     if (!session) {
-      navigate({ to: "/auth", replace: true });
+      navigate({ to: "/onboarding", replace: true });
       return;
     }
     if (!tenantLoading && !currentTenant) {
