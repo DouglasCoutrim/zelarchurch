@@ -76,6 +76,10 @@ function SettingsPage() {
   const [timezone, setTimezone] = useState("America/Sao_Paulo");
   const [language, setLanguage] = useState("pt-BR");
   const [currency, setCurrency] = useState("BRL");
+  const [latitude, setLatitude] = useState<string>("");
+  const [longitude, setLongitude] = useState<string>("");
+  const [radius, setRadius] = useState<string>("200");
+  const [locating, setLocating] = useState(false);
 
   useEffect(() => {
     if (!currentTenant) return;
