@@ -1,73 +1,50 @@
+# Escalas Dinâmicas — Rodízio, Substituição e Relatórios
 
-## Objetivo
+Estende o módulo existente (`schedules`, `schedule_members`, página `/app/escalas`) sem recriá-lo. Trabalho dividido em **4 entregas independentes** para revisar incrementalmente.
 
-Aplicar a mesma identidade visual da landing page (glassmorphism, sombras difusas, animações de entrada, hover-lift, paleta Azul Royal `#1E3A5F` + Dourado `#C8963E`, gradientes sutis) em todas as páginas do sistema — autenticação, seleção de tenant, planos e todo o painel interno (`/app/*`).
+## Entrega 1 — Migration e fundação de dados
 
-## Escopo das páginas
+Arquivo: `db/migrations/00020_schedules_dynamic.sql`
 
-**Públicas / fluxo de entrada**
-- `auth.tsx` — login/cadastro
-- `register.tsx` — onboarding de igreja
-- `pricing.tsx` — planos
-- `select-tenant.tsx` — seleção de igreja
+- Nova tabela `department_instruments` (id, tenant_id, department_id, name, required, timestamps) — reaproveita o conceito de "funções de departamento" (00018) mas com flag `required`. Mantém `department_roles` intacta; instrumentos são uma camada específica para geração de escala.
+- Nova tabela `member_instruments` (member_id, instrument_id, proficiency enum `principal|regular|substituto`, is_active).
+- `schedule_members`: adicionar `instrument_id` (FK → department_instruments, nullable) e `attended` (boolean nullable, para assiduidade).
+- `schedules`: adicionar `status` enum `draft|approved|sent` (default `draft`) e `generation_type` enum `manual|automatic` (default `manual`).
+- Nova tabela `schedule_generation_logs` (params jsonb, result_summary jsonb, generated_by, timestamps).
+- Nova tabela `schedule_substitutions` (schedule_member_id, requested_by, substitute_member_id, status `pending|accepted|rejected|escalated`, reason, timestamps).
+- Função SQL `get_member_participation_count(member_id uuid, department_id uuid, before_date timestamptz)` → integer.
+- RLS por tenant em todas, com `is_department_leader` para escrita onde aplicável; grants para `authenticated` + `service_role`.
 
-**Painel autenticado (`/app/*`)**
-- Shell: `app.tsx` + `AppSidebar.tsx` (sidebar dark navy com destaques dourados, header glass, breadcrumb animado)
-- Dashboard: `app.index.tsx`
-- Membros, Departamentos, Escalas, Financeiro (índice, contas, centros, relatórios), EBD, Check-in, Atas, Convocações, Conselho Fiscal, Patrimônio, Compras, Relatórios, Notificações, Auditoria, Perfil, Configurações
+## Entrega 2 — Cadastro de instrumentos e atribuição a membros
 
-## Estratégia (sem reescrever cada página)
+- `src/lib/instruments.ts`: CRUD `listInstruments`, `createInstrument`, `updateInstrument`, `deleteInstrument`, `listMemberInstruments`, `setMemberInstruments`.
+- No `DepartmentMembersDialog`: nova aba/seção "Instrumentos" (visível ao líder) para gerenciar instrumentos do departamento e, por membro, marcar quais toca e a proficiência.
 
-Para evitar editar 25+ rotas individualmente, a maior parte do efeito virá de **primitivos compartilhados + tokens globais**:
+## Entrega 3 — Geração automática + UI do líder
 
-### 1. Tokens globais (`src/styles.css`)
-- Garantir paleta exata: `--primary` = `#1E3A5F`, `--accent`/dourado = `#C8963E`, fundo off-white `#fafaf7`.
-- Adicionar sombras "soft": `--shadow-soft`, `--shadow-elevated`, `--shadow-gold`.
-- Sidebar tokens dark navy com accent dourado.
-- Keyframes globais: `fade-in-up`, `float`, `shimmer` + utilitários `.hover-lift`, `.glass`, `.glass-strong`.
+- **Algoritmo no cliente** (TypeScript em `src/lib/scheduleGenerator.ts`), não Edge Function — o projeto usa TanStack Start/server functions, não Supabase Edge Functions (regra do template). Usa `get_member_participation_count` via RPC para o balanceamento.
+- Inputs: department_id, start_date, end_date, days_of_week[], start_time, end_time, exclude_member_ids[].
+- Para cada data válida × instrumento obrigatório: escolhe membro com menor participação histórica + maior tempo sem ser escalado; evita conflito de horário em outras escalas; marca data como incompleta se faltar.
+- Retorna `{ suggestions, summary, incompleteDates }` e grava `schedule_generation_logs`.
+- **Botão "Gerar Escala Automática"** em `/app/escalas` (só líderes), abrindo `ScheduleGeneratorDialog` em 3 etapas (Configuração → Rascunho editável com troca manual por instrumento → Aprovação).
+- Aprovar = cria `schedules` (status `approved`, generation_type `automatic`) + `schedule_members` com `instrument_id` em transação.
+- Botão "Enviar Escala" muda status para `sent` e insere notificações em `notifications` para cada membro escalado (usa `createNotification` existente).
 
-### 2. Componentes shadcn refinados (afetam tudo de uma vez)
-- `card.tsx` — variante padrão com borda translúcida, backdrop-blur, sombra difusa, hover-lift sutil.
-- `button.tsx` — CTA dourado padrão com sombra `gold-glow` e translate no hover; variante outline glass.
-- `input.tsx` / `select.tsx` / `textarea.tsx` — borda suave, focus ring dourado, fundo levemente translúcido.
-- `dialog.tsx` / `sheet.tsx` / `popover.tsx` — backdrop blur mais forte, borda glass.
-- `table.tsx` — header com fundo navy/5, linhas com hover suave.
-- `badge.tsx` — variantes com tons da marca.
-- `tabs.tsx` — indicador animado dourado.
+## Entrega 4 — Visão do membro, substituição e relatórios
 
-### 3. Shell do app (`app.tsx` + `AppSidebar.tsx`)
-- Sidebar: fundo navy escuro com gradiente sutil, item ativo com pill dourado, logo Zelar no topo, divisores translúcidos.
-- Header do app: glass sticky com blur, busca/notificações com hover dourado.
-- Fundo da área de conteúdo: gradient mesh muito sutil (radial blobs navy/dourado em opacidade baixa).
-- Wrapper de página com animação `fade-in-up` no `<Outlet />` por chave de rota.
-
-### 4. Páginas de auth/onboarding (impacto visual direto)
-- `auth.tsx`, `register.tsx`, `select-tenant.tsx`: layout split com painel lateral escuro (navy + foto Unsplash com blend overlay + slogan "Gestão com Fidelidade") e formulário em card glass do lado oposto.
-- `pricing.tsx`: cards de plano com hover-lift, plano recomendado em destaque dourado e badge "Mais escolhido".
-
-### 5. Animações de entrada nas páginas internas
-- Criar `<PageTransition>` simples (framer-motion) usado em `app.tsx` ao redor do `<Outlet />` → fade-in + slide-up curto a cada mudança de rota.
-- Tabelas e cards do dashboard: `motion.div` com `whileInView` stagger leve onde já há listas.
+- Rota `/app/minhas-escalas`: próximas escalas do usuário logado com botões "Confirmar Presença" / "Solicitar Substituição".
+- `SubstitutionDialog`: lista membros do mesmo departamento que tocam o mesmo `instrument_id` e estão livres na data/hora; envia `schedule_substitutions` (pending) + notifica substituto.
+- Substituto vê em `/app/minhas-escalas` (seção "Solicitações") e Aceita (troca `member_id` em `schedule_members`, notifica solicitante) ou Recusa (notifica solicitante). Botão "Informar ao Líder" gera notificação ao `departments.leader_id`.
+- Rota `/app/escalas/relatorios` (líderes): filtros departamento + intervalo; tabela de assiduidade (designadas, presenças confirmadas via `attended=true`, %), gráfico de barras Recharts, exportação PDF reusando o padrão do projeto.
 
 ## Detalhes técnicos
 
-- Continuar usando `framer-motion` (já instalado) para transições e hover; nada de novas dependências.
-- Manter todos os tokens via CSS vars — nenhum hex hardcoded em componente novo (só nos tokens em `styles.css`).
-- Preservar 100% da lógica de negócio, rotas, schemas e chamadas a server functions. Mudanças apenas em markup/classes/tokens.
-- Acessibilidade: contraste mantido (texto sobre navy = branco, sobre off-white = navy escuro), foco visível com ring dourado.
-- Performance: blurs aplicados em áreas pequenas/fixas (sidebar, headers, modais), nunca no body inteiro.
+- **Sem Edge Function** — uso de Supabase client + RPC para `get_member_participation_count` respeita as regras do stack (TanStack Start não usa Edge Functions para lógica interna).
+- Reaproveito `notifications`, `is_department_leader`, `has_permission`, `ScheduleMembersDialog` e o padrão de RLS das migrations 00018/00019.
+- Compatível com PWA: apenas componentes shadcn já presentes; sem dependências novas além de `recharts` (já no projeto) e `jspdf` se ainda não estiver (verifico antes).
 
-## Ordem de execução
+## Confirmações antes de começar
 
-1. Tokens + utilitários globais em `styles.css`.
-2. Refino dos primitivos shadcn (card, button, input, dialog, table, tabs, badge).
-3. Shell `app.tsx` + `AppSidebar.tsx` + `PageTransition`.
-4. `auth.tsx`, `register.tsx`, `select-tenant.tsx`, `pricing.tsx`.
-5. Polimento do dashboard (`app.index.tsx`) — cards de KPI, gráficos com a paleta nova.
-6. Verificação visual rápida nas rotas principais.
-
-## Fora do escopo
-
-- Redesenho página-a-página com layouts totalmente novos das telas internas (membros, financeiro, etc.) — elas herdarão o visual pelos primitivos e pelo shell. Se quiser depois um redesenho dedicado de telas específicas, fazemos em prompts separados.
-
-Posso seguir com este plano?
+1. OK gerar tudo em **uma única resposta longa** (4 entregas seguidas) ou prefere **entrega por entrega**, revisando cada uma?
+2. OK manter o algoritmo de geração no client (via RPC) em vez de Edge Function, conforme stack do projeto?
+3. "Instrumento" e "Função do departamento" (00018) ficam como conceitos **separados** (instrumentos só para Louvor/escalas; funções para o resto), correto?
