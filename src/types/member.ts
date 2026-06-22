@@ -17,4 +17,6 @@ export interface MemberListRow {
   member_type: string | null;
   photo_url: string | null;
   created_at: string;
+  congregation_id: string | null;
+  congregation?: { id: string; name: string } | null;
 }
