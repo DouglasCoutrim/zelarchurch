@@ -235,6 +235,65 @@ function SettingsPage() {
               </div>
             </CardContent>
           </Card>
+
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle>Localização da igreja (check-in)</CardTitle>
+              <CardDescription>
+                Define o ponto de referência. O check-in só será aceito dentro do raio configurado.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4 md:grid-cols-3">
+              <div className="space-y-2">
+                <Label>Latitude</Label>
+                <Input
+                  inputMode="decimal"
+                  placeholder="-23.5505"
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Longitude</Label>
+                <Input
+                  inputMode="decimal"
+                  placeholder="-46.6333"
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Raio (metros)</Label>
+                <Input
+                  type="number"
+                  min={10}
+                  value={radius}
+                  onChange={(e) => setRadius(e.target.value)}
+                />
+              </div>
+              <div className="md:col-span-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={locating}
+                  onClick={async () => {
+                    setLocating(true);
+                    try {
+                      const pos = await getCurrentPosition();
+                      setLatitude(String(pos.coords.latitude));
+                      setLongitude(String(pos.coords.longitude));
+                      toast.success("Localização capturada. Clique em Salvar.");
+                    } catch (e) {
+                      toast.error(e instanceof Error ? e.message : "Erro ao obter localização");
+                    } finally {
+                      setLocating(false);
+                    }
+                  }}
+                >
+                  <MapPin className="h-4 w-4" />
+                  {locating ? "Obtendo..." : "Usar minha localização atual"}
+                </Button>
+              </div>
         </TabsContent>
 
         <TabsContent value="regional" className="mt-4">
