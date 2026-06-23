@@ -526,3 +526,14 @@ function SettingsPage() {
     </div>
   );
 }
+
+function InfoField({ label, value, mono }: { label: string; value: string | null | undefined; mono?: boolean }) {
+  return (
+    <div className="space-y-1">
+      <p className="text-xs font-medium text-muted-foreground">{label}</p>
+      <p className={mono ? "font-mono text-sm" : "text-sm"}>
+        {value && value.trim() !== "" ? value : <span className="text-muted-foreground">—</span>}
+      </p>
+    </div>
+  );
+}
