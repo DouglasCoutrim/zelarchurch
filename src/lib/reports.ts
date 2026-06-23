@@ -100,8 +100,8 @@ export async function getConsolidatedReport(
   const totalValue = patRows.reduce((s, p) => s + Number(p.current_value ?? p.acquisition_value ?? 0), 0);
 
   // Schedules
-  const schRows = (schRes.data ?? []) as { event_at: string }[];
-  const completed = schRows.filter((s) => new Date(s.event_at).getTime() < Date.now()).length;
+  const schRows = (schRes.data ?? []) as { starts_at: string }[];
+  const completed = schRows.filter((s) => new Date(s.starts_at).getTime() < Date.now()).length;
 
   // Minutes
   const minutesRows = (minutesRes.data ?? []) as { status: string }[];
