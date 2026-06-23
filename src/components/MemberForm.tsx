@@ -279,7 +279,10 @@ function SelectField({
   return (
     <div className="space-y-1.5">
       <Label>{label}</Label>
-      <Select value={value || undefined} onValueChange={(v) => onChange(v === "__none" ? "" : v)}>
+      <Select
+        value={value === "" || value == null ? "__none" : value}
+        onValueChange={(v) => onChange(v === "__none" ? "" : v)}
+      >
         <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
         <SelectContent>
           {clearable && <SelectItem value="__none">— Nenhum —</SelectItem>}
