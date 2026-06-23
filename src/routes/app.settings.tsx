@@ -143,12 +143,19 @@ function SettingsPage() {
         plan_id: null,
         created_at: updated.created_at,
       });
+      setEditing(false);
       toast.success("Configurações salvas");
     } catch (e) {
+      console.error("settings save error", e);
       toast.error(e instanceof Error ? e.message : "Erro ao salvar");
     } finally {
       setSaving(false);
     }
+  }
+
+  function cancelEdit() {
+    if (tenant) hydrateForm(tenant);
+    setEditing(false);
   }
 
   async function toggleAdmin(m: TeamMember) {
