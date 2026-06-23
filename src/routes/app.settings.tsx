@@ -195,10 +195,23 @@ function SettingsPage() {
             Preferências da organização, regional e equipe.
           </p>
         </div>
-        <Button onClick={handleSave} disabled={saving}>
-          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          Salvar
-        </Button>
+        {editing ? (
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={cancelEdit} disabled={saving}>
+              <X className="h-4 w-4" />
+              Cancelar
+            </Button>
+            <Button onClick={handleSave} disabled={saving}>
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              Salvar
+            </Button>
+          </div>
+        ) : (
+          <Button onClick={() => setEditing(true)}>
+            <Pencil className="h-4 w-4" />
+            Editar dados da igreja
+          </Button>
+        )}
       </div>
 
       <Tabs defaultValue="organization">
