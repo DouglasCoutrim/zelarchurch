@@ -222,109 +222,156 @@ function SettingsPage() {
           <TabsTrigger value="team">Equipe</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="organization" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Dados da organização</CardTitle>
-              <CardDescription>Informações cadastrais e de contato.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label>Nome</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Slug</Label>
-                <Input value={tenant?.slug ?? ""} disabled />
-              </div>
-              <div className="space-y-2">
-                <Label>CNPJ</Label>
-                <Input value={cnpj} onChange={(e) => setCnpj(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>E-mail</Label>
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Telefone</Label>
-                <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Site</Label>
-                <Input value={website} onChange={(e) => setWebsite(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Cidade</Label>
-                <Input value={city} onChange={(e) => setCity(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>UF</Label>
-                <Input maxLength={2} value={state} onChange={(e) => setState(e.target.value.toUpperCase())} />
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="organization" className="mt-4 space-y-4">
+          {!editing ? (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Dados da organização</CardTitle>
+                  <CardDescription>Informações cadastrais e de contato.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4 md:grid-cols-2">
+                  <InfoField label="Nome" value={tenant?.name} />
+                  <InfoField label="Slug" value={tenant?.slug} mono />
+                  <InfoField label="CNPJ" value={tenant?.cnpj} />
+                  <InfoField label="E-mail" value={tenant?.email} />
+                  <InfoField label="Telefone" value={tenant?.phone} />
+                  <InfoField label="Site" value={tenant?.website} />
+                  <InfoField label="Cidade" value={tenant?.city} />
+                  <InfoField label="UF" value={tenant?.state} />
+                </CardContent>
+              </Card>
 
-          <Card className="mt-4">
-            <CardHeader>
-              <CardTitle>Localização da igreja (check-in)</CardTitle>
-              <CardDescription>
-                Define o ponto de referência. O check-in só será aceito dentro do raio configurado.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-3">
-              <div className="space-y-2">
-                <Label>Latitude</Label>
-                <Input
-                  inputMode="decimal"
-                  placeholder="-23.5505"
-                  value={latitude}
-                  onChange={(e) => setLatitude(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Longitude</Label>
-                <Input
-                  inputMode="decimal"
-                  placeholder="-46.6333"
-                  value={longitude}
-                  onChange={(e) => setLongitude(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Raio (metros)</Label>
-                <Input
-                  type="number"
-                  min={10}
-                  value={radius}
-                  onChange={(e) => setRadius(e.target.value)}
-                />
-              </div>
-              <div className="md:col-span-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={locating}
-                  onClick={async () => {
-                    setLocating(true);
-                    try {
-                      const pos = await getCurrentPosition();
-                      setLatitude(String(pos.coords.latitude));
-                      setLongitude(String(pos.coords.longitude));
-                      toast.success("Localização capturada. Clique em Salvar.");
-                    } catch (e) {
-                      toast.error(e instanceof Error ? e.message : "Erro ao obter localização");
-                    } finally {
-                      setLocating(false);
-                    }
-                  }}
-                >
-                  <MapPin className="h-4 w-4" />
-                  {locating ? "Obtendo..." : "Usar minha localização atual"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Localização da igreja (check-in)</CardTitle>
+                  <CardDescription>
+                    Ponto de referência e raio aceito para o check-in.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4 md:grid-cols-3">
+                  <InfoField
+                    label="Latitude"
+                    value={tenant?.latitude != null ? String(tenant.latitude) : null}
+                  />
+                  <InfoField
+                    label="Longitude"
+                    value={tenant?.longitude != null ? String(tenant.longitude) : null}
+                  />
+                  <InfoField
+                    label="Raio (metros)"
+                    value={tenant?.checkin_radius_meters != null ? String(tenant.checkin_radius_meters) : null}
+                  />
+                </CardContent>
+              </Card>
+            </>
+          ) : (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Dados da organização</CardTitle>
+                  <CardDescription>Informações cadastrais e de contato.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Nome</Label>
+                    <Input value={name} onChange={(e) => setName(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Slug</Label>
+                    <Input value={tenant?.slug ?? ""} disabled />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>CNPJ</Label>
+                    <Input value={cnpj} onChange={(e) => setCnpj(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>E-mail</Label>
+                    <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Telefone</Label>
+                    <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Site</Label>
+                    <Input value={website} onChange={(e) => setWebsite(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Cidade</Label>
+                    <Input value={city} onChange={(e) => setCity(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>UF</Label>
+                    <Input maxLength={2} value={state} onChange={(e) => setState(e.target.value.toUpperCase())} />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Localização da igreja (check-in)</CardTitle>
+                  <CardDescription>
+                    Define o ponto de referência. O check-in só será aceito dentro do raio configurado.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4 md:grid-cols-3">
+                  <div className="space-y-2">
+                    <Label>Latitude</Label>
+                    <Input
+                      inputMode="decimal"
+                      placeholder="-23.5505"
+                      value={latitude}
+                      onChange={(e) => setLatitude(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Longitude</Label>
+                    <Input
+                      inputMode="decimal"
+                      placeholder="-46.6333"
+                      value={longitude}
+                      onChange={(e) => setLongitude(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Raio (metros)</Label>
+                    <Input
+                      type="number"
+                      min={10}
+                      value={radius}
+                      onChange={(e) => setRadius(e.target.value)}
+                    />
+                  </div>
+                  <div className="md:col-span-3">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={locating}
+                      onClick={async () => {
+                        setLocating(true);
+                        try {
+                          const pos = await getCurrentPosition();
+                          setLatitude(String(pos.coords.latitude));
+                          setLongitude(String(pos.coords.longitude));
+                          toast.success("Localização capturada. Clique em Salvar.");
+                        } catch (e) {
+                          toast.error(e instanceof Error ? e.message : "Erro ao obter localização");
+                        } finally {
+                          setLocating(false);
+                        }
+                      }}
+                    >
+                      <MapPin className="h-4 w-4" />
+                      {locating ? "Obtendo..." : "Usar minha localização atual"}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </TabsContent>
+
 
 
         <TabsContent value="regional" className="mt-4">
