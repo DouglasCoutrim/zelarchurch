@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,10 +89,11 @@ function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Relatórios de Escalas</h1>
-        <p className="text-sm text-muted-foreground">Assiduidade dos membros por departamento.</p>
-      </div>
+      <PageHeader
+        eyebrow="Análises"
+        title="Relatórios de Escalas"
+        description="Assiduidade dos membros por departamento."
+      />
 
       <div className="flex flex-wrap items-end gap-3">
         <div className="space-y-1">

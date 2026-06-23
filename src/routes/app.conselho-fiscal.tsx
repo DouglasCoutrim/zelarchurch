@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, ShieldCheck, Calendar } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -62,17 +63,16 @@ function FiscalPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Conselho Fiscal</h1>
-          <p className="text-sm text-muted-foreground">
-            Pareceres assinados sobre prestação de contas e auditorias.
-          </p>
-        </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="mr-1 h-4 w-4" /> Novo parecer
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Governança"
+        title="Conselho Fiscal"
+        description="Pareceres assinados sobre prestação de contas e auditorias."
+        actions={
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="mr-1 h-4 w-4" /> Novo parecer
+          </Button>
+        }
+      />
 
       {error && (
         <Alert variant="destructive">

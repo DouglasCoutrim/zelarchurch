@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2, FileText, Calendar, MapPin, Eye } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -80,28 +81,27 @@ function MinutesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Atas</h1>
-          <p className="text-sm text-muted-foreground">
-            Registre e organize as atas das reuniões da igreja.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos os status</SelectItem>
-              {MINUTE_STATUS_OPTIONS.map((o) => (
-                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button onClick={() => setCreating(true)}>
-            <Plus className="mr-1 h-4 w-4" /> Nova ata
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Governança"
+        title="Atas"
+        description="Registre e organize as atas das reuniões da igreja."
+        actions={
+          <>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os status</SelectItem>
+                {MINUTE_STATUS_OPTIONS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button onClick={() => setCreating(true)}>
+              <Plus className="mr-1 h-4 w-4" /> Nova ata
+            </Button>
+          </>
+        }
+      />
 
       {error && (
         <Alert variant="destructive">

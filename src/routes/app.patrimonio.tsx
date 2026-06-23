@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2, Search, Package, DollarSign, MapPin } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -91,17 +92,16 @@ function PatrimonyPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Patrimônio</h1>
-          <p className="text-sm text-muted-foreground">
-            Controle de bens, equipamentos e itens da igreja.
-          </p>
-        </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="mr-1 h-4 w-4" /> Novo item
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Administração"
+        title="Patrimônio"
+        description="Controle de bens, equipamentos e itens da igreja."
+        actions={
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="mr-1 h-4 w-4" /> Novo item
+          </Button>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <SummaryCard icon={<Package className="h-4 w-4" />} label="Itens cadastrados" value={String(summary.total)} />
