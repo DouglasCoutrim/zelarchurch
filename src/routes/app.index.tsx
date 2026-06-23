@@ -362,7 +362,7 @@ function KpiCard({
           )}
         </div>
         <div className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-xl ring-1", badge)}>
-          <Icon className="h-4.5 w-4.5" />
+          <Icon className="h-4 w-4" />
         </div>
       </CardContent>
     </Card>
