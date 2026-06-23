@@ -23,13 +23,17 @@ export interface RecentTransaction {
   description: string | null;
   amount: number;
   type: string;
-  occurred_at: string;
+  transaction_date: string;
 }
 
 function monthRange(): { from: string; to: string } {
   const now = new Date();
-  const from = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-  const to = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).toISOString();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const y = now.getFullYear();
+  const m = now.getMonth();
+  const lastDay = new Date(y, m + 1, 0).getDate();
+  const from = `${y}-${pad(m + 1)}-01`;
+  const to = `${y}-${pad(m + 1)}-${pad(lastDay)}`;
   return { from, to };
 }
 
@@ -55,8 +59,9 @@ export async function loadDashboard(tenantId: string, userId: string): Promise<{
       .from("transactions")
       .select("amount,type")
       .eq("tenant_id", tenantId)
-      .gte("occurred_at", from)
-      .lte("occurred_at", to),
+      .is("deleted_at", null)
+      .gte("transaction_date", from)
+      .lte("transaction_date", to),
     supabase
       .from("members")
       .select("id", { count: "exact", head: true })
@@ -85,12 +90,13 @@ export async function loadDashboard(tenantId: string, userId: string): Promise<{
       .from("checkins")
       .select("id", { count: "exact", head: true })
       .eq("tenant_id", tenantId)
-      .gte("created_at", sevenDaysAgo),
+      .gte("checked_in_at", sevenDaysAgo),
     supabase
       .from("transactions")
-      .select("id,description,amount,type,occurred_at")
+      .select("id,description,amount,type,transaction_date")
       .eq("tenant_id", tenantId)
-      .order("occurred_at", { ascending: false })
+      .is("deleted_at", null)
+      .order("transaction_date", { ascending: false })
       .limit(5),
   ]);
 
