@@ -60,14 +60,14 @@ export async function getConsolidatedReport(
       .gte("transaction_date", from).lte("transaction_date", to),
     supabase.from("patrimonies").select("acquisition_value, current_value")
       .eq("tenant_id", tenantId).is("deleted_at", null),
-    supabase.from("schedules").select("id, event_at", { count: "exact" })
+    supabase.from("schedules").select("id, starts_at", { count: "exact" })
       .eq("tenant_id", tenantId)
-      .gte("event_at", fromIso).lte("event_at", toIso),
+      .gte("starts_at", fromIso).lte("starts_at", toIso),
     supabase.from("schedules").select("id", { count: "exact", head: true })
-      .eq("tenant_id", tenantId).gte("event_at", nowIso),
+      .eq("tenant_id", tenantId).gte("starts_at", nowIso),
     supabase.from("checkins").select("id", { count: "exact", head: true })
       .eq("tenant_id", tenantId)
-      .gte("created_at", fromIso).lte("created_at", toIso),
+      .gte("checked_in_at", fromIso).lte("checked_in_at", toIso),
     supabase.from("minutes").select("status")
       .eq("tenant_id", tenantId).is("deleted_at", null)
       .gte("meeting_at", fromIso).lte("meeting_at", toIso),
@@ -100,8 +100,8 @@ export async function getConsolidatedReport(
   const totalValue = patRows.reduce((s, p) => s + Number(p.current_value ?? p.acquisition_value ?? 0), 0);
 
   // Schedules
-  const schRows = (schRes.data ?? []) as { event_at: string }[];
-  const completed = schRows.filter((s) => new Date(s.event_at).getTime() < Date.now()).length;
+  const schRows = (schRes.data ?? []) as { starts_at: string }[];
+  const completed = schRows.filter((s) => new Date(s.starts_at).getTime() < Date.now()).length;
 
   // Minutes
   const minutesRows = (minutesRes.data ?? []) as { status: string }[];
