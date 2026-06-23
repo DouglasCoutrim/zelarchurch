@@ -117,6 +117,12 @@ function MemberProfile() {
                     {m.full_name}
                   </h1>
                   <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                    {m.registration_number && (
+                      <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-900 px-2 py-0.5 text-[11px] font-bold tracking-wider text-white">
+                        <span className="opacity-70">MAT.</span>
+                        <span className="font-mono">{m.registration_number}</span>
+                      </span>
+                    )}
                     <StatusBadge status={m.status} />
                     {m.member_type && <MetaPill icon={<Users className="h-3 w-3" />} label={m.member_type} />}
                     {m.church_role && <MetaPill icon={<Briefcase className="h-3 w-3" />} label={m.church_role} />}

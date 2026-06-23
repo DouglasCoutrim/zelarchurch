@@ -55,6 +55,7 @@ function MembershipCardPage() {
   const data: MembershipCardData | null = m
     ? {
         fullName: m.full_name,
+        registrationNumber: m.registration_number,
         birthDate: m.birth_date,
         baptismDate: m.baptism_date,
         role: roleOverride || m.church_role || m.member_type,
