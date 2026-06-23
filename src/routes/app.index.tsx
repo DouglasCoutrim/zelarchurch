@@ -225,7 +225,7 @@ function Dashboard() {
                           {t.description ?? "(sem descrição)"}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(t.occurred_at).toLocaleDateString("pt-BR")}
+                          {new Date(t.transaction_date).toLocaleDateString("pt-BR")}
                         </p>
                       </div>
                       <span
