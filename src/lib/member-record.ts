@@ -14,6 +14,7 @@ export interface MemberAddress {
 export interface MemberRecord {
   id: string;
   tenant_id: string;
+  registration_number: string | null;
   full_name: string;
   cpf: string | null;
   rg: string | null;
@@ -37,7 +38,7 @@ export interface MemberRecord {
   created_at: string;
 }
 
-export type MemberFormInput = Omit<MemberRecord, "id" | "tenant_id" | "created_at">;
+export type MemberFormInput = Omit<MemberRecord, "id" | "tenant_id" | "created_at" | "registration_number">;
 
 export async function getMember(id: string): Promise<MemberRecord> {
   const { data, error } = await supabase
