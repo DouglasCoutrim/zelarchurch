@@ -86,8 +86,8 @@
 :root {
   --radius: 0.625rem;
 
-  /* Surfaces */
-  --background: oklch(1 0 0);
+  /* Surfaces — page is slate-50ish, cards are pure white for contrast */
+  --background: oklch(0.984 0.003 248);          /* ~ slate-50 */
   --foreground: oklch(0.21 0.04 260);            /* neutral-800/900 */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.21 0.04 260);
@@ -118,8 +118,9 @@
   --warning: oklch(0.78 0.16 75);                 /* gold */
   --warning-foreground: oklch(0.32 0.09 60);
 
-  --border: oklch(0.92 0.012 255);
-  --input: oklch(0.92 0.012 255);
+  /* Borders deliberately a touch darker than v3 — must be visible on white cards */
+  --border: oklch(0.9 0.012 255);
+  --input: oklch(0.9 0.012 255);
   --ring: oklch(0.32 0.09 257);
 
   --chart-1: oklch(0.32 0.09 257);   /* navy */
@@ -282,12 +283,17 @@
   }
 }
 
+/* App surface — solid slate-50 with a single, very subtle radial accent.
+   Was a heavy gradient mesh; now reads as a calm SaaS canvas. */
 @utility gradient-mesh {
   background-color: var(--color-background);
   background-image:
-    radial-gradient(at 12% 8%, color-mix(in oklab, var(--color-brand-navy) 14%, transparent) 0px, transparent 50%),
-    radial-gradient(at 88% 4%, color-mix(in oklab, var(--color-brand-gold) 10%, transparent) 0px, transparent 45%),
-    radial-gradient(at 70% 90%, color-mix(in oklab, var(--color-brand-emerald) 8%, transparent) 0px, transparent 55%);
+    radial-gradient(at 100% 0%, color-mix(in oklab, var(--color-brand-navy) 4%, transparent) 0px, transparent 60%);
+}
+
+/* Sutil divisor lateral cinza ancorando o conteúdo da página */
+@utility page-rail {
+  border-left: 1px solid color-mix(in oklab, var(--color-foreground) 6%, transparent);
 }
 
 @utility gradient-navy {

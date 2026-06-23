@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Users, Pencil, Trash2, AlertTriangle, Music } from "lucide-react";
+import { Plus, Users, Pencil, Trash2, AlertTriangle, Music, Building2 } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
+import { EmptyState } from "@/components/EmptyState";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,21 +62,26 @@ function DepartmentsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Departamentos</h1>
-          <p className="text-sm text-muted-foreground">
-            {usage
-              ? `${usage.currentDepartments} de ${usage.maxDepartments} departamentos usados`
-              : "Organize os ministérios e equipes da sua igreja."}
-          </p>
-        </div>
-        <Button onClick={() => setCreating(true)} disabled={!canAddDepartment}
-          title={!canAddDepartment ? "Limite do plano atingido" : undefined}>
-          <Plus className="mr-1 h-4 w-4" />
-          Novo departamento
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Estrutura"
+        title="Departamentos"
+        description={
+          usage
+            ? `${usage.currentDepartments} de ${usage.maxDepartments} departamentos usados`
+            : "Organize os ministérios e equipes da sua igreja."
+        }
+        actions={
+          <Button
+            onClick={() => setCreating(true)}
+            disabled={!canAddDepartment}
+            title={!canAddDepartment ? "Limite do plano atingido" : undefined}
+          >
+            <Plus className="mr-1 h-4 w-4" />
+            Novo departamento
+          </Button>
+        }
+      />
+
 
       {!canAddDepartment && usage && (
         <Alert>
@@ -98,13 +105,13 @@ function DepartmentsPage() {
           {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-40" />)}
         </div>
       ) : data && data.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {data.map((d) => (
             <Card key={d.id} className={!d.is_active ? "opacity-60" : ""}>
-              <CardHeader>
+              <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <CardTitle className="truncate">{d.name}</CardTitle>
+                    <CardTitle className="truncate text-base text-slate-900">{d.name}</CardTitle>
                     {d.description && (
                       <CardDescription className="line-clamp-2">{d.description}</CardDescription>
                     )}
@@ -113,11 +120,15 @@ function DepartmentsPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <button onClick={() => setLinkOpen(d)}
-                  className="flex w-full items-center gap-2 rounded-md border p-2 text-left text-sm hover:bg-muted">
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                  <span>{d.member_count} {d.member_count === 1 ? "membro" : "membros"}</span>
-                  <span className="ml-auto text-xs text-muted-foreground">Gerenciar →</span>
+                <button
+                  onClick={() => setLinkOpen(d)}
+                  className="flex w-full items-center gap-2 rounded-md border border-slate-200/70 bg-slate-50/60 p-2 text-left text-sm transition-colors hover:border-primary/30 hover:bg-slate-100"
+                >
+                  <Users className="h-4 w-4 text-slate-500" />
+                  <span className="text-slate-700">
+                    {d.member_count} {d.member_count === 1 ? "membro" : "membros"}
+                  </span>
+                  <span className="ml-auto text-xs font-medium text-primary">Gerenciar →</span>
                 </button>
                 <div className="flex justify-end gap-1">
                   <Button size="sm" variant="ghost" onClick={() => setInstOpen(d)} title="Instrumentos">
@@ -135,11 +146,21 @@ function DepartmentsPage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-md border p-12 text-center">
-          <p className="text-sm text-muted-foreground">
-            Nenhum departamento ainda. Clique em "Novo departamento" para começar.
-          </p>
-        </div>
+        <Card>
+          <CardContent className="p-6">
+            <EmptyState
+              icon={Building2}
+              title="Nenhum departamento ainda"
+              description='Crie o primeiro ministério ou equipe para começar a organizar membros e escalas.'
+              action={
+                <Button onClick={() => setCreating(true)} disabled={!canAddDepartment}>
+                  <Plus className="mr-1 h-4 w-4" />
+                  Novo departamento
+                </Button>
+              }
+            />
+          </CardContent>
+        </Card>
       )}
 
       <DepartmentDialog

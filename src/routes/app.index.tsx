@@ -20,6 +20,8 @@ import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/PageHeader";
+import { EmptyState } from "@/components/EmptyState";
 import { usePlanLimit } from "@/hooks/usePlanLimit";
 import { useTenantStore } from "@/stores/tenantStore";
 import { useAuthStore } from "@/stores/authStore";
@@ -75,12 +77,12 @@ function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Painel</h1>
-        <p className="text-sm text-muted-foreground">
-          Visão geral de {currentTenant?.name ?? "sua área de trabalho"}.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Painel"
+        title="Visão geral"
+        description={`Resumo operacional de ${currentTenant?.name ?? "sua área de trabalho"}.`}
+      />
+
 
       {error && (
         <Alert variant="destructive">
@@ -172,16 +174,19 @@ function Dashboard() {
             {loading ? (
               <Skeleton className="h-24 w-full" />
             ) : upcoming.length === 0 ? (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                Nenhuma escala futura.
-              </p>
+              <EmptyState
+                compact
+                icon={CalendarDays}
+                title="Nenhuma escala futura"
+                description="Quando você criar escalas, os próximos eventos aparecerão aqui."
+              />
             ) : (
-              <ul className="divide-y">
+              <ul className="divide-y divide-slate-200/70">
                 {upcoming.map((s) => (
                   <li key={s.id} className="flex items-center justify-between py-3">
                     <div>
-                      <p className="font-medium">{s.title}</p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="font-medium text-slate-900">{s.title}</p>
+                      <p className="text-xs text-slate-500">
                         {new Date(s.starts_at).toLocaleString("pt-BR", {
                           dateStyle: "short",
                           timeStyle: "short",
@@ -189,7 +194,7 @@ function Dashboard() {
                         {s.location && ` • ${s.location}`}
                       </p>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    <ArrowRight className="h-4 w-4 text-slate-400" />
                   </li>
                 ))}
               </ul>
@@ -211,26 +216,29 @@ function Dashboard() {
             {loading ? (
               <Skeleton className="h-24 w-full" />
             ) : recent.length === 0 ? (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                Nenhuma movimentação registrada.
-              </p>
+              <EmptyState
+                compact
+                icon={Wallet}
+                title="Sem movimentações"
+                description="Quando registrar receitas ou despesas, elas aparecerão aqui."
+              />
             ) : (
-              <ul className="divide-y">
+              <ul className="divide-y divide-slate-200/70">
                 {recent.map((t) => {
                   const isIn = t.type === "entrada" || t.type === "income";
                   return (
                     <li key={t.id} className="flex items-center justify-between py-3">
                       <div className="min-w-0">
-                        <p className="truncate font-medium">
+                        <p className="truncate font-medium text-slate-900">
                           {t.description ?? "(sem descrição)"}
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-slate-500">
                           {new Date(t.transaction_date).toLocaleDateString("pt-BR")}
                         </p>
                       </div>
                       <span
                         className={cn(
-                          "font-mono text-sm font-medium",
+                          "font-mono text-sm font-semibold",
                           isIn ? "text-emerald-600" : "text-destructive",
                         )}
                       >
@@ -333,25 +341,29 @@ function KpiCard({
   icon: typeof Users;
   tone?: "success" | "danger";
 }) {
+  const badge =
+    tone === "success"
+      ? "bg-emerald-50 text-emerald-600 ring-emerald-100"
+      : tone === "danger"
+        ? "bg-rose-50 text-rose-600 ring-rose-100"
+        : "bg-slate-100 text-slate-600 ring-slate-200/70";
+
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardDescription>{title}</CardDescription>
-        <Icon
-          className={cn(
-            "h-4 w-4",
-            tone === "success" && "text-emerald-600",
-            tone === "danger" && "text-destructive",
-            !tone && "text-muted-foreground",
+    <Card className="overflow-hidden">
+      <CardContent className="flex items-center justify-between gap-3 p-4">
+        <div className="min-w-0">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+            {title}
+          </p>
+          {value === null ? (
+            <Skeleton className="mt-1.5 h-7 w-24" />
+          ) : (
+            <p className="mt-1 truncate text-xl font-bold text-slate-900">{value}</p>
           )}
-        />
-      </CardHeader>
-      <CardContent>
-        {value === null ? (
-          <Skeleton className="h-8 w-28" />
-        ) : (
-          <p className="text-2xl font-bold">{value}</p>
-        )}
+        </div>
+        <div className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-xl ring-1", badge)}>
+          <Icon className="h-4 w-4" />
+        </div>
       </CardContent>
     </Card>
   );
@@ -370,13 +382,17 @@ function MiniStat({
 }) {
   return (
     <Link to={to}>
-      <Card className="transition-colors hover:bg-accent">
+      <Card className="transition-colors hover:border-primary/30 hover:bg-slate-50/60">
         <CardContent className="flex items-center justify-between p-4">
           <div>
-            <p className="text-xs text-muted-foreground">{label}</p>
-            <p className="text-xl font-semibold">{value}</p>
+            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+              {label}
+            </p>
+            <p className="mt-1 text-xl font-bold text-slate-900">{value}</p>
           </div>
-          <Icon className="h-5 w-5 text-muted-foreground" />
+          <div className="grid h-9 w-9 place-items-center rounded-lg bg-slate-100 text-slate-600 ring-1 ring-slate-200/70">
+            <Icon className="h-4 w-4" />
+          </div>
         </CardContent>
       </Card>
     </Link>
