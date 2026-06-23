@@ -59,8 +59,9 @@ export async function loadDashboard(tenantId: string, userId: string): Promise<{
       .from("transactions")
       .select("amount,type")
       .eq("tenant_id", tenantId)
-      .gte("occurred_at", from)
-      .lte("occurred_at", to),
+      .is("deleted_at", null)
+      .gte("transaction_date", from)
+      .lte("transaction_date", to),
     supabase
       .from("members")
       .select("id", { count: "exact", head: true })
@@ -89,12 +90,13 @@ export async function loadDashboard(tenantId: string, userId: string): Promise<{
       .from("checkins")
       .select("id", { count: "exact", head: true })
       .eq("tenant_id", tenantId)
-      .gte("created_at", sevenDaysAgo),
+      .gte("checked_in_at", sevenDaysAgo),
     supabase
       .from("transactions")
-      .select("id,description,amount,type,occurred_at")
+      .select("id,description,amount,type,transaction_date")
       .eq("tenant_id", tenantId)
-      .order("occurred_at", { ascending: false })
+      .is("deleted_at", null)
+      .order("transaction_date", { ascending: false })
       .limit(5),
   ]);
 
