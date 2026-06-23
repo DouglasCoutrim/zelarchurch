@@ -283,12 +283,13 @@
   }
 }
 
-/* App surface — solid slate-50 with a single, very subtle radial accent.
-   Was a heavy gradient mesh; now reads as a calm SaaS canvas. */
+/* App surface — slate-50 with two whisper-soft brand glows (navy + gold)
+   anchoring the corners. Reads as a calm, premium SaaS canvas. */
 @utility gradient-mesh {
-  background-color: var(--color-background);
+  background-color: #f8fafc;
   background-image:
-    radial-gradient(at 100% 0%, color-mix(in oklab, var(--color-brand-navy) 4%, transparent) 0px, transparent 60%);
+    radial-gradient(at 0% 0%, rgb(27 58 107 / 0.045) 0px, transparent 55%),
+    radial-gradient(at 100% 100%, rgb(245 158 11 / 0.04) 0px, transparent 55%);
 }
 
 /* Sutil divisor lateral cinza ancorando o conteúdo da página */
