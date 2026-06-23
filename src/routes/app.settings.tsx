@@ -62,6 +62,7 @@ function SettingsPage() {
   const [team, setTeam] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   // form fields
   const [name, setName] = useState("");
