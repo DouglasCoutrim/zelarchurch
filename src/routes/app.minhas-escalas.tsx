@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Clock, MapPin, Check, UserMinus, Loader2 } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -109,12 +110,11 @@ function MyScheduleView() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Minhas escalas</h1>
-        <p className="text-sm text-muted-foreground">
-          Suas próximas atividades e solicitações de substituição.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Pessoal"
+        title="Minhas escalas"
+        description="Suas próximas atividades e solicitações de substituição."
+      />
 
       {(pendingSubsQ.data ?? []).length > 0 && (
         <Card>

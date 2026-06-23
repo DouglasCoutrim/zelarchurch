@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Loader2, MapPin, Pencil, Save, Shield, ShieldOff, UserCheck, UserX, X } from "lucide-react";
 import { getCurrentPosition } from "@/lib/checkins";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -188,31 +189,30 @@ function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Configurações</h1>
-          <p className="text-sm text-muted-foreground">
-            Preferências da organização, regional e equipe.
-          </p>
-        </div>
-        {editing ? (
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={cancelEdit} disabled={saving}>
-              <X className="h-4 w-4" />
-              Cancelar
+      <PageHeader
+        eyebrow="Sistema"
+        title="Configurações"
+        description="Preferências da organização, regional e equipe."
+        actions={
+          editing ? (
+            <>
+              <Button variant="outline" onClick={cancelEdit} disabled={saving}>
+                <X className="h-4 w-4" />
+                Cancelar
+              </Button>
+              <Button onClick={handleSave} disabled={saving}>
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                Salvar
+              </Button>
+            </>
+          ) : (
+            <Button onClick={() => setEditing(true)}>
+              <Pencil className="h-4 w-4" />
+              Editar dados da igreja
             </Button>
-            <Button onClick={handleSave} disabled={saving}>
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              Salvar
-            </Button>
-          </div>
-        ) : (
-          <Button onClick={() => setEditing(true)}>
-            <Pencil className="h-4 w-4" />
-            Editar dados da igreja
-          </Button>
-        )}
-      </div>
+          )
+        }
+      />
 
       <Tabs defaultValue="organization">
         <TabsList>

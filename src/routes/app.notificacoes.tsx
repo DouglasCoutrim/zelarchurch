@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, CheckCheck, Check, Trash2, ExternalLink } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -59,18 +60,17 @@ function NotificationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Notificações</h1>
-          <p className="text-sm text-muted-foreground">
-            {unreadCount > 0 ? `${unreadCount} não lida(s)` : "Você está em dia."}
-          </p>
-        </div>
-        <Button variant="outline" disabled={unreadCount === 0 || readAllMut.isPending}
-          onClick={() => readAllMut.mutate()}>
-          <CheckCheck className="mr-1 h-4 w-4" /> Marcar todas como lidas
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Atividade"
+        title="Notificações"
+        description={unreadCount > 0 ? `${unreadCount} não lida(s)` : "Você está em dia."}
+        actions={
+          <Button variant="outline" disabled={unreadCount === 0 || readAllMut.isPending}
+            onClick={() => readAllMut.mutate()}>
+            <CheckCheck className="mr-1 h-4 w-4" /> Marcar todas como lidas
+          </Button>
+        }
+      />
 
       {error && (
         <Alert variant="destructive">

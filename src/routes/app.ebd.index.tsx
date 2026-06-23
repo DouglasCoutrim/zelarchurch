@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2, GraduationCap, Users, ArrowRight } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -55,17 +56,16 @@ function EbdClassesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Escola Bíblica Dominical</h1>
-          <p className="text-sm text-muted-foreground">
-            Gerencie classes, professores e a chamada de cada domingo.
-          </p>
-        </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="mr-1 h-4 w-4" /> Nova classe
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Ensino"
+        title="Escola Bíblica Dominical"
+        description="Gerencie classes, professores e a chamada de cada domingo."
+        actions={
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="mr-1 h-4 w-4" /> Nova classe
+          </Button>
+        }
+      />
 
       {error && (
         <Alert variant="destructive">

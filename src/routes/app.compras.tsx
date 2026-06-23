@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+import { PageHeader } from "@/components/PageHeader";
   Plus, Pencil, Trash2, ShoppingCart, Check, X, PackageCheck, AlertCircle,
 } from "lucide-react";
 
@@ -110,28 +111,27 @@ function PurchasesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Compras</h1>
-          <p className="text-sm text-muted-foreground">
-            Solicitações de aquisição e fluxo de aprovação.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as PurchaseStatus | "all")}>
-            <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos os status</SelectItem>
-              {PURCHASE_STATUS_OPTIONS.map((o) => (
-                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button onClick={() => setCreating(true)}>
-            <Plus className="mr-1 h-4 w-4" /> Nova solicitação
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Administração"
+        title="Compras"
+        description="Solicitações de aquisição e fluxo de aprovação."
+        actions={
+          <>
+            <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as PurchaseStatus | "all")}>
+              <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os status</SelectItem>
+                {PURCHASE_STATUS_OPTIONS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button onClick={() => setCreating(true)}>
+              <Plus className="mr-1 h-4 w-4" /> Nova solicitação
+            </Button>
+          </>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi icon={<AlertCircle className="h-4 w-4" />} label="Aguardando" value={String(summary.totals.aguardando)} />

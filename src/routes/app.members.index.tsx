@@ -3,6 +3,7 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import { Plus, Search, AlertTriangle } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,22 +89,19 @@ function MembersList() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Membros</h1>
-          <p className="text-sm text-muted-foreground">
-            {usage
-              ? `${usage.currentMembers} de ${usage.maxMembers} membros usados`
-              : "Gerencie os membros da sua igreja."}
-          </p>
-        </div>
-        <Button asChild disabled={!canAddMember} title={!canAddMember ? "Limite do plano atingido" : undefined}>
-          <Link to="/app/members/new">
-            <Plus className="mr-1 h-4 w-4" />
-            Novo membro
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Comunidade"
+        title="Membros"
+        description={usage ? `${usage.currentMembers} de ${usage.maxMembers} membros usados` : "Gerencie os membros da sua igreja."}
+        actions={
+          <Button asChild disabled={!canAddMember} title={!canAddMember ? "Limite do plano atingido" : undefined}>
+            <Link to="/app/members/new">
+              <Plus className="mr-1 h-4 w-4" />
+              Novo membro
+            </Link>
+          </Button>
+        }
+      />
 
       {!canAddMember && usage && (
         <Alert>

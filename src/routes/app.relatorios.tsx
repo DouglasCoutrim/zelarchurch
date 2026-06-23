@@ -6,6 +6,7 @@ import {
   TrendingUp, TrendingDown, Download,
 } from "lucide-react";
 import {
+import { PageHeader } from "@/components/PageHeader";
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend,
   LineChart, Line,
 } from "recharts";
@@ -100,30 +101,29 @@ function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Relatórios consolidados</h1>
-          <p className="text-sm text-muted-foreground">
-            Visão geral de todos os módulos no período selecionado.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-end gap-2">
-          <div className="space-y-1">
-            <Label className="text-xs">De</Label>
-            <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-[150px]" />
-          </div>
-          <div className="space-y-1">
-            <Label className="text-xs">Até</Label>
-            <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-[150px]" />
-          </div>
-          <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
-            {isFetching ? "Atualizando..." : "Atualizar"}
-          </Button>
-          <Button onClick={exportCsv} disabled={!data}>
-            <Download className="mr-1 h-4 w-4" /> CSV
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Análises"
+        title="Relatórios consolidados"
+        description="Visão geral de todos os módulos no período selecionado."
+        actions={
+          <>
+            <div className="space-y-1">
+              <Label className="text-xs">De</Label>
+              <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-[150px]" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Até</Label>
+              <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-[150px]" />
+            </div>
+            <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
+              {isFetching ? "Atualizando..." : "Atualizar"}
+            </Button>
+            <Button onClick={exportCsv} disabled={!data}>
+              <Download className="mr-1 h-4 w-4" /> CSV
+            </Button>
+          </>
+        }
+      />
 
       {error && (
         <Alert variant="destructive">

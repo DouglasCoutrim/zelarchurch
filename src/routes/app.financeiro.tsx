@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/PageHeader";
 
 export const Route = createFileRoute("/app/financeiro")({
   head: () => ({ meta: [{ title: "Financeiro" }] }),
@@ -17,12 +18,11 @@ function FinanceLayout() {
   const path = useRouterState({ select: (r) => r.location.pathname });
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Financeiro</h1>
-        <p className="text-sm text-muted-foreground">
-          Controle receitas, despesas e o plano de contas da sua igreja.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Tesouraria"
+        title="Financeiro"
+        description="Controle receitas, despesas e o plano de contas da sua igreja."
+      />
       <nav className="flex gap-1 border-b">
         {tabs.map((t) => {
           const active = t.exact ? path === t.to : path.startsWith(t.to);

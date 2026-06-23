@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Loader2, RefreshCw, Search, ChevronDown, ChevronRight } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -96,18 +97,17 @@ function AuditPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Auditoria</h1>
-          <p className="text-sm text-muted-foreground">
-            Histórico de ações realizadas na organização.
-          </p>
-        </div>
-        <Button variant="outline" onClick={load} disabled={loading}>
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-          Atualizar
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Segurança"
+        title="Auditoria"
+        description="Histórico de ações realizadas na organização."
+        actions={
+          <Button variant="outline" onClick={load} disabled={loading}>
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+            Atualizar
+          </Button>
+        }
+      />
 
       <Card>
         <CardHeader>

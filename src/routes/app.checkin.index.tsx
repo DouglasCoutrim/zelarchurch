@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Clock, MapPin, ClipboardCheck } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,12 +24,11 @@ function CheckinIndex() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Check-in</h1>
-        <p className="text-sm text-muted-foreground">
-          Selecione uma escala em andamento ou próxima para registrar presença.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Presença"
+        title="Check-in"
+        description="Selecione uma escala em andamento ou próxima para registrar presença."
+      />
 
       {isLoading ? (
         <div className="grid gap-3 md:grid-cols-2">

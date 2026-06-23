@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+import { PageHeader } from "@/components/PageHeader";
   Plus, Pencil, Trash2, Users, MapPin, CalendarDays, Clock,
 } from "lucide-react";
 
@@ -110,22 +111,19 @@ function SchedulesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Escalas</h1>
-          <p className="text-sm text-muted-foreground">
-            Organize cultos, ensaios e eventos com a equipe escalada.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setAutoGen(true)}>
-            Gerar automática
-          </Button>
-          <Button onClick={() => setCreating(true)}>
-            <Plus className="mr-1 h-4 w-4" /> Nova escala
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Operação"
+        title="Escalas"
+        description="Organize cultos, ensaios e eventos com a equipe escalada."
+        actions={
+          <>
+            <Button variant="outline" onClick={() => setAutoGen(true)}>Gerar automática</Button>
+            <Button onClick={() => setCreating(true)}>
+              <Plus className="mr-1 h-4 w-4" /> Nova escala
+            </Button>
+          </>
+        }
+      />
 
       {autoGen && (
         <ScheduleGeneratorDialog

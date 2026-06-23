@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2, Megaphone, Calendar, MapPin, Send, Undo2 } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -68,17 +69,16 @@ function ConvocationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Convocações</h1>
-          <p className="text-sm text-muted-foreground">
-            Edital de assembleias, reuniões e eventos oficiais.
-          </p>
-        </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="mr-1 h-4 w-4" /> Nova convocação
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Governança"
+        title="Convocações"
+        description="Edital de assembleias, reuniões e eventos oficiais."
+        actions={
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="mr-1 h-4 w-4" /> Nova convocação
+          </Button>
+        }
+      />
 
       {error && (
         <Alert variant="destructive">
