@@ -136,7 +136,7 @@ function MemberProfile() {
                 <QuickStat label="Ingresso" value={formatDate(m.join_date)} />
                 <QuickStat label="Batismo" value={formatDate(m.baptism_date)} />
                 <QuickStat label="Nascimento" value={formatDate(m.birth_date)} />
-                <QuickStat label="Congregação" value={m.congregation?.name ?? "Sede"} />
+                <QuickStat label="Congregação" value={m.congregation_id ? "Vinculada" : "Sede"} />
               </dl>
             </div>
           </section>
