@@ -82,6 +82,24 @@ function SettingsPage() {
   const [radius, setRadius] = useState<string>("200");
   const [locating, setLocating] = useState(false);
 
+  function hydrateForm(t: TenantFull) {
+    setName(t.name ?? "");
+    setCnpj(t.cnpj ?? "");
+    setEmail(t.email ?? "");
+    setPhone(t.phone ?? "");
+    setCity(t.city ?? "");
+    setState(t.state ?? "");
+    setWebsite(t.website ?? "");
+    setLogoUrl(t.logo_url ?? "");
+    setPrimaryColor(t.primary_color ?? "#0f172a");
+    setTimezone(t.settings?.timezone ?? "America/Sao_Paulo");
+    setLanguage(t.settings?.language ?? "pt-BR");
+    setCurrency(t.settings?.currency ?? "BRL");
+    setLatitude(t.latitude != null ? String(t.latitude) : "");
+    setLongitude(t.longitude != null ? String(t.longitude) : "");
+    setRadius(String(t.checkin_radius_meters ?? 200));
+  }
+
   useEffect(() => {
     if (!currentTenant) return;
     setLoading(true);
@@ -89,23 +107,12 @@ function SettingsPage() {
       .then(([t, members]) => {
         setTenant(t);
         setTeam(members);
-        setName(t.name ?? "");
-        setCnpj(t.cnpj ?? "");
-        setEmail(t.email ?? "");
-        setPhone(t.phone ?? "");
-        setCity(t.city ?? "");
-        setState(t.state ?? "");
-        setWebsite(t.website ?? "");
-        setLogoUrl(t.logo_url ?? "");
-        setPrimaryColor(t.primary_color ?? "#0f172a");
-        setTimezone(t.settings?.timezone ?? "America/Sao_Paulo");
-        setLanguage(t.settings?.language ?? "pt-BR");
-        setCurrency(t.settings?.currency ?? "BRL");
-        setLatitude(t.latitude != null ? String(t.latitude) : "");
-        setLongitude(t.longitude != null ? String(t.longitude) : "");
-        setRadius(String(t.checkin_radius_meters ?? 200));
+        hydrateForm(t);
       })
-      .catch((e) => toast.error(e.message ?? "Erro ao carregar configurações"))
+      .catch((e) => {
+        console.error("settings load error", e);
+        toast.error(e.message ?? "Erro ao carregar configurações");
+      })
       .finally(() => setLoading(false));
   }, [currentTenant]);
 
