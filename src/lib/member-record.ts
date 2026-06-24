@@ -78,12 +78,3 @@ export async function updateMember(
   if (error) throw error;
   return data as MemberRecord;
 }
-
-/** Soft-delete: marca `deleted_at` para esconder de listagens. */
-export async function deleteMember(id: string): Promise<void> {
-  const { error } = await supabase
-    .from("members")
-    .update({ deleted_at: new Date().toISOString() })
-    .eq("id", id);
-  if (error) throw error;
-}

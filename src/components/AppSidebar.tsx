@@ -50,50 +50,40 @@ type Section = { label: string; items: Item[] };
 
 const sections: Section[] = [
   {
-    label: "Início",
-    items: [{ title: "Dashboard", url: "/app", icon: LayoutDashboard, exact: true }],
+    label: "Principal",
+    items: [{ title: "Painel", url: "/app", icon: LayoutDashboard, exact: true }],
   },
   {
-    label: "Organização",
+    label: "Gestão",
     items: [
       { title: "Membros", url: "/app/members", icon: Users },
-      { title: "Congregações", url: "/app/congregations", icon: Building2 },
       { title: "Departamentos", url: "/app/departments", icon: Building2 },
+      { title: "Congregações", url: "/app/congregations", icon: Building2 },
       { title: "Códigos de acesso", url: "/app/invitations", icon: QrCode },
     ],
   },
   {
     label: "Operação",
     items: [
+      { title: "Financeiro", url: "/app/financeiro", icon: Wallet },
       { title: "Escalas", url: "/app/escalas", icon: CalendarDays },
       { title: "Minhas escalas", url: "/app/minhas-escalas", icon: CalendarDays },
-      { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
+      { title: "Assiduidade", url: "/app/escalas-relatorios", icon: BarChart3 },
       { title: "EBD", url: "/app/ebd", icon: GraduationCap },
       { title: "Atas", url: "/app/atas", icon: FileText },
-      { title: "Assiduidade", url: "/app/escalas-relatorios", icon: BarChart3 },
-    ],
-  },
-  {
-    label: "Financeiro",
-    items: [
-      { title: "Financeiro", url: "/app/financeiro", icon: Wallet },
-      { title: "Compras", url: "/app/compras", icon: ShoppingCart },
-      { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },
-      { title: "Conselho Fiscal", url: "/app/conselho-fiscal", icon: ShieldCheck },
-    ],
-  },
-  {
-    label: "Comunicação",
-    items: [
       { title: "Convocações", url: "/app/convocacoes", icon: Megaphone },
+      { title: "Conselho Fiscal", url: "/app/conselho-fiscal", icon: ShieldCheck },
+      { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
+      { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },
+      { title: "Compras", url: "/app/compras", icon: ShoppingCart },
       { title: "Pedidos de oração", url: "/app/oracao", icon: HandHeart },
-      { title: "Notificações", url: "/app/notificacoes", icon: Bell },
+      { title: "Relatórios", url: "/app/relatorios", icon: BarChart3 },
     ],
   },
   {
-    label: "Administração",
+    label: "Sistema",
     items: [
-      { title: "Relatórios", url: "/app/relatorios", icon: BarChart3 },
+      { title: "Notificações", url: "/app/notificacoes", icon: Bell },
       { title: "Auditoria", url: "/app/auditoria", icon: History },
       { title: "Configurações", url: "/app/settings", icon: Settings },
     ],
@@ -110,7 +100,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b border-white/5 px-4 pt-6 pb-5">
+      <SidebarHeader className="border-b px-3 py-4">
         <div className="flex items-center justify-center">
           {collapsed ? (
             <img
@@ -119,24 +109,16 @@ export function AppSidebar() {
               className="h-9 w-9 shrink-0 rounded-md object-contain"
             />
           ) : (
-            <img
-              src={logoAsset.url}
-              alt={APP_NAME}
-              className="h-16 w-auto object-contain drop-shadow-[0_4px_12px_rgba(200,150,62,0.25)]"
-            />
+            <img src={logoAsset.url} alt={APP_NAME} className="h-14 w-auto" />
           )}
         </div>
       </SidebarHeader>
-      <SidebarContent className="gap-1 px-2 py-3">
+      <SidebarContent>
         {sections.map((section) => (
-          <SidebarGroup key={section.label} className="px-1 py-1.5">
-            {!collapsed && (
-              <SidebarGroupLabel className="px-2.5 pt-1 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
-                {section.label}
-              </SidebarGroupLabel>
-            )}
+          <SidebarGroup key={section.label}>
+            <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu className="gap-0.5">
+              <SidebarMenu>
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   if (item.soon) {
@@ -144,14 +126,14 @@ export function AppSidebar() {
                       <SidebarMenuItem key={item.url}>
                         <SidebarMenuButton
                           disabled
-                          className="cursor-not-allowed rounded-xl px-3 py-2.5 opacity-50"
+                          className="cursor-not-allowed opacity-60"
                           tooltip={collapsed ? `${item.title} — em breve` : undefined}
                         >
                           <Icon className="h-4 w-4" />
                           {!collapsed && (
                             <span className="flex w-full items-center justify-between">
                               <span>{item.title}</span>
-                              <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/40">
+                              <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
                                 em breve
                               </span>
                             </span>
@@ -167,11 +149,10 @@ export function AppSidebar() {
                         asChild
                         isActive={active}
                         tooltip={collapsed ? item.title : undefined}
-                        className="rounded-xl px-3 py-2.5 transition-all duration-200"
                       >
-                        <Link to={item.url} className={cn("flex items-center gap-3")}>
-                          <Icon className="h-[17px] w-[17px] shrink-0" />
-                          {!collapsed && <span className="text-[13.5px] font-medium">{item.title}</span>}
+                        <Link to={item.url} className={cn("flex items-center gap-2")}>
+                          <Icon className="h-4 w-4" />
+                          {!collapsed && <span>{item.title}</span>}
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -185,4 +166,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-

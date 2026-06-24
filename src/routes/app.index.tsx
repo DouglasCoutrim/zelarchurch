@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Users,
   Building2,
@@ -12,69 +12,31 @@ import {
   ShoppingCart,
   Bell,
   ClipboardCheck,
-  ArrowUpRight,
-  Activity,
+  ArrowRight,
 } from "lucide-react";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  BarChart,
-  Bar,
-} from "recharts";
 
-import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/PageHeader";
+import { EmptyState } from "@/components/EmptyState";
 import { usePlanLimit } from "@/hooks/usePlanLimit";
 import { useTenantStore } from "@/stores/tenantStore";
 import { useAuthStore } from "@/stores/authStore";
+import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { getCongregationsUsage } from "@/lib/congregations";
-import {
-  loadDashboard,
-  type DashboardStats,
-  type RecentTransaction,
-  type UpcomingSchedule,
-} from "@/lib/dashboard";
-import { loadDashboardSeries } from "@/lib/dashboard-series";
-import {
-  ZPage,
-  ZPageHeader,
-  ZSection,
-  ZGrid,
-  ZKpi,
-  ZPanel,
-  ZEmpty,
-  ZQuickCard,
-  ZTimeline,
-  type ZTimelineItem,
-} from "@/components/z";
+import { loadDashboard, type DashboardStats, type RecentTransaction, type UpcomingSchedule } from "@/lib/dashboard";
 
 export const Route = createFileRoute("/app/")({
-  head: () => ({ meta: [{ title: "Painel · Zelar" }] }),
+  head: () => ({ meta: [{ title: "Painel" }] }),
   component: Dashboard,
 });
 
 const BRL = (v: number) =>
-  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
-const BRLshort = (v: number) => {
-  if (Math.abs(v) >= 1000) return `R$ ${(v / 1000).toFixed(1)}k`;
-  return BRL(v);
-};
-
-function pctDelta(arr?: number[]): number | null {
-  if (!arr || arr.length < 2) return null;
-  const cur = arr[arr.length - 1];
-  const prev = arr[arr.length - 2];
-  if (!prev) return cur > 0 ? 100 : null;
-  return ((cur - prev) / Math.abs(prev)) * 100;
-}
+  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 function Dashboard() {
   const currentTenant = useTenantStore((s) => s.currentTenant);
@@ -95,15 +57,11 @@ function Dashboard() {
         setUpcoming(d.upcoming);
         setRecent(d.recent);
       })
-      .catch(() => {})
+      .catch(() => {
+        /* silent */
+      })
       .finally(() => setLoading(false));
   }, [currentTenant?.id, session?.user.id]);
-
-  const { data: series } = useQuery({
-    queryKey: ["dashboard-series", currentTenant?.id],
-    enabled: !!currentTenant?.id,
-    queryFn: () => loadDashboardSeries(currentTenant!.id),
-  });
 
   const { data: congUsage } = useQuery({
     queryKey: ["congregations-usage", currentTenant?.id],
@@ -111,417 +69,380 @@ function Dashboard() {
     queryFn: () => getCongregationsUsage(currentTenant!.id),
   });
 
+  const enabledFeatures = usage
+    ? Object.entries(usage.features).filter(([, on]) => on).map(([k]) => k)
+    : [];
   const membersNear = isNearLimit("members");
   const deptsNear = isNearLimit("departments");
 
-  const incomeDelta = pctDelta(series?.income);
-  const expenseDelta = pctDelta(series?.expense);
-  const balanceDelta = pctDelta(series?.balance);
-  const membersDelta = pctDelta(series?.membersCumulative);
-
-  const chartData =
-    series?.labels.map((label, i) => ({
-      label,
-      Receitas: series.income[i],
-      Despesas: series.expense[i],
-      Membros: series.membersCumulative[i],
-    })) ?? [];
-
-  // Timeline: merge recent transactions + upcoming schedules into one feed
-  const timeline = useMemo<ZTimelineItem[]>(() => {
-    const items: ZTimelineItem[] = [];
-    recent.forEach((t) => {
-      const isIn = t.type === "entrada" || t.type === "income";
-      items.push({
-        id: `tx-${t.id}`,
-        icon: isIn ? TrendingUp : TrendingDown,
-        tone: isIn ? "emerald" : "rose",
-        title: t.description ?? (isIn ? "Receita registrada" : "Despesa registrada"),
-        description: `${isIn ? "Entrada" : "Saída"} financeira`,
-        meta: (
-          <span
-            className={cn(
-              "font-mono text-[11.5px] font-semibold tabular-nums",
-              isIn ? "text-emerald-600" : "text-rose-600",
-            )}
-          >
-            {isIn ? "+" : "−"} {BRL(Math.abs(t.amount))}
-          </span>
-        ),
-        timestamp: new Date(t.transaction_date).toLocaleDateString("pt-BR", {
-          day: "2-digit",
-          month: "short",
-        }),
-      });
-    });
-    upcoming.forEach((s) => {
-      items.push({
-        id: `sch-${s.id}`,
-        icon: CalendarDays,
-        tone: "navy",
-        title: s.title,
-        description: s.location ?? "Escala / evento agendado",
-        timestamp: new Date(s.starts_at).toLocaleDateString("pt-BR", {
-          day: "2-digit",
-          month: "short",
-        }),
-      });
-    });
-    return items.slice(0, 10);
-  }, [recent, upcoming]);
-
   return (
-    <ZPage>
-      <ZPageHeader
+    <div className="space-y-6">
+      <PageHeader
         eyebrow="Painel"
-        title={`Visão geral · ${currentTenant?.name ?? "Sua igreja"}`}
-        description="Indicadores, fluxo de caixa e atividades dos últimos 6 meses."
-        actions={
-          <>
-            <Link
-              to="/app/financeiro"
-              className="hidden h-8 items-center gap-1 rounded-md border border-slate-200 bg-white px-2.5 text-[11.5px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 sm:inline-flex"
-            >
-              <Wallet className="h-3.5 w-3.5" /> Financeiro
-            </Link>
-            <Link
-              to="/app/relatorios"
-              className="inline-flex h-8 items-center gap-1 rounded-md bg-[var(--navy)] px-3 text-[11.5px] font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[var(--navy-mid)]"
-            >
-              Ver relatórios <ArrowUpRight className="h-3.5 w-3.5" />
-            </Link>
-          </>
-        }
+        title="Visão geral"
+        description={`Resumo operacional de ${currentTenant?.name ?? "sua área de trabalho"}.`}
       />
 
+
       {error && (
-        <Alert variant="destructive" className="py-2.5">
+        <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
-          <AlertTitle className="text-[12.5px]">Erro ao carregar o uso do plano</AlertTitle>
-          <AlertDescription className="text-[11.5px]">{error.message}</AlertDescription>
+          <AlertTitle>Não foi possível carregar o uso do plano</AlertTitle>
+          <AlertDescription>{error.message}</AlertDescription>
         </Alert>
       )}
+
       {(membersNear || deptsNear) && (
-        <Alert className="py-2.5">
+        <Alert>
           <AlertTriangle className="h-4 w-4" />
-          <AlertTitle className="text-[12.5px]">Atenção aos limites do plano</AlertTitle>
-          <AlertDescription className="text-[11.5px]">
+          <AlertTitle>Atenção aos limites do plano</AlertTitle>
+          <AlertDescription>
             Você está próximo do limite de{" "}
             {[membersNear && "membros", deptsNear && "departamentos"].filter(Boolean).join(" e ")}.
+            Considere fazer um upgrade.
           </AlertDescription>
         </Alert>
       )}
 
-      {/* Linha 1 — KPIs compactos (5 cards, ~88px altura) */}
-      <ZGrid cols={5}>
-        <ZKpi
-          label="Membros"
-          value={loading ? null : (stats?.membersActive ?? 0).toLocaleString("pt-BR")}
-          icon={Users}
-          tone="navy"
-          spark={series?.membersCumulative}
-          delta={membersDelta}
-          href="/app/members"
-          loading={loading}
-        />
-        <ZKpi
-          label="Receita"
+      {/* KPIs financeiros e operacionais */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <KpiCard
+          title="Entradas (mês)"
           value={loading ? null : BRL(stats?.monthIncome ?? 0)}
           icon={TrendingUp}
-          tone="emerald"
-          spark={series?.income}
-          delta={incomeDelta}
-          href="/app/financeiro"
-          loading={loading}
+          tone="success"
         />
-        <ZKpi
-          label="Despesa"
+        <KpiCard
+          title="Saídas (mês)"
           value={loading ? null : BRL(stats?.monthExpense ?? 0)}
           icon={TrendingDown}
-          tone="rose"
-          spark={series?.expense}
-          delta={expenseDelta != null ? -expenseDelta : null}
-          href="/app/financeiro"
-          loading={loading}
+          tone="danger"
         />
-        <ZKpi
-          label="Saldo"
+        <KpiCard
+          title="Saldo (mês)"
           value={loading ? null : BRL(stats?.monthBalance ?? 0)}
           icon={Wallet}
-          tone={(stats?.monthBalance ?? 0) >= 0 ? "gold" : "rose"}
-          spark={series?.balance}
-          delta={balanceDelta}
-          href="/app/financeiro"
-          loading={loading}
+          tone={(stats?.monthBalance ?? 0) >= 0 ? "success" : "danger"}
         />
-        <ZKpi
-          label="Escalas (sem)"
-          value={loading ? null : stats?.upcomingSchedulesCount ?? 0}
-          icon={CalendarDays}
-          tone="slate"
-          href="/app/escalas"
-          loading={loading}
-        />
-      </ZGrid>
-
-      {/* Linha 2 — 2 gráficos lado a lado, 240px */}
-      <div className="grid gap-3 lg:grid-cols-3">
-        <ZPanel
-          className="lg:col-span-2"
-          title="Fluxo de caixa"
-          subtitle="Últimos 6 meses"
-          icon={Activity}
-          action={
-            <Link
-              to="/app/financeiro"
-              className="text-[10.5px] font-semibold text-[var(--navy)] hover:underline"
-            >
-              Detalhar →
-            </Link>
-          }
-          bodyClassName="px-2 py-2"
-        >
-          <div className="h-[220px] w-full">
-            {series ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData} margin={{ top: 4, right: 8, left: -10, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="gIncome" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#10B981" stopOpacity={0.28} />
-                      <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="gExpense" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#E11D48" stopOpacity={0.22} />
-                      <stop offset="100%" stopColor="#E11D48" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid stroke="#F1F5F9" vertical={false} />
-                  <XAxis
-                    dataKey="label"
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fontSize: 10, fill: "#94A3B8" }}
-                  />
-                  <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fontSize: 10, fill: "#94A3B8" }}
-                    tickFormatter={BRLshort}
-                    width={52}
-                  />
-                  <Tooltip
-                    cursor={{ stroke: "#E2E8F0", strokeWidth: 1 }}
-                    contentStyle={{
-                      borderRadius: 8,
-                      border: "1px solid #E2E8F0",
-                      boxShadow: "0 8px 24px rgba(15,35,71,0.10)",
-                      fontSize: 11,
-                      padding: "6px 8px",
-                    }}
-                    formatter={(v: number) => BRL(v)}
-                  />
-                  <Area type="monotone" dataKey="Receitas" stroke="#10B981" strokeWidth={2} fill="url(#gIncome)" />
-                  <Area type="monotone" dataKey="Despesas" stroke="#E11D48" strokeWidth={2} fill="url(#gExpense)" />
-                </AreaChart>
-              </ResponsiveContainer>
-            ) : (
-              <Skeleton className="h-full w-full" />
-            )}
-          </div>
-        </ZPanel>
-
-        <ZPanel
-          title="Crescimento da igreja"
-          subtitle="Membresia acumulada por mês"
+        <KpiCard
+          title="Membros ativos"
+          value={loading ? null : String(stats?.membersActive ?? 0)}
           icon={Users}
-          bodyClassName="px-2 py-2"
-        >
-          <div className="h-[220px] w-full">
-            {series ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 4, right: 8, left: -18, bottom: 0 }}>
-                  <CartesianGrid stroke="#F1F5F9" vertical={false} />
-                  <XAxis
-                    dataKey="label"
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fontSize: 10, fill: "#94A3B8" }}
-                  />
-                  <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fontSize: 10, fill: "#94A3B8" }}
-                    width={36}
-                  />
-                  <Tooltip
-                    cursor={{ fill: "rgba(27,58,107,0.04)" }}
-                    contentStyle={{
-                      borderRadius: 8,
-                      border: "1px solid #E2E8F0",
-                      boxShadow: "0 8px 24px rgba(15,35,71,0.10)",
-                      fontSize: 11,
-                      padding: "6px 8px",
-                    }}
-                  />
-                  <Bar dataKey="Membros" fill="#1B3A6B" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <Skeleton className="h-full w-full" />
-            )}
-          </div>
-        </ZPanel>
+        />
       </div>
 
-      {/* Linha 3 — Cards operacionais compactos */}
-      <ZGrid cols={4}>
-        <ZQuickCard
-          icon={CalendarDays}
-          label="Próximos eventos"
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <MiniStat
+          to="/app/escalas"
+          label="Próximas escalas"
           value={stats?.upcomingSchedulesCount ?? 0}
-          hint="Escalas confirmadas"
-          tone="navy"
-          href="/app/escalas"
+          icon={CalendarDays}
         />
-        <ZQuickCard
-          icon={ShoppingCart}
+        <MiniStat
+          to="/app/compras"
           label="Compras pendentes"
           value={stats?.pendingPurchases ?? 0}
-          hint="Aguardando aprovação"
-          tone="gold"
-          href="/app/compras"
+          icon={ShoppingCart}
         />
-        <ZQuickCard
-          icon={ClipboardCheck}
+        <MiniStat
+          to="/app/checkin"
           label="Check-ins (7 dias)"
           value={stats?.lastCheckins ?? 0}
-          hint="Presenças confirmadas"
-          tone="emerald"
-          href="/app/checkin"
+          icon={ClipboardCheck}
         />
-        <ZQuickCard
-          icon={Bell}
-          label="Notificações"
+        <MiniStat
+          to="/app/notificacoes"
+          label="Notificações não lidas"
           value={stats?.unreadNotifications ?? 0}
-          hint="Não lidas"
-          tone="rose"
-          href="/app/notificacoes"
+          icon={Bell}
         />
-      </ZGrid>
-
-      {/* Linha 4 — Atividade recente (timeline) + Plano */}
-      <div className="grid gap-3 lg:grid-cols-3">
-        <ZPanel
-          className="lg:col-span-2"
-          title="Atividade recente"
-          subtitle="Movimentações financeiras e escalas agendadas"
-          icon={Activity}
-          action={
-            <Link
-              to="/app/auditoria"
-              className="text-[10.5px] font-semibold text-[var(--navy)] hover:underline"
-            >
-              Auditoria completa →
-            </Link>
-          }
-        >
-          {loading ? (
-            <div className="space-y-2">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-10 w-full" />
-              ))}
-            </div>
-          ) : timeline.length === 0 ? (
-            <ZEmpty
-              icon={Activity}
-              title="Nenhuma atividade recente"
-              description="Quando houver movimentação financeira ou escalas agendadas, elas aparecerão aqui."
-            />
-          ) : (
-            <ZTimeline items={timeline} />
-          )}
-        </ZPanel>
-
-        <ZPanel
-          title="Plano e capacidade"
-          subtitle="Uso atual da assinatura"
-          icon={Sparkles}
-          action={
-            <Link
-              to="/app/settings"
-              className="text-[10.5px] font-semibold text-[var(--navy)] hover:underline"
-            >
-              Gerenciar →
-            </Link>
-          }
-        >
-          <div className="space-y-3">
-            <UsageBar
-              label="Membros"
-              current={usage?.currentMembers}
-              max={usage?.maxMembers}
-              loading={planLoading}
-              near={membersNear}
-            />
-            <UsageBar
-              label="Departamentos"
-              current={usage?.currentDepartments}
-              max={usage?.maxDepartments}
-              loading={planLoading}
-              near={deptsNear}
-            />
-            <UsageBar
-              label="Congregações"
-              current={congUsage?.current}
-              max={congUsage?.max ?? undefined}
-              loading={!congUsage}
-              near={false}
-              icon={Building2}
-            />
-          </div>
-        </ZPanel>
       </div>
-    </ZPage>
+
+      {/* Listas */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <div>
+              <CardTitle>Próximas escalas</CardTitle>
+              <CardDescription>Eventos e cultos agendados.</CardDescription>
+            </div>
+            <Link to="/app/escalas" className="text-sm text-primary hover:underline">
+              Ver todas
+            </Link>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <Skeleton className="h-24 w-full" />
+            ) : upcoming.length === 0 ? (
+              <EmptyState
+                compact
+                icon={CalendarDays}
+                title="Nenhuma escala futura"
+                description="Quando você criar escalas, os próximos eventos aparecerão aqui."
+              />
+            ) : (
+              <ul className="divide-y divide-slate-200/70">
+                {upcoming.map((s) => (
+                  <li key={s.id} className="flex items-center justify-between py-3">
+                    <div>
+                      <p className="font-medium text-slate-900">{s.title}</p>
+                      <p className="text-xs text-slate-500">
+                        {new Date(s.starts_at).toLocaleString("pt-BR", {
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        })}
+                        {s.location && ` • ${s.location}`}
+                      </p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-slate-400" />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <div>
+              <CardTitle>Movimentações recentes</CardTitle>
+              <CardDescription>Últimas entradas e saídas.</CardDescription>
+            </div>
+            <Link to="/app/financeiro" className="text-sm text-primary hover:underline">
+              Ver financeiro
+            </Link>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <Skeleton className="h-24 w-full" />
+            ) : recent.length === 0 ? (
+              <EmptyState
+                compact
+                icon={Wallet}
+                title="Sem movimentações"
+                description="Quando registrar receitas ou despesas, elas aparecerão aqui."
+              />
+            ) : (
+              <ul className="divide-y divide-slate-200/70">
+                {recent.map((t) => {
+                  const isIn = t.type === "entrada" || t.type === "income";
+                  return (
+                    <li key={t.id} className="flex items-center justify-between py-3">
+                      <div className="min-w-0">
+                        <p className="truncate font-medium text-slate-900">
+                          {t.description ?? "(sem descrição)"}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {new Date(t.transaction_date).toLocaleDateString("pt-BR")}
+                        </p>
+                      </div>
+                      <span
+                        className={cn(
+                          "font-mono text-sm font-semibold",
+                          isIn ? "text-emerald-600" : "text-destructive",
+                        )}
+                      >
+                        {isIn ? "+" : "-"} {BRL(Math.abs(t.amount))}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Plano */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <UsageCard
+          title="Membros"
+          description="Cadastrados na sua igreja"
+          icon={Users}
+          current={usage?.currentMembers}
+          max={usage?.maxMembers}
+          loading={planLoading}
+          near={membersNear}
+        />
+        <UsageCard
+          title="Departamentos"
+          description="Departamentos ativos"
+          icon={Building2}
+          current={usage?.currentDepartments}
+          max={usage?.maxDepartments}
+          loading={planLoading}
+          near={deptsNear}
+        />
+        <Card>
+          <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0">
+            <div>
+              <CardTitle>Congregações</CardTitle>
+              <CardDescription>Filiais vinculadas</CardDescription>
+            </div>
+            <Building2 className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {!congUsage ? (
+              <Skeleton className="h-8 w-24" />
+            ) : (
+              <>
+                <p className="text-2xl font-bold">
+                  {congUsage.max === null
+                    ? `${congUsage.current} (ilimitado)`
+                    : `${congUsage.current} de ${congUsage.max}`}
+                </p>
+                <Link
+                  to="/app/congregations"
+                  className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                >
+                  Gerenciar <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </>
+            )}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0">
+            <div>
+              <CardTitle>Plano</CardTitle>
+              <CardDescription>Recursos disponíveis</CardDescription>
+            </div>
+            <Sparkles className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            {planLoading ? (
+              <Skeleton className="h-8 w-32" />
+            ) : enabledFeatures.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Nenhum recurso ativo.</p>
+            ) : (
+              <div className="flex flex-wrap gap-1.5">
+                {enabledFeatures.map((f) => (
+                  <Badge key={f} variant="secondary" className="font-normal">
+                    {f}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }
 
-function UsageBar({
+function KpiCard({
+  title,
+  value,
+  icon: Icon,
+  tone,
+}: {
+  title: string;
+  value: string | null;
+  icon: typeof Users;
+  tone?: "success" | "danger";
+}) {
+  const badge =
+    tone === "success"
+      ? "bg-emerald-50 text-emerald-600 ring-emerald-100"
+      : tone === "danger"
+        ? "bg-rose-50 text-rose-600 ring-rose-100"
+        : "bg-slate-100 text-slate-600 ring-slate-200/70";
+
+  return (
+    <Card className="overflow-hidden">
+      <CardContent className="flex items-center justify-between gap-3 p-4">
+        <div className="min-w-0">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+            {title}
+          </p>
+          {value === null ? (
+            <Skeleton className="mt-1.5 h-7 w-24" />
+          ) : (
+            <p className="mt-1 truncate text-xl font-bold text-slate-900">{value}</p>
+          )}
+        </div>
+        <div className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-xl ring-1", badge)}>
+          <Icon className="h-4 w-4" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function MiniStat({
+  to,
   label,
+  value,
+  icon: Icon,
+}: {
+  to: string;
+  label: string;
+  value: number;
+  icon: typeof Users;
+}) {
+  return (
+    <Link to={to}>
+      <Card className="transition-colors hover:border-primary/30 hover:bg-slate-50/60">
+        <CardContent className="flex items-center justify-between p-4">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+              {label}
+            </p>
+            <p className="mt-1 text-xl font-bold text-slate-900">{value}</p>
+          </div>
+          <div className="grid h-9 w-9 place-items-center rounded-lg bg-slate-100 text-slate-600 ring-1 ring-slate-200/70">
+            <Icon className="h-4 w-4" />
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
+function UsageCard({
+  title,
+  description,
+  icon: Icon,
   current,
   max,
   loading,
   near,
-  icon: Icon,
 }: {
-  label: string;
+  title: string;
+  description: string;
+  icon: typeof Users;
   current?: number;
   max?: number;
   loading: boolean;
   near: boolean;
-  icon?: typeof Users;
 }) {
   const pct = max && max > 0 ? Math.min(100, Math.round(((current ?? 0) / max) * 100)) : 0;
   return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between gap-2">
-        <span className="flex items-center gap-1.5 text-[11.5px] font-semibold text-slate-700">
-          {Icon && <Icon className="h-3 w-3 text-slate-400" />}
-          {label}
-        </span>
+    <Card>
+      <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0">
+        <div>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </div>
+        <Icon className="h-5 w-5 text-muted-foreground" />
+      </CardHeader>
+      <CardContent className="space-y-3">
         {loading ? (
-          <Skeleton className="h-3 w-14" />
+          <>
+            <Skeleton className="h-8 w-24" />
+            <Skeleton className="h-2 w-full" />
+          </>
         ) : (
-          <span className="text-[11px] tabular-nums text-slate-500">
-            <span className={cn("font-semibold", near ? "text-rose-600" : "text-slate-800")}>
-              {current ?? 0}
-            </span>
-            {max != null && <> / {max}</>}
-          </span>
+          <>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold">{current ?? 0}</span>
+              <span className="text-sm text-muted-foreground">/ {max ?? 0}</span>
+            </div>
+            <Progress value={pct} className={cn(near && "[&>div]:bg-destructive")} />
+            <p className="text-xs text-muted-foreground">{pct}% utilizado</p>
+          </>
         )}
-      </div>
-      {!loading && max != null && (
-        <Progress value={pct} className={cn("h-1.5", near && "[&>div]:bg-destructive")} />
-      )}
-    </div>
+      </CardContent>
+    </Card>
   );
 }
