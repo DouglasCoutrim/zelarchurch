@@ -9,10 +9,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Landing primary CTA — gold with deep gold shadow + lift on hover
+        // Landing secondary CTA — navy, deep shadow + lift
         default:
-          "bg-[#C8963E] text-white shadow-[0_14px_40px_-12px_rgba(200,150,62,0.7)] hover:bg-[#b58432] hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-12px_rgba(200,150,62,0.85)] active:translate-y-0",
-        // Navy variant — landing secondary CTA
+          "bg-[#1E3A5F] text-white shadow-[0_10px_30px_-12px_rgba(30,58,95,0.5)] hover:bg-[#152a47] hover:-translate-y-0.5 hover:shadow-[0_14px_36px_-12px_rgba(30,58,95,0.6)] active:translate-y-0",
         navy:
           "bg-[#1E3A5F] text-white shadow-[0_10px_30px_-12px_rgba(30,58,95,0.5)] hover:bg-[#152a47] hover:-translate-y-0.5 active:translate-y-0",
         gold:
