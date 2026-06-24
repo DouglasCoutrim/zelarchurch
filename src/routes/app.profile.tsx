@@ -303,7 +303,107 @@ function ProfilePage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="danger" className="mt-4 space-y-4">
+          {currentTenant && (
+            <Card className="border-destructive/40">
+              <CardHeader>
+                <CardTitle className="text-destructive">Excluir igreja</CardTitle>
+                <CardDescription>
+                  Apenas o owner. Apaga permanentemente <strong>{currentTenant.name}</strong> e
+                  todos os dados (membros, escalas, finanças, etc.). Não pode ser desfeito.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button variant="destructive" onClick={() => setTenantOpen(true)}>
+                  <Trash2 className="mr-1 h-4 w-4" />
+                  Excluir igreja
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="border-destructive/40">
+            <CardHeader>
+              <CardTitle className="text-destructive">Excluir minha conta</CardTitle>
+              <CardDescription>
+                Você será removido de todas as igrejas em que participa e seu acesso será
+                encerrado. Esta ação é permanente.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="destructive" onClick={() => setAccountOpen(true)}>
+                <Trash2 className="mr-1 h-4 w-4" />
+                Excluir minha conta
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
+
+      {/* Confirm delete account */}
+      <AlertDialog open={accountOpen} onOpenChange={(v) => { setAccountOpen(v); if (!v) setConfirmAccountText(""); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir minha conta</AlertDialogTitle>
+            <AlertDialogDescription>
+              Para confirmar, digite <strong>EXCLUIR</strong> no campo abaixo. Esta ação é
+              permanente e não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={confirmAccountText}
+            onChange={(e) => setConfirmAccountText(e.target.value)}
+            placeholder="Digite EXCLUIR"
+            autoFocus
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={confirmAccountText !== "EXCLUIR" || accountDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                void handleDeleteAccount();
+              }}
+            >
+              {accountDeleting ? "Excluindo…" : "Excluir definitivamente"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Confirm delete tenant */}
+      <AlertDialog open={tenantOpen} onOpenChange={(v) => { setTenantOpen(v); if (!v) setConfirmTenantText(""); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir igreja</AlertDialogTitle>
+            <AlertDialogDescription>
+              Para confirmar, digite o nome da igreja{" "}
+              <strong>{currentTenant?.name}</strong> abaixo. Todos os dados serão perdidos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={confirmTenantText}
+            onChange={(e) => setConfirmTenantText(e.target.value)}
+            placeholder={currentTenant?.name ?? ""}
+            autoFocus
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={confirmTenantText !== currentTenant?.name || tenantDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                void handleDeleteTenant();
+              }}
+            >
+              {tenantDeleting ? "Excluindo…" : "Excluir igreja"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
