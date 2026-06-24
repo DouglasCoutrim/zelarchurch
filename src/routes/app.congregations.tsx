@@ -218,6 +218,14 @@ function CongregationsPage() {
                           <Power className="h-4 w-4 text-emerald-600" />
                         )}
                       </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setDeleting(c)}
+                        title="Excluir"
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
