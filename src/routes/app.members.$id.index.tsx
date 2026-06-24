@@ -1,9 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import {
   ChevronLeft,
   Pencil,
+  Trash2,
   Mail,
   Phone,
   MessageCircle,
@@ -27,7 +29,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getMember } from "@/lib/member-record";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { getMember, deleteMember } from "@/lib/member-record";
 import { MEMBER_STATUS_OPTIONS } from "@/types/member";
 
 export const Route = createFileRoute("/app/members/$id/")({
@@ -37,9 +43,22 @@ export const Route = createFileRoute("/app/members/$id/")({
 
 function MemberProfile() {
   const { id } = Route.useParams();
+  const navigate = useNavigate();
+  const qc = useQueryClient();
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const { data: m, isLoading, error } = useQuery({
     queryKey: ["member", id],
     queryFn: () => getMember(id),
+  });
+
+  const delMut = useMutation({
+    mutationFn: () => deleteMember(id),
+    onSuccess: () => {
+      toast.success("Membro excluído");
+      qc.invalidateQueries({ queryKey: ["members"] });
+      navigate({ to: "/app/members" });
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (
