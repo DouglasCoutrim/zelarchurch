@@ -78,6 +78,16 @@ function MembersList() {
       }),
   });
 
+  const delMut = useMutation({
+    mutationFn: (id: string) => deleteMember(id),
+    onSuccess: () => {
+      toast.success("Membro excluído.");
+      setToDelete(null);
+      qc.invalidateQueries({ queryKey: ["members", currentTenant?.id] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const total = data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / DEFAULT_PAGE_SIZE));
 
