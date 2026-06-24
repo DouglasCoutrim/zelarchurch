@@ -185,6 +185,9 @@ function ProfilePage() {
           <TabsTrigger value="profile"><UserIcon className="mr-1 h-4 w-4" />Dados</TabsTrigger>
           <TabsTrigger value="email"><Mail className="mr-1 h-4 w-4" />E-mail</TabsTrigger>
           <TabsTrigger value="password"><KeyRound className="mr-1 h-4 w-4" />Senha</TabsTrigger>
+          <TabsTrigger value="danger" className="data-[state=active]:text-destructive">
+            <AlertTriangle className="mr-1 h-4 w-4" />Zona de perigo
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile" className="mt-4">
