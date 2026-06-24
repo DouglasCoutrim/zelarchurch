@@ -106,7 +106,7 @@
   --shadow-sidebar: 2px 0 12px rgba(15,35,71,.15);
 
   /* shadcn semantic tokens — fundo da página com tom frio para superfícies brancas saltarem */
-  --background: #ECF0F8;
+  --background: #F8FAFC;
   --foreground: #0B1428;
   --card: #FFFFFF;
   --card-foreground: #0B1428;
