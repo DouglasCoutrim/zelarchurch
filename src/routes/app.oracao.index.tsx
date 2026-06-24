@@ -128,6 +128,14 @@ function PrayerIndex() {
                           ))}
                         </SelectContent>
                       </Select>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        title="Excluir pedido"
+                        onClick={() => setToDelete(p.id)}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
                     </div>
                   </div>
                 </CardHeader>
