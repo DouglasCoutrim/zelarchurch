@@ -132,6 +132,35 @@ function ProfilePage() {
     }
   }
 
+  async function handleDeleteAccount() {
+    setAccountDeleting(true);
+    try {
+      await deleteMyAccount();
+      resetTenant();
+      toast.success("Conta excluída.");
+      navigate({ to: "/" });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setAccountDeleting(false);
+    }
+  }
+
+  async function handleDeleteTenant() {
+    if (!currentTenant) return;
+    setTenantDeleting(true);
+    try {
+      await deleteTenant(currentTenant.id);
+      resetTenant();
+      toast.success("Igreja excluída.");
+      navigate({ to: "/" });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setTenantDeleting(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
       <Button asChild variant="ghost" size="sm" className="-ml-2">
