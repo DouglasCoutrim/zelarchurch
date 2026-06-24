@@ -12,23 +12,31 @@ import {
   ShoppingCart,
   Bell,
   ClipboardCheck,
-  ArrowRight,
   ArrowUpRight,
-  type LucideIcon,
+  Activity,
 } from "lucide-react";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  BarChart,
+  Bar,
+  Legend,
+} from "recharts";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { useQuery } from "@tanstack/react-query";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { PageHeader } from "@/components/PageHeader";
-import { EmptyState } from "@/components/EmptyState";
+import { cn } from "@/lib/utils";
 import { usePlanLimit } from "@/hooks/usePlanLimit";
 import { useTenantStore } from "@/stores/tenantStore";
 import { useAuthStore } from "@/stores/authStore";
-import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 import { getCongregationsUsage } from "@/lib/congregations";
 import {
   loadDashboard,
@@ -36,14 +44,30 @@ import {
   type RecentTransaction,
   type UpcomingSchedule,
 } from "@/lib/dashboard";
+import { loadDashboardSeries } from "@/lib/dashboard-series";
+import {
+  ZPage,
+  ZPageHeader,
+  ZSection,
+  ZGrid,
+  ZKpi,
+  ZPanel,
+  ZEmpty,
+  ZCard,
+  ZStatus,
+} from "@/components/z";
 
 export const Route = createFileRoute("/app/")({
-  head: () => ({ meta: [{ title: "Painel" }] }),
+  head: () => ({ meta: [{ title: "Painel · Zelar" }] }),
   component: Dashboard,
 });
 
 const BRL = (v: number) =>
-  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+const BRLshort = (v: number) => {
+  if (Math.abs(v) >= 1000) return `R$ ${(v / 1000).toFixed(1)}k`;
+  return BRL(v);
+};
 
 function Dashboard() {
   const currentTenant = useTenantStore((s) => s.currentTenant);
@@ -68,6 +92,12 @@ function Dashboard() {
       .finally(() => setLoading(false));
   }, [currentTenant?.id, session?.user.id]);
 
+  const { data: series } = useQuery({
+    queryKey: ["dashboard-series", currentTenant?.id],
+    enabled: !!currentTenant?.id,
+    queryFn: () => loadDashboardSeries(currentTenant!.id),
+  });
+
   const { data: congUsage } = useQuery({
     queryKey: ["congregations-usage", currentTenant?.id],
     enabled: !!currentTenant?.id,
@@ -80,12 +110,35 @@ function Dashboard() {
   const membersNear = isNearLimit("members");
   const deptsNear = isNearLimit("departments");
 
+  // deltas (mês atual vs anterior)
+  const incomeDelta = pctDelta(series?.income);
+  const expenseDelta = pctDelta(series?.expense);
+  const balanceDelta = pctDelta(series?.balance);
+  const membersDelta = pctDelta(series?.membersCumulative);
+
+  const chartData =
+    series?.labels.map((label, i) => ({
+      label,
+      Receitas: series.income[i],
+      Despesas: series.expense[i],
+      Saldo: series.balance[i],
+      Membros: series.membersCumulative[i],
+    })) ?? [];
+
   return (
-    <div className="space-y-8">
-      <PageHeader
+    <ZPage>
+      <ZPageHeader
         eyebrow="Painel"
         title="Visão geral"
-        description={`Resumo operacional de ${currentTenant?.name ?? "sua área de trabalho"}.`}
+        description={`Resumo operacional de ${currentTenant?.name ?? "sua área de trabalho"} — últimos 6 meses.`}
+        actions={
+          <Link
+            to="/app/relatorios"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--navy)] px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[var(--navy-mid)]"
+          >
+            Ver relatórios <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        }
       />
 
       {error && (
@@ -95,7 +148,6 @@ function Dashboard() {
           <AlertDescription>{error.message}</AlertDescription>
         </Alert>
       )}
-
       {(membersNear || deptsNear) && (
         <Alert>
           <AlertTriangle className="h-4 w-4" />
@@ -107,84 +159,201 @@ function Dashboard() {
         </Alert>
       )}
 
-      {/* Linha 1 — KPIs principais */}
-      <Section title="Indicadores do mês" hint="Atualizado em tempo real">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <Kpi
+      {/* Linha 1 — KPIs com sparkline e delta */}
+      <ZSection title="Indicadores do mês" hint="vs. mês anterior">
+        <ZGrid cols={4}>
+          <ZKpi
             label="Membros ativos"
             value={loading ? null : (stats?.membersActive ?? 0).toLocaleString("pt-BR")}
             icon={Users}
             tone="navy"
+            spark={series?.membersCumulative}
+            delta={membersDelta}
             href="/app/members"
+            loading={loading}
           />
-          <Kpi
+          <ZKpi
             label="Receita do mês"
             value={loading ? null : BRL(stats?.monthIncome ?? 0)}
             icon={TrendingUp}
             tone="emerald"
+            spark={series?.income}
+            delta={incomeDelta}
             href="/app/financeiro"
+            loading={loading}
           />
-          <Kpi
+          <ZKpi
             label="Despesa do mês"
             value={loading ? null : BRL(stats?.monthExpense ?? 0)}
             icon={TrendingDown}
             tone="rose"
+            spark={series?.expense}
+            delta={expenseDelta != null ? -expenseDelta : null}
             href="/app/financeiro"
+            loading={loading}
           />
-          <Kpi
-            label="Saldo atual"
+          <ZKpi
+            label="Saldo do mês"
             value={loading ? null : BRL(stats?.monthBalance ?? 0)}
             icon={Wallet}
             tone={(stats?.monthBalance ?? 0) >= 0 ? "gold" : "rose"}
+            spark={series?.balance}
+            delta={balanceDelta}
             href="/app/financeiro"
+            loading={loading}
           />
-        </div>
-      </Section>
+        </ZGrid>
+      </ZSection>
 
-      {/* Linha 2 — Mini stats operacionais */}
-      <Section title="Operação" hint="Eventos e atividades">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <MiniStat
-            to="/app/escalas"
-            label="Próximas escalas"
-            value={stats?.upcomingSchedulesCount ?? 0}
-            icon={CalendarDays}
-          />
-          <MiniStat
-            to="/app/compras"
-            label="Compras pendentes"
-            value={stats?.pendingPurchases ?? 0}
-            icon={ShoppingCart}
-          />
-          <MiniStat
-            to="/app/checkin"
-            label="Check-ins (7 dias)"
-            value={stats?.lastCheckins ?? 0}
-            icon={ClipboardCheck}
-          />
-          <MiniStat
-            to="/app/notificacoes"
-            label="Não lidas"
-            value={stats?.unreadNotifications ?? 0}
-            icon={Bell}
-          />
-        </div>
-      </Section>
+      {/* Linha 2 — Gráficos */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        <ZPanel
+          className="lg:col-span-2"
+          title="Fluxo de caixa"
+          subtitle="Receitas e despesas dos últimos 6 meses"
+          icon={Activity}
+          action={
+            <Link
+              to="/app/financeiro"
+              className="text-[11px] font-semibold text-[var(--navy)] hover:underline"
+            >
+              Detalhar →
+            </Link>
+          }
+        >
+          <div className="h-64 w-full">
+            {series ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ top: 5, right: 8, left: -8, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="gIncome" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#10B981" stopOpacity={0.28} />
+                      <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="gExpense" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#E11D48" stopOpacity={0.22} />
+                      <stop offset="100%" stopColor="#E11D48" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid stroke="#F1F5F9" vertical={false} />
+                  <XAxis
+                    dataKey="label"
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fontSize: 11, fill: "#94A3B8" }}
+                  />
+                  <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fontSize: 11, fill: "#94A3B8" }}
+                    tickFormatter={BRLshort}
+                    width={60}
+                  />
+                  <Tooltip
+                    cursor={{ stroke: "#E2E8F0", strokeWidth: 1 }}
+                    contentStyle={{
+                      borderRadius: 10,
+                      border: "1px solid #E2E8F0",
+                      boxShadow: "0 8px 24px rgba(15,35,71,0.08)",
+                      fontSize: 12,
+                    }}
+                    formatter={(v: number) => BRL(v)}
+                  />
+                  <Legend
+                    wrapperStyle={{ fontSize: 11, paddingTop: 8 }}
+                    iconType="circle"
+                    iconSize={8}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Receitas"
+                    stroke="#10B981"
+                    strokeWidth={2}
+                    fill="url(#gIncome)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Despesas"
+                    stroke="#E11D48"
+                    strokeWidth={2}
+                    fill="url(#gExpense)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <Skeleton className="h-full w-full" />
+            )}
+          </div>
+        </ZPanel>
 
-      {/* Linha 3 — Listas */}
-      <Section title="Próximas atividades">
+        <ZPanel
+          title="Crescimento da membresia"
+          subtitle="Total acumulado por mês"
+          icon={Users}
+        >
+          <div className="h-64 w-full">
+            {series ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 5, right: 8, left: -16, bottom: 0 }}>
+                  <CartesianGrid stroke="#F1F5F9" vertical={false} />
+                  <XAxis
+                    dataKey="label"
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fontSize: 11, fill: "#94A3B8" }}
+                  />
+                  <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fontSize: 11, fill: "#94A3B8" }}
+                    width={40}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "rgba(27,58,107,0.04)" }}
+                    contentStyle={{
+                      borderRadius: 10,
+                      border: "1px solid #E2E8F0",
+                      boxShadow: "0 8px 24px rgba(15,35,71,0.08)",
+                      fontSize: 12,
+                    }}
+                  />
+                  <Bar dataKey="Membros" fill="#1B3A6B" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <Skeleton className="h-full w-full" />
+            )}
+          </div>
+        </ZPanel>
+      </div>
+
+      {/* Linha 3 — Mini stats operacionais */}
+      <ZSection title="Operação rápida">
+        <ZGrid cols={4}>
+          <MiniStat to="/app/escalas" label="Próximas escalas" value={stats?.upcomingSchedulesCount ?? 0} icon={CalendarDays} />
+          <MiniStat to="/app/compras" label="Compras pendentes" value={stats?.pendingPurchases ?? 0} icon={ShoppingCart} />
+          <MiniStat to="/app/checkin" label="Check-ins (7 dias)" value={stats?.lastCheckins ?? 0} icon={ClipboardCheck} />
+          <MiniStat to="/app/notificacoes" label="Notificações" value={stats?.unreadNotifications ?? 0} icon={Bell} />
+        </ZGrid>
+      </ZSection>
+
+      {/* Linha 4 — Listas */}
+      <ZSection title="Atividade recente">
         <div className="grid gap-4 lg:grid-cols-2">
-          <Panel
+          <ZPanel
             title="Próximas escalas"
             subtitle="Eventos e cultos agendados"
-            href="/app/escalas"
-            hrefLabel="Ver todas"
+            icon={CalendarDays}
+            action={
+              <Link to="/app/escalas" className="text-[11px] font-semibold text-[var(--navy)] hover:underline">
+                Ver todas →
+              </Link>
+            }
           >
             {loading ? (
               <Skeleton className="h-24 w-full" />
             ) : upcoming.length === 0 ? (
-              <EmptyState
-                compact
+              <ZEmpty
                 icon={CalendarDays}
                 title="Nenhuma escala futura"
                 description="Quando você criar escalas, os próximos eventos aparecerão aqui."
@@ -197,38 +366,36 @@ function Dashboard() {
                     className="group flex items-center justify-between gap-3 rounded-lg px-2 py-3 transition-colors hover:bg-slate-50"
                   >
                     <div className="flex min-w-0 items-center gap-3">
-                      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--navy-light)] text-[var(--navy)]">
-                        <CalendarDays className="h-4 w-4" />
-                      </div>
+                      <DateChip iso={s.starts_at} />
                       <div className="min-w-0">
                         <p className="truncate text-sm font-semibold text-slate-900">{s.title}</p>
                         <p className="truncate text-xs text-slate-500">
-                          {new Date(s.starts_at).toLocaleString("pt-BR", {
-                            dateStyle: "short",
-                            timeStyle: "short",
-                          })}
+                          {new Date(s.starts_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                           {s.location && ` • ${s.location}`}
                         </p>
                       </div>
                     </div>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--navy)]" />
+                    <ZStatus tone="info" dot>Agendado</ZStatus>
                   </li>
                 ))}
               </ul>
             )}
-          </Panel>
+          </ZPanel>
 
-          <Panel
+          <ZPanel
             title="Movimentações recentes"
             subtitle="Últimas entradas e saídas"
-            href="/app/financeiro"
-            hrefLabel="Ver financeiro"
+            icon={Wallet}
+            action={
+              <Link to="/app/financeiro" className="text-[11px] font-semibold text-[var(--navy)] hover:underline">
+                Ver financeiro →
+              </Link>
+            }
           >
             {loading ? (
               <Skeleton className="h-24 w-full" />
             ) : recent.length === 0 ? (
-              <EmptyState
-                compact
+              <ZEmpty
                 icon={Wallet}
                 title="Sem movimentações"
                 description="Quando registrar receitas ou despesas, elas aparecerão aqui."
@@ -246,16 +413,10 @@ function Dashboard() {
                         <div
                           className={cn(
                             "grid h-9 w-9 shrink-0 place-items-center rounded-lg",
-                            isIn
-                              ? "bg-emerald-50 text-emerald-600"
-                              : "bg-rose-50 text-rose-600",
+                            isIn ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600",
                           )}
                         >
-                          {isIn ? (
-                            <TrendingUp className="h-4 w-4" />
-                          ) : (
-                            <TrendingDown className="h-4 w-4" />
-                          )}
+                          {isIn ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                         </div>
                         <div className="min-w-0">
                           <p className="truncate text-sm font-semibold text-slate-900">
@@ -279,13 +440,13 @@ function Dashboard() {
                 })}
               </ul>
             )}
-          </Panel>
+          </ZPanel>
         </div>
-      </Section>
+      </ZSection>
 
-      {/* Linha 4 — Plano */}
-      <Section title="Plano e capacidade">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* Linha 5 — Plano */}
+      <ZSection title="Plano e capacidade">
+        <ZGrid cols={4}>
           <UsageCard
             title="Membros"
             description="Cadastrados na sua igreja"
@@ -304,31 +465,31 @@ function Dashboard() {
             loading={planLoading}
             near={deptsNear}
           />
-          <Card>
-            <CardContent className="space-y-3 p-5">
-              <Header icon={Building2} title="Congregações" subtitle="Filiais vinculadas" />
+          <ZCard>
+            <div className="space-y-3 p-5">
+              <MiniHeader icon={Building2} title="Congregações" subtitle="Filiais vinculadas" />
               {!congUsage ? (
                 <Skeleton className="h-8 w-24" />
               ) : (
                 <>
-                  <p className="text-2xl font-bold tracking-tight text-slate-900">
+                  <p className="text-[22px] font-bold tracking-tight text-slate-900">
                     {congUsage.max === null
-                      ? `${congUsage.current} (ilimitado)`
-                      : `${congUsage.current} de ${congUsage.max}`}
+                      ? `${congUsage.current}`
+                      : `${congUsage.current} / ${congUsage.max}`}
                   </p>
                   <Link
                     to="/app/congregations"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--navy)] hover:underline"
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--navy)] hover:underline"
                   >
-                    Gerenciar <ArrowUpRight className="h-3.5 w-3.5" />
+                    Gerenciar <ArrowUpRight className="h-3 w-3" />
                   </Link>
                 </>
               )}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="space-y-3 p-5">
-              <Header icon={Sparkles} title="Plano" subtitle="Recursos disponíveis" />
+            </div>
+          </ZCard>
+          <ZCard>
+            <div className="space-y-3 p-5">
+              <MiniHeader icon={Sparkles} title="Plano" subtitle="Recursos disponíveis" />
               {planLoading ? (
                 <Skeleton className="h-8 w-32" />
               ) : enabledFeatures.length === 0 ? (
@@ -341,48 +502,48 @@ function Dashboard() {
                     </Badge>
                   ))}
                   {enabledFeatures.length > 6 && (
-                    <Badge variant="secondary" className="font-medium">
-                      +{enabledFeatures.length - 6}
-                    </Badge>
+                    <Badge variant="secondary" className="font-medium">+{enabledFeatures.length - 6}</Badge>
                   )}
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </div>
-      </Section>
+            </div>
+          </ZCard>
+        </ZGrid>
+      </ZSection>
+    </ZPage>
+  );
+}
+
+/* ── helpers ─────────────────────────────────────────── */
+
+function pctDelta(arr?: number[]): number | null {
+  if (!arr || arr.length < 2) return null;
+  const cur = arr[arr.length - 1];
+  const prev = arr[arr.length - 2];
+  if (!prev) return cur > 0 ? 100 : null;
+  return ((cur - prev) / Math.abs(prev)) * 100;
+}
+
+function DateChip({ iso }: { iso: string }) {
+  const d = new Date(iso);
+  const day = d.getDate();
+  const mon = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"][d.getMonth()];
+  return (
+    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-slate-200 bg-slate-50 text-center">
+      <div>
+        <div className="text-[9px] font-bold leading-none text-[var(--navy)]">{mon}</div>
+        <div className="text-sm font-bold leading-none text-slate-900">{day}</div>
+      </div>
     </div>
   );
 }
 
-/* ── primitives ───────────────────────────────────────── */
-
-function Section({
-  title,
-  hint,
-  children,
-}: {
-  title: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="space-y-3">
-      <div className="flex items-end justify-between gap-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">{title}</h2>
-        {hint && <span className="text-xs text-slate-400">{hint}</span>}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function Header({
+function MiniHeader({
   icon: Icon,
   title,
   subtitle,
 }: {
-  icon: LucideIcon;
+  icon: typeof Users;
   title: string;
   subtitle?: string;
 }) {
@@ -399,53 +560,6 @@ function Header({
   );
 }
 
-const TONES = {
-  navy: "bg-[var(--navy-light)] text-[var(--navy)]",
-  emerald: "bg-emerald-50 text-emerald-600",
-  rose: "bg-rose-50 text-rose-600",
-  gold: "bg-[var(--gold-light)] text-[var(--gold-dark)]",
-} as const;
-
-function Kpi({
-  label,
-  value,
-  icon: Icon,
-  tone = "navy",
-  href,
-}: {
-  label: string;
-  value: string | null;
-  icon: LucideIcon;
-  tone?: keyof typeof TONES;
-  href?: string;
-}) {
-  const inner = (
-    <Card className="group h-full transition-all hover:-translate-y-0.5">
-      <CardContent className="flex items-start justify-between gap-3 p-5">
-        <div className="min-w-0 space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-            {label}
-          </p>
-          {value === null ? (
-            <Skeleton className="h-7 w-28" />
-          ) : (
-            <p className="truncate text-2xl font-bold tracking-tight text-slate-900">{value}</p>
-          )}
-          {href && (
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--navy)] opacity-0 transition-opacity group-hover:opacity-100">
-              Abrir <ArrowUpRight className="h-3 w-3" />
-            </span>
-          )}
-        </div>
-        <div className={cn("grid h-11 w-11 shrink-0 place-items-center rounded-xl", TONES[tone])}>
-          <Icon className="h-5 w-5" />
-        </div>
-      </CardContent>
-    </Card>
-  );
-  return href ? <Link to={href}>{inner}</Link> : inner;
-}
-
 function MiniStat({
   to,
   label,
@@ -455,60 +569,22 @@ function MiniStat({
   to: string;
   label: string;
   value: number;
-  icon: LucideIcon;
+  icon: typeof Users;
 }) {
   return (
     <Link to={to}>
-      <Card className="h-full transition-all hover:-translate-y-0.5">
-        <CardContent className="flex items-center justify-between gap-3 p-4">
+      <ZCard interactive className="h-full">
+        <div className="flex items-center justify-between gap-3 p-4">
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-              {label}
-            </p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">{label}</p>
             <p className="mt-1 text-xl font-bold tracking-tight text-slate-900">{value}</p>
           </div>
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-600">
             <Icon className="h-4 w-4" />
           </div>
-        </CardContent>
-      </Card>
-    </Link>
-  );
-}
-
-function Panel({
-  title,
-  subtitle,
-  href,
-  hrefLabel,
-  children,
-}: {
-  title: string;
-  subtitle?: string;
-  href?: string;
-  hrefLabel?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Card>
-      <CardContent className="space-y-4 p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-900">{title}</p>
-            {subtitle && <p className="text-xs text-slate-500">{subtitle}</p>}
-          </div>
-          {href && hrefLabel && (
-            <Link
-              to={href}
-              className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[var(--navy)] hover:underline"
-            >
-              {hrefLabel} <ArrowUpRight className="h-3.5 w-3.5" />
-            </Link>
-          )}
         </div>
-        {children}
-      </CardContent>
-    </Card>
+      </ZCard>
+    </Link>
   );
 }
 
@@ -523,7 +599,7 @@ function UsageCard({
 }: {
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: typeof Users;
   current?: number;
   max?: number;
   loading: boolean;
@@ -531,9 +607,9 @@ function UsageCard({
 }) {
   const pct = max && max > 0 ? Math.min(100, Math.round(((current ?? 0) / max) * 100)) : 0;
   return (
-    <Card>
-      <CardContent className="space-y-3 p-5">
-        <Header icon={Icon} title={title} subtitle={description} />
+    <ZCard>
+      <div className="space-y-3 p-5">
+        <MiniHeader icon={Icon} title={title} subtitle={description} />
         {loading ? (
           <>
             <Skeleton className="h-8 w-24" />
@@ -542,14 +618,14 @@ function UsageCard({
         ) : (
           <>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold tracking-tight text-slate-900">{current ?? 0}</span>
+              <span className="text-[22px] font-bold tracking-tight text-slate-900">{current ?? 0}</span>
               <span className="text-sm text-slate-500">/ {max ?? 0}</span>
             </div>
             <Progress value={pct} className={cn(near && "[&>div]:bg-destructive")} />
             <p className="text-xs text-slate-500">{pct}% utilizado</p>
           </>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </ZCard>
   );
 }
