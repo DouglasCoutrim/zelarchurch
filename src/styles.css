@@ -199,12 +199,7 @@
   }
 
   body {
-    background-color: var(--background);
-    background-image:
-      radial-gradient(1200px 600px at -10% -20%, rgba(27,58,107,0.08), transparent 60%),
-      radial-gradient(900px 500px at 110% 0%, rgba(196,154,42,0.07), transparent 55%),
-      linear-gradient(180deg, #ECF0F8 0%, #E4EAF4 100%);
-    background-attachment: fixed;
+    background-color: #E2E8F2;
     color: var(--n900);
     font-size: 14px;
     line-height: 1.5;
@@ -318,30 +313,16 @@ h4 { font-size: 14px; font-weight: 600; color: var(--n700); }
 
 [data-slot="card"],
 [class*="rounded-2xl"][class*="border"][class*="bg-white"] {
-  position: relative;
-  background:
-    linear-gradient(180deg, #ffffff 0%, #FAFBFE 100%) !important;
+  background: #ffffff !important;
   border: 1px solid var(--n200) !important;
   border-radius: 14px !important;
   box-shadow: var(--shadow-card) !important;
-  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease !important;
-}
-[data-slot="card"]::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 3px;
-  border-radius: 14px 14px 0 0;
-  background: linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 55%, var(--gold) 100%);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease !important;
 }
 [data-slot="card"]:hover {
   box-shadow: var(--shadow-hover) !important;
   border-color: var(--n300) !important;
 }
-[data-slot="card"]:hover::before { opacity: 1; }
 
 /* ─────────────────────────────────────────
    BADGES / STATUS
