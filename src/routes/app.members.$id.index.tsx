@@ -85,9 +85,42 @@ function MemberProfile() {
                 Editar perfil
               </Link>
             </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="border-red-200 bg-white text-red-600 shadow-sm hover:bg-red-50"
+              onClick={() => setConfirmDelete(true)}
+            >
+              <Trash2 className="mr-1 h-4 w-4" />
+              Excluir
+            </Button>
           </div>
         )}
       </div>
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir membro</AlertDialogTitle>
+            <AlertDialogDescription>
+              O membro <strong>{m?.full_name}</strong> será removido das listagens.
+              Esta ação pode ser revertida por um administrador.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                delMut.mutate();
+              }}
+            >
+              {delMut.isPending ? "Excluindo…" : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {isLoading && (
         <div className="mx-auto mt-4 max-w-6xl space-y-4">
