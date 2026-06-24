@@ -106,7 +106,7 @@
   --shadow-sidebar: 2px 0 12px rgba(15,35,71,.15);
 
   /* shadcn semantic tokens — fundo da página com tom frio para superfícies brancas saltarem */
-  --background: #ECF0F8;
+  --background: #F8FAFC;
   --foreground: #0B1428;
   --card: #FFFFFF;
   --card-foreground: #0B1428;
@@ -199,12 +199,8 @@
   }
 
   body {
-    background-color: #CBD5E5;
-    background-image: url("/__l5e/assets-v1/d81aecf8-46b3-4ee8-9fda-0c210e549580/logo-zelar.svg");
-    background-repeat: no-repeat;
-    background-position: right -80px bottom -80px;
-    background-size: 520px auto;
-    background-attachment: fixed;
+    background-color: #F8FAFC;
+    background-image: none;
     color: var(--n900);
     font-size: 14px;
     line-height: 1.5;
@@ -213,11 +209,11 @@
     content: "";
     position: fixed;
     inset: 0;
-    background: #CBD5E5;
-    opacity: 0.86;
+    background: #F8FAFC;
     pointer-events: none;
     z-index: -1;
   }
+
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', system-ui, sans-serif;
@@ -327,18 +323,17 @@ h4 { font-size: 13px; font-weight: 600; color: var(--n700); }
 
 [data-slot="card"],
 [class*="rounded-2xl"][class*="border"][class*="bg-white"] {
-  background:
-    linear-gradient(135deg, rgba(27,58,107,0.04) 0%, #ffffff 45%, #ffffff 70%, rgba(196,154,42,0.05) 100%),
-    #ffffff !important;
-  border: 1px solid var(--n200) !important;
-  border-radius: 14px !important;
-  box-shadow: var(--shadow-card) !important;
+  background: #ffffff !important;
+  border: 1px solid #F1F5F9 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px -4px rgba(0,0,0,0.05) !important;
   transition: box-shadow 0.2s ease, border-color 0.2s ease !important;
 }
 [data-slot="card"]:hover {
-  box-shadow: var(--shadow-hover) !important;
-  border-color: var(--n300) !important;
+  box-shadow: 0 8px 28px -6px rgba(0,0,0,0.08) !important;
+  border-color: #E2E8F0 !important;
 }
+
 
 /* ─────────────────────────────────────────
    BADGES / STATUS
@@ -400,34 +395,35 @@ h4 { font-size: 13px; font-weight: 600; color: var(--n700); }
 
 table {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid var(--n200);
-  box-shadow: var(--shadow-card);
+  border: 1px solid #F1F5F9;
+  box-shadow: 0 4px 20px -4px rgba(0,0,0,0.05);
   width: 100%;
 }
 
-thead { background: var(--n50); border-bottom: 1px solid var(--n200); }
+thead { background: #F8FAFC; border-bottom: 1px solid #F1F5F9; }
 
 th {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--n500);
+  color: #64748B;
   padding: 10px 16px;
   text-align: left;
 }
 
 td {
   font-size: 13.5px;
-  color: var(--n700);
+  color: #1E293B;
   padding: 12px 16px;
-  border-bottom: 1px solid var(--n100);
+  border-bottom: 1px solid #F1F5F9;
 }
 
 tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: var(--n50); transition: background 0.1s ease; }
+tbody tr:hover td { background: rgba(248,250,252,0.8); transition: background 0.15s ease; }
+
 
 /* ─────────────────────────────────────────
    SWITCH / CHECKBOX
