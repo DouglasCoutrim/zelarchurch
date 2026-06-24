@@ -223,15 +223,18 @@
 }
 
 /* ─────────────────────────────────────────
-   SIDEBAR (único elemento escuro institucional)
+   SIDEBAR — único elemento escuro institucional
+   Navy profundo extraído do logotipo Zelar
 ───────────────────────────────────────── */
 
 aside,
 [data-sidebar],
 [data-sidebar="sidebar"] {
-  background: linear-gradient(180deg, #152a47 0%, #1E3A5F 100%) !important;
-  border-right: 1px solid rgba(255,255,255,0.06) !important;
-  box-shadow: 4px 0 24px -8px rgba(15,31,58,0.25) !important;
+  background:
+    radial-gradient(at 100% 0%, rgba(200,150,62,0.08) 0px, transparent 50%),
+    linear-gradient(180deg, #0d1c33 0%, #112643 55%, #152a47 100%) !important;
+  border-right: 1px solid rgba(255,255,255,0.04) !important;
+  box-shadow: 4px 0 32px -12px rgba(13,28,51,0.45) !important;
 }
 
 aside img,
@@ -239,52 +242,58 @@ aside img,
   filter: brightness(0) invert(1);
 }
 
-aside [class*="group-label"],
-aside [class*="section-label"] {
-  color: rgba(255,255,255,0.40) !important;
+aside [data-sidebar="group-label"],
+aside [class*="group-label"] {
+  color: rgba(255,255,255,0.32) !important;
   font-size: 10px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.12em !important;
+  letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
+  padding: 4px 10px 6px !important;
 }
 
-aside a,
-aside [role="menuitem"],
+aside [data-sidebar="menu-button"],
+aside a[data-sidebar="menu-button"],
 aside button[data-sidebar="menu-button"] {
-  color: rgba(255,255,255,0.72) !important;
-  border-radius: 10px !important;
+  color: rgba(226,232,240,0.70) !important;
+  border-radius: 12px !important;
   font-size: 13.5px !important;
   font-weight: 500 !important;
-  transition: all 0.2s ease !important;
+  padding: 9px 12px !important;
+  gap: 12px !important;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important;
 }
 
-aside a:hover,
-aside [role="menuitem"]:hover,
+aside [data-sidebar="menu-button"]:hover,
+aside a[data-sidebar="menu-button"]:hover,
 aside button[data-sidebar="menu-button"]:hover {
-  background: rgba(255,255,255,0.06) !important;
+  background: rgba(255,255,255,0.05) !important;
   color: #ffffff !important;
 }
 
-aside a[aria-current="page"],
-aside a[data-active="true"],
-aside [data-active="true"],
+aside [data-sidebar="menu-button"][data-active="true"],
+aside a[data-sidebar="menu-button"][data-active="true"],
 aside button[data-sidebar="menu-button"][data-active="true"] {
-  background: linear-gradient(90deg, rgba(200,150,62,0.18), rgba(200,150,62,0.06)) !important;
-  color: var(--gold-light) !important;
-  box-shadow: inset 2px 0 0 var(--gold) !important;
+  background: linear-gradient(90deg, rgba(200,150,62,0.22) 0%, rgba(200,150,62,0.08) 100%) !important;
+  color: #e8c878 !important;
+  box-shadow:
+    inset 2px 0 0 #C8963E,
+    0 1px 0 rgba(255,255,255,0.04),
+    0 4px 16px -6px rgba(200,150,62,0.35) !important;
 }
 
-aside a[aria-current="page"] svg,
-aside [data-active="true"] svg {
-  color: var(--gold) !important;
+aside [data-sidebar="menu-button"][data-active="true"] svg,
+aside a[data-sidebar="menu-button"][data-active="true"] svg {
+  color: #e8c878 !important;
 }
 
 aside svg {
-  color: rgba(255,255,255,0.55);
+  color: rgba(226,232,240,0.55);
   width: 17px;
   height: 17px;
   flex-shrink: 0;
 }
+
 
 /* ─────────────────────────────────────────
    TOPBAR / HEADER (interno do app)

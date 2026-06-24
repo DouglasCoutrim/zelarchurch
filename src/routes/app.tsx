@@ -74,45 +74,44 @@ function AppLayout() {
   return (
     <SidebarProvider>
       <CommandPalette />
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-[#fafaf7]">
         <AppSidebar />
         <SidebarInset className="flex flex-1 flex-col bg-transparent">
           {/* TopBar unificada — saudação · tenant · busca · ações */}
-          <header className="sticky top-0 z-30 flex h-12 items-center gap-2 border-b border-slate-200/80 bg-white/85 px-3 backdrop-blur-md">
-            <SidebarTrigger className="h-7 w-7 rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-900" />
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-[#1E3A5F]/10 bg-white/75 px-4 backdrop-blur-xl">
+            <SidebarTrigger className="h-8 w-8 rounded-lg text-[#1E3A5F]/60 transition-colors hover:bg-[#1E3A5F]/8 hover:text-[#1E3A5F]" />
 
-            {/* Saudação compacta — esconde em telas pequenas */}
-            <div className="hidden min-w-0 items-center gap-1.5 lg:flex">
-              <span className="text-[12.5px] font-semibold text-slate-800">
+            <div className="hidden min-w-0 items-center gap-2 lg:flex">
+              <span className="text-[13px] font-semibold text-[#1E3A5F]">
                 {greeting()}, {firstName}
               </span>
-              <span className="text-[11px] text-slate-400">·</span>
+              <span className="text-[#1E3A5F]/30">·</span>
             </div>
 
             <TenantSwitcher />
 
             {/* Busca global ⌘K */}
-            <div className="ml-2 hidden flex-1 max-w-[420px] md:flex">
+            <div className="ml-2 hidden flex-1 max-w-[440px] md:flex">
               <button
                 type="button"
                 onClick={() => {
                   window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
                 }}
-                className="group inline-flex w-full items-center gap-2 rounded-md border border-slate-200 bg-slate-50/70 px-2.5 py-1 text-[11.5px] text-slate-500 transition-colors hover:border-slate-300 hover:bg-white hover:text-slate-700"
+                className="group inline-flex w-full items-center gap-2 rounded-lg border border-[#1E3A5F]/12 bg-white/60 px-3 py-1.5 text-[12px] text-[#1E3A5F]/55 transition-all hover:border-[#C8963E]/40 hover:bg-white hover:text-[#1E3A5F]"
               >
                 <Search className="h-3.5 w-3.5" />
                 <span className="flex-1 text-left">Buscar membros, escalas, transações…</span>
-                <kbd className="hidden rounded border border-slate-200 bg-white px-1 py-0 font-mono text-[10px] text-slate-500 lg:inline-block">
+                <kbd className="hidden rounded border border-[#1E3A5F]/15 bg-white px-1.5 py-0 font-mono text-[10px] text-[#1E3A5F]/60 lg:inline-block">
                   ⌘K
                 </kbd>
               </button>
             </div>
 
-            <div className="ml-auto flex items-center gap-0.5">
+            <div className="ml-auto flex items-center gap-1">
               <InviteMemberButton />
               <Link
                 to="/app/relatorios"
-                className="hidden h-8 items-center gap-1 rounded-md px-2 text-[11.5px] font-semibold text-[var(--navy)] transition-colors hover:bg-[var(--navy-light)] md:inline-flex"
+                className="hidden h-8 items-center gap-1.5 rounded-lg px-2.5 text-[12px] font-semibold text-[#C8963E] transition-all hover:bg-[#C8963E]/10 md:inline-flex"
               >
                 <Sparkles className="h-3.5 w-3.5" />
                 Ações rápidas
@@ -121,18 +120,18 @@ function AppLayout() {
                 href="https://docs.lovable.dev/features/cloud"
                 target="_blank"
                 rel="noreferrer"
-                className="hidden h-8 w-8 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 md:inline-flex"
+                className="hidden h-8 w-8 items-center justify-center rounded-lg text-[#1E3A5F]/55 transition-colors hover:bg-[#1E3A5F]/8 hover:text-[#1E3A5F] md:inline-flex"
                 aria-label="Ajuda"
               >
                 <HelpCircle className="h-4 w-4" />
               </a>
               <NotificationBell />
-              <Separator orientation="vertical" className="mx-1 h-5 bg-slate-200" />
+              <Separator orientation="vertical" className="mx-1.5 h-5 bg-[#1E3A5F]/10" />
               <Link
                 to="/app/profile"
-                className="hidden items-center gap-1.5 rounded-md px-1.5 py-1 text-[11.5px] font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 sm:inline-flex"
+                className="hidden items-center gap-2 rounded-lg px-2 py-1 text-[12px] font-medium text-[#1E3A5F]/75 transition-colors hover:bg-[#1E3A5F]/8 hover:text-[#1E3A5F] sm:inline-flex"
               >
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-[var(--navy)] text-[10px] font-bold text-white">
+                <span className="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-[#1E3A5F] to-[#152a47] text-[11px] font-bold text-white shadow-[0_4px_12px_-2px_rgba(30,58,95,0.4)]">
                   {(firstName ?? "U").slice(0, 1).toUpperCase()}
                 </span>
                 <span className="max-w-[140px] truncate">{firstName}</span>
@@ -141,14 +140,14 @@ function AppLayout() {
                 variant="ghost"
                 size="sm"
                 onClick={handleSignOut}
-                className="h-7 w-7 p-0 text-slate-500 hover:text-slate-900"
+                className="h-8 w-8 p-0 text-[#1E3A5F]/55 hover:bg-[#1E3A5F]/8 hover:text-[#1E3A5F]"
                 aria-label="Sair"
               >
-                <LogOut className="h-3.5 w-3.5" />
+                <LogOut className="h-4 w-4" />
               </Button>
             </div>
           </header>
-          <main className="flex-1 px-4 py-4 lg:px-6 lg:py-5">
+          <main className="flex-1 px-5 py-5 lg:px-8 lg:py-7">
             <PageTransition>
               <Outlet />
             </PageTransition>
@@ -158,6 +157,7 @@ function AppLayout() {
     </SidebarProvider>
   );
 }
+
 
 function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
