@@ -320,20 +320,40 @@ header:not(.z-skip):not([class*="page-header"]):not([class*="fixed"]) {
 }
 
 /* ─────────────────────────────────────────
-   CARDS — Soft (estilo "JoinMethods" da landing)
+   CARDS — flat & clean
 ───────────────────────────────────────── */
 
 [data-slot="card"] {
   background: #ffffff !important;
-  border: 1px solid rgba(30,58,95,0.10) !important;
-  border-radius: 16px !important;
-  box-shadow: var(--shadow-card) !important;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+  border: 1px solid rgb(241, 245, 249) !important; /* slate-100 */
+  border-radius: 12px !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.015), 0 1px 3px rgba(0,0,0,0.005) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
-[data-slot="card"]:hover {
-  border-color: rgba(200,150,62,0.35) !important;
-  box-shadow: var(--shadow-hover) !important;
+
+/* ─────────────────────────────────────────
+   INPUTS — bordas finas globais
+───────────────────────────────────────── */
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+select,
+textarea {
+  border-width: 1px !important;
+  border-color: rgb(226, 232, 240) !important; /* slate-200 */
+  border-style: solid !important;
 }
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):focus,
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  border-color: #d97706 !important; /* amber-600 */
+  box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.10) !important;
+  outline: none !important;
+}
+
 
 /* ─────────────────────────────────────────
    BADGES / STATUS (estilo pill da landing)
