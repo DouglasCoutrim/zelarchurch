@@ -36,6 +36,7 @@ const STATUS_VARIANT: Record<PrayerStatus, "default" | "secondary" | "outline"> 
 function PrayerIndex() {
   const tenant = useTenantStore((s) => s.currentTenant);
   const qc = useQueryClient();
+  const [toDelete, setToDelete] = useState<string | null>(null);
 
   const q = useQuery({
     queryKey: ["prayer-requests", tenant?.id],
@@ -48,6 +49,16 @@ function PrayerIndex() {
       updatePrayerStatus(id, status),
     onSuccess: () => {
       toast.success("Status atualizado");
+      qc.invalidateQueries({ queryKey: ["prayer-requests", tenant?.id] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const delMut = useMutation({
+    mutationFn: (id: string) => deletePrayerRequest(id),
+    onSuccess: () => {
+      toast.success("Pedido excluído");
+      setToDelete(null);
       qc.invalidateQueries({ queryKey: ["prayer-requests", tenant?.id] });
     },
     onError: (e: Error) => toast.error(e.message),
