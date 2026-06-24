@@ -68,3 +68,8 @@ export async function updatePrayerStatus(id: string, status: PrayerStatus): Prom
     .eq("id", id);
   if (error) throw error;
 }
+
+export async function deletePrayerRequest(id: string): Promise<void> {
+  const { error } = await supabase.from("prayer_requests").delete().eq("id", id);
+  if (error) throw error;
+}

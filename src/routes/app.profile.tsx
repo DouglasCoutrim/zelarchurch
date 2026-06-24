@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronLeft, Save, KeyRound, Mail, User as UserIcon } from "lucide-react";
+import { ChevronLeft, Save, KeyRound, Mail, User as UserIcon, AlertTriangle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,8 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ImageUploadField } from "@/components/ImageUploadField";
 import { useAuthStore } from "@/stores/authStore";
+import { useTenantStore } from "@/stores/tenantStore";
+import { deleteMyAccount, deleteTenant } from "@/lib/account";
 import {
   getProfile,
   upsertProfile,
@@ -35,9 +41,20 @@ function initials(name?: string | null, email?: string | null) {
 }
 
 function ProfilePage() {
+  const navigate = useNavigate();
   const session = useAuthStore((s) => s.session);
   const userId = session?.user.id;
   const email = session?.user.email ?? "";
+  const currentTenant = useTenantStore((s) => s.currentTenant);
+  const resetTenant = useTenantStore((s) => s.reset);
+
+  const [confirmAccountText, setConfirmAccountText] = useState("");
+  const [accountDeleting, setAccountDeleting] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+
+  const [confirmTenantText, setConfirmTenantText] = useState("");
+  const [tenantDeleting, setTenantDeleting] = useState(false);
+  const [tenantOpen, setTenantOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -115,6 +132,35 @@ function ProfilePage() {
     }
   }
 
+  async function handleDeleteAccount() {
+    setAccountDeleting(true);
+    try {
+      await deleteMyAccount();
+      resetTenant();
+      toast.success("Conta excluída.");
+      navigate({ to: "/" });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setAccountDeleting(false);
+    }
+  }
+
+  async function handleDeleteTenant() {
+    if (!currentTenant) return;
+    setTenantDeleting(true);
+    try {
+      await deleteTenant(currentTenant.id);
+      resetTenant();
+      toast.success("Igreja excluída.");
+      navigate({ to: "/" });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setTenantDeleting(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
       <Button asChild variant="ghost" size="sm" className="-ml-2">
@@ -139,6 +185,9 @@ function ProfilePage() {
           <TabsTrigger value="profile"><UserIcon className="mr-1 h-4 w-4" />Dados</TabsTrigger>
           <TabsTrigger value="email"><Mail className="mr-1 h-4 w-4" />E-mail</TabsTrigger>
           <TabsTrigger value="password"><KeyRound className="mr-1 h-4 w-4" />Senha</TabsTrigger>
+          <TabsTrigger value="danger" className="data-[state=active]:text-destructive">
+            <AlertTriangle className="mr-1 h-4 w-4" />Zona de perigo
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile" className="mt-4">
@@ -254,7 +303,107 @@ function ProfilePage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="danger" className="mt-4 space-y-4">
+          {currentTenant && (
+            <Card className="border-destructive/40">
+              <CardHeader>
+                <CardTitle className="text-destructive">Excluir igreja</CardTitle>
+                <CardDescription>
+                  Apenas o owner. Apaga permanentemente <strong>{currentTenant.name}</strong> e
+                  todos os dados (membros, escalas, finanças, etc.). Não pode ser desfeito.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button variant="destructive" onClick={() => setTenantOpen(true)}>
+                  <Trash2 className="mr-1 h-4 w-4" />
+                  Excluir igreja
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="border-destructive/40">
+            <CardHeader>
+              <CardTitle className="text-destructive">Excluir minha conta</CardTitle>
+              <CardDescription>
+                Você será removido de todas as igrejas em que participa e seu acesso será
+                encerrado. Esta ação é permanente.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="destructive" onClick={() => setAccountOpen(true)}>
+                <Trash2 className="mr-1 h-4 w-4" />
+                Excluir minha conta
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
+
+      {/* Confirm delete account */}
+      <AlertDialog open={accountOpen} onOpenChange={(v) => { setAccountOpen(v); if (!v) setConfirmAccountText(""); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir minha conta</AlertDialogTitle>
+            <AlertDialogDescription>
+              Para confirmar, digite <strong>EXCLUIR</strong> no campo abaixo. Esta ação é
+              permanente e não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={confirmAccountText}
+            onChange={(e) => setConfirmAccountText(e.target.value)}
+            placeholder="Digite EXCLUIR"
+            autoFocus
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={confirmAccountText !== "EXCLUIR" || accountDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                void handleDeleteAccount();
+              }}
+            >
+              {accountDeleting ? "Excluindo…" : "Excluir definitivamente"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Confirm delete tenant */}
+      <AlertDialog open={tenantOpen} onOpenChange={(v) => { setTenantOpen(v); if (!v) setConfirmTenantText(""); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir igreja</AlertDialogTitle>
+            <AlertDialogDescription>
+              Para confirmar, digite o nome da igreja{" "}
+              <strong>{currentTenant?.name}</strong> abaixo. Todos os dados serão perdidos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={confirmTenantText}
+            onChange={(e) => setConfirmTenantText(e.target.value)}
+            placeholder={currentTenant?.name ?? ""}
+            autoFocus
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={confirmTenantText !== currentTenant?.name || tenantDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                void handleDeleteTenant();
+              }}
+            >
+              {tenantDeleting ? "Excluindo…" : "Excluir igreja"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

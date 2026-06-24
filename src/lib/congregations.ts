@@ -128,6 +128,11 @@ export async function updateCongregation(
   return data as Congregation;
 }
 
+export async function deleteCongregation(id: string): Promise<void> {
+  const { error } = await supabase.from("congregations").delete().eq("id", id);
+  if (error) throw error;
+}
+
 export async function deactivateCongregation(id: string): Promise<void> {
   const { error } = await supabase
     .from("congregations")

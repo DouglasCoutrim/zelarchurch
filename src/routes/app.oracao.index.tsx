@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { HandHeart, Plus, UserCircle2 } from "lucide-react";
+import { Plus, Trash2, UserCircle2 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/PageHeader";
 
@@ -12,7 +13,11 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  listPrayerRequests, updatePrayerStatus,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  listPrayerRequests, updatePrayerStatus, deletePrayerRequest,
   PRAYER_STATUS_LABEL, type PrayerStatus,
 } from "@/lib/prayers";
 import { useTenantStore } from "@/stores/tenantStore";
@@ -31,6 +36,7 @@ const STATUS_VARIANT: Record<PrayerStatus, "default" | "secondary" | "outline"> 
 function PrayerIndex() {
   const tenant = useTenantStore((s) => s.currentTenant);
   const qc = useQueryClient();
+  const [toDelete, setToDelete] = useState<string | null>(null);
 
   const q = useQuery({
     queryKey: ["prayer-requests", tenant?.id],
@@ -43,6 +49,16 @@ function PrayerIndex() {
       updatePrayerStatus(id, status),
     onSuccess: () => {
       toast.success("Status atualizado");
+      qc.invalidateQueries({ queryKey: ["prayer-requests", tenant?.id] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const delMut = useMutation({
+    mutationFn: (id: string) => deletePrayerRequest(id),
+    onSuccess: () => {
+      toast.success("Pedido excluído");
+      setToDelete(null);
       qc.invalidateQueries({ queryKey: ["prayer-requests", tenant?.id] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -112,6 +128,14 @@ function PrayerIndex() {
                           ))}
                         </SelectContent>
                       </Select>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        title="Excluir pedido"
+                        onClick={() => setToDelete(p.id)}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
                     </div>
                   </div>
                 </CardHeader>
@@ -134,6 +158,29 @@ function PrayerIndex() {
           })}
         </div>
       )}
+
+      <AlertDialog open={!!toDelete} onOpenChange={(v) => !v && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir pedido de oração</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação é permanente e não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                if (toDelete) delMut.mutate(toDelete);
+              }}
+            >
+              {delMut.isPending ? "Excluindo…" : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
