@@ -169,13 +169,14 @@ function MembersList() {
               <TableHead className="hidden sm:table-cell">Tipo</TableHead>
               <TableHead className="hidden md:table-cell">Congregação</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="w-12 text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell colSpan={6}><Skeleton className="h-6 w-full" /></TableCell>
+                  <TableCell colSpan={7}><Skeleton className="h-6 w-full" /></TableCell>
                 </TableRow>
               ))
             ) : data && data.rows.length > 0 ? (
@@ -195,11 +196,21 @@ function MembersList() {
                     {m.congregation?.name ?? "Sede"}
                   </TableCell>
                   <TableCell><StatusBadge status={m.status} /></TableCell>
+                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      title="Excluir membro"
+                      onClick={() => setToDelete({ id: m.id, name: m.full_name })}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="h-32 text-center text-sm text-muted-foreground">
+                <TableCell colSpan={7} className="h-32 text-center text-sm text-muted-foreground">
                   {search.q || search.status !== "all"
                     ? "Nenhum membro encontrado para esses filtros."
                     : "Nenhum membro ainda. Clique em \"Novo membro\" para começar."}
@@ -209,6 +220,30 @@ function MembersList() {
           </TableBody>
         </Table>
       </div>
+
+      <AlertDialog open={!!toDelete} onOpenChange={(v) => !v && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir membro</AlertDialogTitle>
+            <AlertDialogDescription>
+              O membro <strong>{toDelete?.name}</strong> será removido das listagens.
+              Esta ação pode ser revertida por um administrador.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                if (toDelete) delMut.mutate(toDelete.id);
+              }}
+            >
+              {delMut.isPending ? "Excluindo…" : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {total > 0 && (
         <div className="flex items-center justify-between gap-3 text-sm">
