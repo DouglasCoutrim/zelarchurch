@@ -50,40 +50,50 @@ type Section = { label: string; items: Item[] };
 
 const sections: Section[] = [
   {
-    label: "Principal",
-    items: [{ title: "Painel", url: "/app", icon: LayoutDashboard, exact: true }],
+    label: "Início",
+    items: [{ title: "Dashboard", url: "/app", icon: LayoutDashboard, exact: true }],
   },
   {
-    label: "Gestão",
+    label: "Organização",
     items: [
       { title: "Membros", url: "/app/members", icon: Users },
-      { title: "Departamentos", url: "/app/departments", icon: Building2 },
       { title: "Congregações", url: "/app/congregations", icon: Building2 },
+      { title: "Departamentos", url: "/app/departments", icon: Building2 },
       { title: "Códigos de acesso", url: "/app/invitations", icon: QrCode },
     ],
   },
   {
     label: "Operação",
     items: [
-      { title: "Financeiro", url: "/app/financeiro", icon: Wallet },
       { title: "Escalas", url: "/app/escalas", icon: CalendarDays },
       { title: "Minhas escalas", url: "/app/minhas-escalas", icon: CalendarDays },
-      { title: "Assiduidade", url: "/app/escalas-relatorios", icon: BarChart3 },
+      { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
       { title: "EBD", url: "/app/ebd", icon: GraduationCap },
       { title: "Atas", url: "/app/atas", icon: FileText },
-      { title: "Convocações", url: "/app/convocacoes", icon: Megaphone },
-      { title: "Conselho Fiscal", url: "/app/conselho-fiscal", icon: ShieldCheck },
-      { title: "Check-in", url: "/app/checkin", icon: ClipboardCheck },
-      { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },
-      { title: "Compras", url: "/app/compras", icon: ShoppingCart },
-      { title: "Pedidos de oração", url: "/app/oracao", icon: HandHeart },
-      { title: "Relatórios", url: "/app/relatorios", icon: BarChart3 },
+      { title: "Assiduidade", url: "/app/escalas-relatorios", icon: BarChart3 },
     ],
   },
   {
-    label: "Sistema",
+    label: "Financeiro",
     items: [
+      { title: "Financeiro", url: "/app/financeiro", icon: Wallet },
+      { title: "Compras", url: "/app/compras", icon: ShoppingCart },
+      { title: "Patrimônio", url: "/app/patrimonio", icon: Boxes },
+      { title: "Conselho Fiscal", url: "/app/conselho-fiscal", icon: ShieldCheck },
+    ],
+  },
+  {
+    label: "Comunicação",
+    items: [
+      { title: "Convocações", url: "/app/convocacoes", icon: Megaphone },
+      { title: "Pedidos de oração", url: "/app/oracao", icon: HandHeart },
       { title: "Notificações", url: "/app/notificacoes", icon: Bell },
+    ],
+  },
+  {
+    label: "Administração",
+    items: [
+      { title: "Relatórios", url: "/app/relatorios", icon: BarChart3 },
       { title: "Auditoria", url: "/app/auditoria", icon: History },
       { title: "Configurações", url: "/app/settings", icon: Settings },
     ],
