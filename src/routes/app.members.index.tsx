@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { z } from "zod";
 import { useEffect, useState } from "react";
-import { Plus, Search, AlertTriangle } from "lucide-react";
+import { Plus, Search, AlertTriangle, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
@@ -16,8 +17,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { DEFAULT_PAGE_SIZE } from "@/config/constants";
 import { listMembers } from "@/lib/members";
+import { deleteMember } from "@/lib/member-record";
 import { MEMBER_STATUS_OPTIONS, type MemberStatus } from "@/types/member";
 import { useTenantStore } from "@/stores/tenantStore";
 import { usePlanLimit } from "@/hooks/usePlanLimit";
