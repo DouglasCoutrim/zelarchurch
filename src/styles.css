@@ -199,12 +199,8 @@
   }
 
   body {
-    background-color: #CBD5E5;
-    background-image: url("/__l5e/assets-v1/d81aecf8-46b3-4ee8-9fda-0c210e549580/logo-zelar.svg");
-    background-repeat: no-repeat;
-    background-position: right -80px bottom -80px;
-    background-size: 520px auto;
-    background-attachment: fixed;
+    background-color: #F8FAFC;
+    background-image: none;
     color: var(--n900);
     font-size: 14px;
     line-height: 1.5;
@@ -213,11 +209,11 @@
     content: "";
     position: fixed;
     inset: 0;
-    background: #CBD5E5;
-    opacity: 0.86;
+    background: #F8FAFC;
     pointer-events: none;
     z-index: -1;
   }
+
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', system-ui, sans-serif;
