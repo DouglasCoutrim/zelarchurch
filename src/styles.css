@@ -395,34 +395,35 @@ h4 { font-size: 13px; font-weight: 600; color: var(--n700); }
 
 table {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid var(--n200);
-  box-shadow: var(--shadow-card);
+  border: 1px solid #F1F5F9;
+  box-shadow: 0 4px 20px -4px rgba(0,0,0,0.05);
   width: 100%;
 }
 
-thead { background: var(--n50); border-bottom: 1px solid var(--n200); }
+thead { background: #F8FAFC; border-bottom: 1px solid #F1F5F9; }
 
 th {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--n500);
+  color: #64748B;
   padding: 10px 16px;
   text-align: left;
 }
 
 td {
   font-size: 13.5px;
-  color: var(--n700);
+  color: #1E293B;
   padding: 12px 16px;
-  border-bottom: 1px solid var(--n100);
+  border-bottom: 1px solid #F1F5F9;
 }
 
 tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: var(--n50); transition: background 0.1s ease; }
+tbody tr:hover td { background: rgba(248,250,252,0.8); transition: background 0.15s ease; }
+
 
 /* ─────────────────────────────────────────
    SWITCH / CHECKBOX
