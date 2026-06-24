@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Pencil, Power, PowerOff, AlertTriangle, Church } from "lucide-react";
+import { Plus, Pencil, Power, PowerOff, AlertTriangle, Church, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,7 @@ import {
   activateCongregation,
   canAddCongregation,
   deactivateCongregation,
+  deleteCongregation,
   getCongregationsUsage,
   listCongregations,
 } from "@/lib/congregations";
@@ -63,6 +64,7 @@ function CongregationsPage() {
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState<Congregation | null>(null);
   const [toggling, setToggling] = useState<Congregation | null>(null);
+  const [deleting, setDeleting] = useState<Congregation | null>(null);
 
   const { data: list, isLoading, error } = useQuery({
     queryKey: ["congregations", tenantId],
@@ -85,6 +87,15 @@ function CongregationsPage() {
       qc.invalidateQueries({ queryKey: ["congregations", tenantId] });
       qc.invalidateQueries({ queryKey: ["congregations-usage", tenantId] });
       setToggling(null);
+    },
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (c: Congregation) => deleteCongregation(c.id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["congregations", tenantId] });
+      qc.invalidateQueries({ queryKey: ["congregations-usage", tenantId] });
+      setDeleting(null);
     },
   });
 
