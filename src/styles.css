@@ -327,7 +327,9 @@ h4 { font-size: 14px; font-weight: 600; color: var(--n700); }
 
 [data-slot="card"],
 [class*="rounded-2xl"][class*="border"][class*="bg-white"] {
-  background: #ffffff !important;
+  background:
+    linear-gradient(135deg, rgba(27,58,107,0.04) 0%, #ffffff 45%, #ffffff 70%, rgba(196,154,42,0.05) 100%),
+    #ffffff !important;
   border: 1px solid var(--n200) !important;
   border-radius: 14px !important;
   box-shadow: var(--shadow-card) !important;
