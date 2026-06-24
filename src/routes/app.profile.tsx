@@ -41,9 +41,20 @@ function initials(name?: string | null, email?: string | null) {
 }
 
 function ProfilePage() {
+  const navigate = useNavigate();
   const session = useAuthStore((s) => s.session);
   const userId = session?.user.id;
   const email = session?.user.email ?? "";
+  const currentTenant = useTenantStore((s) => s.currentTenant);
+  const resetTenant = useTenantStore((s) => s.reset);
+
+  const [confirmAccountText, setConfirmAccountText] = useState("");
+  const [accountDeleting, setAccountDeleting] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+
+  const [confirmTenantText, setConfirmTenantText] = useState("");
+  const [tenantDeleting, setTenantDeleting] = useState(false);
+  const [tenantOpen, setTenantOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
