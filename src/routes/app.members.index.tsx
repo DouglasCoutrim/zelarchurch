@@ -43,10 +43,12 @@ export const Route = createFileRoute("/app/members/")({
 function MembersList() {
   const navigate = useNavigate();
   const search = Route.useSearch();
+  const qc = useQueryClient();
   const currentTenant = useTenantStore((s) => s.currentTenant);
   const { canAddMember, usage } = usePlanLimit(currentTenant?.id);
 
   const [searchInput, setSearchInput] = useState(search.q);
+  const [toDelete, setToDelete] = useState<{ id: string; name: string } | null>(null);
   useEffect(() => setSearchInput(search.q), [search.q]);
 
   // Debounce search input → URL
