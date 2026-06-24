@@ -227,68 +227,81 @@
    Navy profundo extraído do logotipo Zelar
 ───────────────────────────────────────── */
 
-aside,
-[data-sidebar],
+/* Sidebar root: única superfície escura, cor sólida, sem bordas internas */
+aside[data-sidebar="sidebar"],
 [data-sidebar="sidebar"] {
-  background:
-    radial-gradient(at 100% 0%, rgba(200,150,62,0.08) 0px, transparent 50%),
-    linear-gradient(180deg, #0d1c33 0%, #112643 55%, #152a47 100%) !important;
-  border-right: 1px solid rgba(255,255,255,0.04) !important;
-  box-shadow: 4px 0 32px -12px rgba(13,28,51,0.45) !important;
+  background: #0a192f !important;
+  background-image: none !important;
+  border-right: 1px solid rgba(255,255,255,0.06) !important;
+  box-shadow: none !important;
 }
 
-aside img,
-[data-sidebar] img {
+/* Achata TODOS os containers internos — sem bg, sem borda, sem shadow */
+[data-sidebar="header"],
+[data-sidebar="content"],
+[data-sidebar="footer"],
+[data-sidebar="group"],
+[data-sidebar="group-content"],
+[data-sidebar="group-label"],
+[data-sidebar="menu"],
+[data-sidebar="menu-item"] {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+aside img {
   filter: brightness(0) invert(1);
 }
 
-aside [data-sidebar="group-label"],
-aside [class*="group-label"] {
-  color: rgba(255,255,255,0.32) !important;
-  font-size: 10px !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.14em !important;
-  text-transform: uppercase !important;
-  padding: 4px 10px 6px !important;
+/* Espaçamento entre categorias — separação só por margin, nunca por caixa */
+[data-sidebar="group"] + [data-sidebar="group"] {
+  margin-top: 18px !important;
 }
 
-aside [data-sidebar="menu-button"],
-aside a[data-sidebar="menu-button"],
-aside button[data-sidebar="menu-button"] {
-  color: rgba(226,232,240,0.70) !important;
-  border-radius: 12px !important;
+[data-sidebar="group-label"] {
+  color: rgba(148,163,184,0.6) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  padding: 4px 12px 6px !important;
+  height: auto !important;
+}
+
+/* Links: fundo transparente por padrão */
+[data-sidebar="menu-button"] {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: rgba(226,232,240,0.72) !important;
+  border-radius: 8px !important;
   font-size: 13.5px !important;
   font-weight: 500 !important;
   padding: 9px 12px !important;
   gap: 12px !important;
-  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important;
+  transition: background-color 0.18s ease, color 0.18s ease !important;
 }
 
-aside [data-sidebar="menu-button"]:hover,
-aside a[data-sidebar="menu-button"]:hover,
-aside button[data-sidebar="menu-button"]:hover {
+[data-sidebar="menu-button"]:hover {
   background: rgba(255,255,255,0.05) !important;
   color: #ffffff !important;
+  box-shadow: none !important;
 }
 
-aside [data-sidebar="menu-button"][data-active="true"],
-aside a[data-sidebar="menu-button"][data-active="true"],
-aside button[data-sidebar="menu-button"][data-active="true"] {
-  background: linear-gradient(90deg, rgba(200,150,62,0.22) 0%, rgba(200,150,62,0.08) 100%) !important;
-  color: #e8c878 !important;
-  box-shadow:
-    inset 2px 0 0 #C8963E,
-    0 1px 0 rgba(255,255,255,0.04),
-    0 4px 16px -6px rgba(200,150,62,0.35) !important;
+[data-sidebar="menu-button"][data-active="true"] {
+  background: rgba(245,158,11,0.10) !important;
+  color: #f59e0b !important;
+  box-shadow: none !important;
 }
 
-aside [data-sidebar="menu-button"][data-active="true"] svg,
-aside a[data-sidebar="menu-button"][data-active="true"] svg {
-  color: #e8c878 !important;
+[data-sidebar="menu-button"][data-active="true"] svg {
+  color: #f59e0b !important;
 }
 
 aside svg {
-  color: rgba(226,232,240,0.55);
   width: 17px;
   height: 17px;
   flex-shrink: 0;
