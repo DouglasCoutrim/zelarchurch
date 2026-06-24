@@ -65,79 +65,78 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Brand palette — usable as bg-brand-navy, text-brand-emerald, etc. */
-  --color-brand-navy: #1b3a6b;
-  --color-brand-navy-dark: #0f2347;
-  --color-brand-navy-light: #2d5099;
-  --color-brand-navy-muted: #eef2fb;
-  --color-brand-emerald: #10b981;
-  --color-brand-emerald-dark: #059669;
-  --color-brand-emerald-light: #d1fae5;
-  --color-brand-gold: #f59e0b;
-  --color-brand-gold-light: #fef3c7;
+  /* Brand palette — exact landing page values */
+  --color-brand-navy: #1E3A5F;
+  --color-brand-navy-dark: #152a47;
+  --color-brand-navy-light: #2a5587;
+  --color-brand-navy-muted: #eef2f9;
+  --color-brand-gold: #C8963E;
+  --color-brand-gold-dark: #b58432;
+  --color-brand-gold-light: #e0b35a;
+  --color-brand-ink: #0f1f3a;
+  --color-brand-cream: #fafaf7;
 
-  /* Shadows */
-  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-  --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
-  --shadow-nav: 0 1px 0 0 rgb(0 0 0 / 0.05);
-  --shadow-elevated: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  /* Shadows tuned to navy + gold */
+  --shadow-card: 0 8px 30px -12px rgba(30,58,95,0.15);
+  --shadow-card-hover: 0 20px 50px -20px rgba(30,58,95,0.28);
+  --shadow-gold: 0 14px 40px -12px rgba(200,150,62,0.7);
+  --shadow-elevated: 0 30px 80px -20px rgba(30,58,95,0.35);
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
-  /* Surfaces — page is slate-50ish, cards are pure white for contrast */
-  --background: oklch(0.984 0.003 248);          /* ~ slate-50 */
-  --foreground: oklch(0.21 0.04 260);            /* neutral-800/900 */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.04 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.04 260);
+  /* Surfaces — landing cream background, ink text */
+  --background: #fafaf7;
+  --foreground: #0f1f3a;
+  --card: #ffffff;
+  --card-foreground: #0f1f3a;
+  --popover: #ffffff;
+  --popover-foreground: #0f1f3a;
 
-  /* Primary = brand navy #1B3A6B */
-  --primary: oklch(0.32 0.09 257);
-  --primary-foreground: oklch(0.99 0.003 255);
+  /* Primary = navy #1E3A5F */
+  --primary: #1E3A5F;
+  --primary-foreground: #ffffff;
 
-  /* Secondary = soft navy-muted */
-  --secondary: oklch(0.96 0.012 255);
-  --secondary-foreground: oklch(0.32 0.09 257);
+  /* Secondary = soft navy tint */
+  --secondary: #eef2f9;
+  --secondary-foreground: #1E3A5F;
 
-  /* Muted = neutral-100 */
-  --muted: oklch(0.968 0.007 255);
-  --muted-foreground: oklch(0.5 0.03 257);
+  --muted: #f4f3ee;
+  --muted-foreground: #6b7280;
 
-  /* Accent = emerald-muted */
-  --accent: oklch(0.95 0.04 158);
-  --accent-foreground: oklch(0.42 0.13 162);
+  /* Accent = gold */
+  --accent: #fbf2dc;
+  --accent-foreground: #8a6628;
 
-  --destructive: oklch(0.62 0.22 27);
-  --destructive-foreground: oklch(0.99 0.003 255);
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
 
-  --success: oklch(0.69 0.15 162);                /* emerald */
-  --success-foreground: oklch(0.99 0.003 255);
-  --warning: oklch(0.78 0.16 75);                 /* gold */
-  --warning-foreground: oklch(0.32 0.09 60);
+  --success: #10b981;
+  --success-foreground: #ffffff;
+  --warning: #C8963E;
+  --warning-foreground: #ffffff;
 
-  /* Borders deliberately softer — translucent rather than hard slate lines */
-  --border: oklch(0.92 0.008 255 / 0.6);
-  --input: oklch(0.9 0.012 255);
-  --ring: oklch(0.32 0.09 257);
+  /* Borders — soft navy-tinted lines (translucent) */
+  --border: rgba(30, 58, 95, 0.12);
+  --input: rgba(30, 58, 95, 0.18);
+  --ring: #C8963E;
 
-  --chart-1: oklch(0.32 0.09 257);   /* navy */
-  --chart-2: oklch(0.69 0.15 162);   /* emerald */
-  --chart-3: oklch(0.78 0.16 75);    /* gold */
-  --chart-4: oklch(0.62 0.22 27);    /* red */
-  --chart-5: oklch(0.55 0.18 258);   /* navy-light */
+  --chart-1: #1E3A5F;
+  --chart-2: #C8963E;
+  --chart-3: #2a5587;
+  --chart-4: #e0b35a;
+  --chart-5: #10b981;
 
-  /* Sidebar = deep Zelar navy with gold active accent */
-  --sidebar: oklch(0.2 0.07 258);
-  --sidebar-foreground: oklch(0.96 0.01 255);
-  --sidebar-primary: oklch(0.78 0.16 75);
-  --sidebar-primary-foreground: oklch(0.2 0.07 258);
-  --sidebar-accent: oklch(0.26 0.06 258);
-  --sidebar-accent-foreground: oklch(0.98 0.01 75);
-  --sidebar-border: oklch(0.32 0.06 258 / 0.35);
-  --sidebar-ring: oklch(0.78 0.16 75);
+  /* Sidebar = deep navy gradient base, gold active highlight */
+  --sidebar: #152a47;
+  --sidebar-foreground: rgba(255,255,255,0.82);
+  --sidebar-primary: #C8963E;
+  --sidebar-primary-foreground: #152a47;
+  --sidebar-accent: rgba(255,255,255,0.06);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255,255,255,0.08);
+  --sidebar-ring: #C8963E;
 }
 
 .dark {
@@ -256,7 +255,7 @@
 }
 
 @utility glass-dark {
-  background: color-mix(in oklab, #0f2347 75%, transparent);
+  background: color-mix(in oklab, #152a47 80%, transparent);
   backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid rgb(255 255 255 / 0.08);
 }
@@ -267,46 +266,45 @@
               border-color 0.3s ease;
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 18px 40px -18px rgb(27 58 107 / 0.22);
-    border-color: color-mix(in oklab, var(--color-primary) 25%, var(--color-border));
+    box-shadow: 0 20px 50px -20px rgba(30, 58, 95, 0.28);
+    border-color: rgba(200, 150, 62, 0.4);
   }
 }
 
 @utility gold-glow {
-  box-shadow: 0 10px 30px -10px rgb(245 158 11 / 0.55),
-              0 4px 12px -4px rgb(245 158 11 / 0.35);
+  box-shadow: 0 14px 40px -12px rgba(200, 150, 62, 0.7),
+              0 4px 12px -4px rgba(200, 150, 62, 0.35);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   &:hover {
-    box-shadow: 0 18px 40px -10px rgb(245 158 11 / 0.65),
-                0 6px 16px -4px rgb(245 158 11 / 0.45);
-    transform: translateY(-1px);
+    box-shadow: 0 20px 50px -12px rgba(200, 150, 62, 0.85),
+                0 6px 16px -4px rgba(200, 150, 62, 0.5);
+    transform: translateY(-2px);
   }
 }
 
-/* App surface — slate-50 with two whisper-soft brand glows (navy + gold)
-   anchoring the corners. Reads as a calm, premium SaaS canvas. */
+/* App surface — landing-page cream with navy/gold radial glows. */
 @utility gradient-mesh {
-  background-color: #f8fafc;
+  background-color: #fafaf7;
   background-image:
-    radial-gradient(at 0% 0%, rgb(27 58 107 / 0.045) 0px, transparent 55%),
-    radial-gradient(at 100% 100%, rgb(245 158 11 / 0.04) 0px, transparent 55%);
+    radial-gradient(at 0% 0%, rgba(30, 58, 95, 0.10) 0px, transparent 55%),
+    radial-gradient(at 100% 0%, rgba(200, 150, 62, 0.12) 0px, transparent 55%),
+    radial-gradient(at 50% 100%, rgba(30, 58, 95, 0.06) 0px, transparent 60%);
 }
 
-/* Sutil divisor lateral cinza ancorando o conteúdo da página */
 @utility page-rail {
-  border-left: 1px solid color-mix(in oklab, var(--color-foreground) 6%, transparent);
+  border-left: 1px solid rgba(30, 58, 95, 0.08);
 }
 
 @utility gradient-navy {
-  background-image: linear-gradient(135deg, #0f2347 0%, #1b3a6b 55%, #2d5099 100%);
+  background-image: linear-gradient(135deg, #152a47 0%, #1E3A5F 55%, #2a5587 100%);
 }
 
 @utility gradient-gold {
-  background-image: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%);
+  background-image: linear-gradient(135deg, #C8963E 0%, #e0b35a 50%, #C8963E 100%);
 }
 
 @utility text-gradient-navy {
-  background-image: linear-gradient(135deg, #1b3a6b 0%, #2d5099 100%);
+  background-image: linear-gradient(135deg, #1E3A5F 0%, #2a5587 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
