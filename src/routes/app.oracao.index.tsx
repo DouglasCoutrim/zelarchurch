@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { HandHeart, Plus, UserCircle2 } from "lucide-react";
+import { Plus, Trash2, UserCircle2 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/PageHeader";
 
@@ -12,7 +13,11 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  listPrayerRequests, updatePrayerStatus,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  listPrayerRequests, updatePrayerStatus, deletePrayerRequest,
   PRAYER_STATUS_LABEL, type PrayerStatus,
 } from "@/lib/prayers";
 import { useTenantStore } from "@/stores/tenantStore";
