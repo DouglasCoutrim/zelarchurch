@@ -110,7 +110,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b px-3 py-4">
+      <SidebarHeader className="border-b border-white/5 px-4 pt-6 pb-5">
         <div className="flex items-center justify-center">
           {collapsed ? (
             <img
@@ -119,16 +119,24 @@ export function AppSidebar() {
               className="h-9 w-9 shrink-0 rounded-md object-contain"
             />
           ) : (
-            <img src={logoAsset.url} alt={APP_NAME} className="h-14 w-auto" />
+            <img
+              src={logoAsset.url}
+              alt={APP_NAME}
+              className="h-16 w-auto object-contain drop-shadow-[0_4px_12px_rgba(200,150,62,0.25)]"
+            />
           )}
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="gap-1 px-2 py-3">
         {sections.map((section) => (
-          <SidebarGroup key={section.label}>
-            <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
+          <SidebarGroup key={section.label} className="px-1 py-1.5">
+            {!collapsed && (
+              <SidebarGroupLabel className="px-2.5 pt-1 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+                {section.label}
+              </SidebarGroupLabel>
+            )}
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="gap-0.5">
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   if (item.soon) {
@@ -136,14 +144,14 @@ export function AppSidebar() {
                       <SidebarMenuItem key={item.url}>
                         <SidebarMenuButton
                           disabled
-                          className="cursor-not-allowed opacity-60"
+                          className="cursor-not-allowed rounded-xl px-3 py-2.5 opacity-50"
                           tooltip={collapsed ? `${item.title} — em breve` : undefined}
                         >
                           <Icon className="h-4 w-4" />
                           {!collapsed && (
                             <span className="flex w-full items-center justify-between">
                               <span>{item.title}</span>
-                              <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+                              <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/40">
                                 em breve
                               </span>
                             </span>
@@ -159,10 +167,11 @@ export function AppSidebar() {
                         asChild
                         isActive={active}
                         tooltip={collapsed ? item.title : undefined}
+                        className="rounded-xl px-3 py-2.5 transition-all duration-200"
                       >
-                        <Link to={item.url} className={cn("flex items-center gap-2")}>
-                          <Icon className="h-4 w-4" />
-                          {!collapsed && <span>{item.title}</span>}
+                        <Link to={item.url} className={cn("flex items-center gap-3")}>
+                          <Icon className="h-[17px] w-[17px] shrink-0" />
+                          {!collapsed && <span className="text-[13.5px] font-medium">{item.title}</span>}
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -176,3 +185,4 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
