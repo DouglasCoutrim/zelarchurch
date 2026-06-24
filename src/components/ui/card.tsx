@@ -7,10 +7,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     <div
       ref={ref}
       className={cn(
-        // Soft UI / glassmorphism card: translucent white, near-invisible border,
-        // ambient diffused shadow — no hard outlines.
-        "rounded-2xl border border-white/60 bg-white/90 text-card-foreground backdrop-blur-md transition-colors",
-        "shadow-[0_8px_30px_rgb(15,35,71,0.04),0_1px_3px_rgba(15,35,71,0.02)]",
+        "rounded-xl border border-slate-100 bg-white text-slate-950 shadow-[0_8px_30px_rgb(0,0,0,0.015),0_1px_3px_rgba(0,0,0,0.005)]",
         className,
       )}
       {...props}
@@ -18,6 +15,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
   ),
 );
 Card.displayName = "Card";
+
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
