@@ -7,10 +7,10 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     <div
       ref={ref}
       className={cn(
-        // Soft UI / glassmorphism card: translucent white, near-invisible border,
-        // ambient diffused shadow — no hard outlines.
-        "rounded-2xl border border-white/60 bg-white/90 text-card-foreground backdrop-blur-md transition-colors",
-        "shadow-[0_8px_30px_rgb(15,35,71,0.04),0_1px_3px_rgba(15,35,71,0.02)]",
+        // Landing-page glass card: translucent white over cream, navy-tinted hairline,
+        // deep ambient navy shadow. Matches the floating dashboard on the marketing site.
+        "rounded-2xl border border-[rgba(30,58,95,0.10)] bg-white/75 text-card-foreground backdrop-blur-xl transition-all duration-300",
+        "shadow-[0_8px_30px_-12px_rgba(30,58,95,0.15)]",
         className,
       )}
       {...props}
