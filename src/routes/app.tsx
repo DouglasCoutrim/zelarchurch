@@ -65,7 +65,7 @@ function AppLayout() {
       <div className="flex min-h-screen w-full gradient-mesh">
         <AppSidebar />
         <SidebarInset className="flex flex-1 flex-col bg-transparent">
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 glass-strong px-4">
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-[rgba(30,58,95,0.08)] bg-white/70 px-4 backdrop-blur-xl shadow-[0_8px_30px_-12px_rgba(30,58,95,0.10)]">
             <SidebarTrigger className="hover:bg-accent hover:text-accent-foreground rounded-md" />
             <Separator orientation="vertical" className="h-6" />
             <TenantSwitcher />
