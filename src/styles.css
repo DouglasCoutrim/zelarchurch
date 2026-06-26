@@ -65,22 +65,66 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Brand palette — exact landing page values */
-  --color-brand-navy: #1E3A5F;
-  --color-brand-navy-dark: #152a47;
-  --color-brand-navy-light: #2a5587;
-  --color-brand-navy-muted: #eef2f9;
-  --color-brand-gold: #C8963E;
-  --color-brand-gold-dark: #b58432;
-  --color-brand-gold-light: #e0b35a;
-  --color-brand-ink: #0f1f3a;
-  --color-brand-cream: #fafaf7;
+  /* Brand palette — Zelar v2 (logo colors) */
+  --color-navy: #1B3A6B;
+  --color-navy-dark: #0F2347;
+  --color-navy-mid: #24488A;
+  --color-navy-light: #EEF2FB;
+  --color-gold: #C49A2A;
+  --color-gold-dark: #A07D1A;
+  --color-gold-light: #FBF3DC;
+  --color-emerald: #10B981;
+  --color-emerald-dark: #059669;
+  --color-emerald-light: #D1FAE5;
 
-  /* Shadows tuned to navy + gold */
-  --shadow-card: 0 8px 30px -12px rgba(30,58,95,0.15);
-  --shadow-card-hover: 0 20px 50px -20px rgba(30,58,95,0.28);
-  --shadow-gold: 0 14px 40px -12px rgba(200,150,62,0.7);
-  --shadow-elevated: 0 30px 80px -20px rgba(30,58,95,0.35);
+  /* Legacy brand aliases (kept for existing components) */
+  --color-brand-navy: #1B3A6B;
+  --color-brand-navy-dark: #0F2347;
+  --color-brand-navy-light: #24488A;
+  --color-brand-navy-muted: #EEF2FB;
+  --color-brand-gold: #C49A2A;
+  --color-brand-gold-dark: #A07D1A;
+  --color-brand-gold-light: #FBF3DC;
+  --color-brand-ink: #0F172A;
+  --color-brand-cream: #F8FAFC;
+
+  /* Neutral scale (bg-n-50 … bg-n-900) */
+  --color-n-50:  #F8FAFC;
+  --color-n-100: #F1F5F9;
+  --color-n-200: #E2E8F0;
+  --color-n-300: #CBD5E1;
+  --color-n-400: #94A3B8;
+  --color-n-500: #64748B;
+  --color-n-600: #475569;
+  --color-n-700: #334155;
+  --color-n-800: #1E293B;
+  --color-n-900: #0F172A;
+
+  /* Shadow tokens — shadow-card, shadow-hover, shadow-modal, shadow-sidebar */
+  --shadow-card:    0 1px 3px rgba(15,35,71,.07), 0 1px 2px rgba(15,35,71,.04);
+  --shadow-hover:   0 4px 12px rgba(15,35,71,.10), 0 2px 4px rgba(15,35,71,.06);
+  --shadow-modal:   0 20px 40px rgba(15,35,71,.16), 0 8px 16px rgba(15,35,71,.08);
+  --shadow-sidebar: 2px 0 12px rgba(15,35,71,.15);
+  --shadow-gold:    0 14px 40px -12px rgba(196,154,42,0.5);
+  --shadow-elevated: 0 30px 80px -20px rgba(15,35,71,0.35);
+
+  /* Keyframes + animations (animate-shimmer, animate-fade-in, animate-slide-left) */
+  --animate-shimmer: shimmer 1.4s infinite;
+  --animate-fade-in: fadeIn 0.22s ease-out both;
+  --animate-slide-left: slideLeft 0.2s ease-out both;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 :root {
