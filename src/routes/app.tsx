@@ -1,11 +1,12 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { LogOut, Search } from "lucide-react";
+import { ChevronRight, LogOut, Search } from "lucide-react";
 
 import { AppSidebar } from "@/components/AppSidebar";
 import { CommandPalette } from "@/components/CommandPalette";
 import { InviteMemberButton } from "@/components/InviteMemberButton";
 import { NotificationBell } from "@/components/NotificationBell";
+import { OfflineBanner } from "@/components/OfflineBanner";
 import { TenantSwitcher } from "@/components/TenantSwitcher";
 import { Button } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -13,6 +14,41 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthStore } from "@/stores/authStore";
 import { useTenantStore } from "@/stores/tenantStore";
+
+const ROUTE_LABELS: Record<string, string> = {
+  "/app": "Painel",
+  "/app/members": "Membros",
+  "/app/departments": "Departamentos",
+  "/app/congregations": "Congregações",
+  "/app/invitations": "Códigos de acesso",
+  "/app/financeiro": "Financeiro",
+  "/app/escalas": "Escalas",
+  "/app/minhas-escalas": "Minhas escalas",
+  "/app/escalas-relatorios": "Assiduidade",
+  "/app/ebd": "EBD",
+  "/app/atas": "Atas",
+  "/app/convocacoes": "Convocações",
+  "/app/conselho-fiscal": "Conselho Fiscal",
+  "/app/checkin": "Check-in",
+  "/app/patrimonio": "Patrimônio",
+  "/app/compras": "Compras",
+  "/app/oracao": "Pedidos de oração",
+  "/app/relatorios": "Relatórios",
+  "/app/notificacoes": "Notificações",
+  "/app/auditoria": "Auditoria",
+  "/app/settings": "Configurações",
+  "/app/profile": "Perfil",
+};
+
+function getPageLabel(pathname: string): string {
+  if (ROUTE_LABELS[pathname]) return ROUTE_LABELS[pathname];
+  // longest-prefix match (handles nested routes like /app/members/:id)
+  const match = Object.keys(ROUTE_LABELS)
+    .filter((k) => pathname === k || pathname.startsWith(k + "/"))
+    .sort((a, b) => b.length - a.length)[0];
+  return match ? ROUTE_LABELS[match] : "Painel";
+}
+
 
 export const Route = createFileRoute("/app")({
   head: () => ({
