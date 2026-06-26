@@ -313,3 +313,94 @@
   animation: fadeInUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* ============================================================
+ * Global density + sidebar polish (Zelar SaaS look)
+ * ============================================================ */
+
+body {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: #0F172A; }
+h2 { font-size: 17px; font-weight: 600; color: #1E293B; }
+h3 { font-size: 15px; font-weight: 600; color: #1E293B; }
+
+/* App content area — solid slate-50, no gradient mesh */
+main { background: #F8FAFC; }
+
+/* Topbar */
+header.sticky, header[data-app-header] {
+  background: #ffffff;
+  border-bottom: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  backdrop-filter: none;
+}
+
+/* Sidebar — deep navy gradient */
+[data-sidebar="sidebar"] {
+  background: linear-gradient(180deg, #0F2347 0%, #1B3A6B 100%) !important;
+  box-shadow: 2px 0 12px rgba(15,35,71,0.15);
+}
+
+/* Sidebar menu items */
+[data-sidebar="menu-button"] {
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+[data-sidebar="menu-button"] svg {
+  color: rgba(255,255,255,0.4);
+}
+[data-sidebar="menu-button"]:hover {
+  background: rgba(255,255,255,0.07) !important;
+  color: rgba(255,255,255,0.9) !important;
+}
+[data-sidebar="menu-button"]:hover svg {
+  color: rgba(255,255,255,0.85);
+}
+
+/* Active state — gold text + soft gold tint + left border */
+[data-sidebar="menu-button"][data-active="true"] {
+  background: rgba(196,154,42,0.15) !important;
+  color: #C49A2A !important;
+  border-left: 2px solid #C49A2A;
+  border-radius: 0 8px 8px 0;
+  padding-left: 10px;
+}
+[data-sidebar="menu-button"][data-active="true"] svg {
+  color: #C49A2A !important;
+}
+
+/* Group labels — uppercase tracked */
+[data-sidebar="group-label"] {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3) !important;
+}
+
+/* Tables — denser, cleaner */
+table thead th {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748B;
+}
+
+/* Inputs — focus ring navy */
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  border-color: #1B3A6B;
+  box-shadow: 0 0 0 3px rgba(27,58,107,0.1);
+}
+
+/* Tabs — underline style */
+[role="tablist"] {
+  border-bottom: 1px solid #E2E8F0;
+}
+
+
