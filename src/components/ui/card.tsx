@@ -7,10 +7,10 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     <div
       ref={ref}
       className={cn(
-        // Landing-page glass card: translucent white over cream, navy-tinted hairline,
-        // deep ambient navy shadow. Matches the floating dashboard on the marketing site.
-        "rounded-2xl border border-[rgba(30,58,95,0.10)] bg-white/75 text-card-foreground backdrop-blur-xl transition-all duration-300",
-        "shadow-[0_8px_30px_-12px_rgba(30,58,95,0.15)]",
+        // Dense SaaS card: solid white, slate-200 hairline, subtle ambient shadow.
+        "rounded-xl border border-[#E2E8F0] bg-white text-card-foreground transition-shadow duration-200",
+        "shadow-[0_1px_3px_rgba(15,35,71,0.07),0_1px_2px_rgba(15,35,71,0.04)]",
+        "hover:shadow-[0_4px_12px_rgba(15,35,71,0.10),0_2px_4px_rgba(15,35,71,0.06)]",
         className,
       )}
       {...props}
