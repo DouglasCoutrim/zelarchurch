@@ -87,56 +87,55 @@
   --radius: 0.75rem;
 
   /* Surfaces — landing cream background, ink text */
-  --background: #fafaf7;
-  --foreground: #0f1f3a;
+  --background: #F8FAFC;
+  --foreground: #0F172A;
   --card: #ffffff;
-  --card-foreground: #0f1f3a;
+  --card-foreground: #0F172A;
   --popover: #ffffff;
-  --popover-foreground: #0f1f3a;
+  --popover-foreground: #0F172A;
 
-  /* Primary = navy #1E3A5F */
-  --primary: #1E3A5F;
+  /* Primary = navy #1B3A6B */
+  --primary: #1B3A6B;
   --primary-foreground: #ffffff;
 
-  /* Secondary = soft navy tint */
-  --secondary: #eef2f9;
-  --secondary-foreground: #1E3A5F;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #1B3A6B;
 
-  --muted: #f4f3ee;
-  --muted-foreground: #6b7280;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
 
   /* Accent = gold */
-  --accent: #fbf2dc;
-  --accent-foreground: #8a6628;
+  --accent: #FBF3DC;
+  --accent-foreground: #A07D1A;
 
-  --destructive: #dc2626;
+  --destructive: #EF4444;
   --destructive-foreground: #ffffff;
 
-  --success: #10b981;
+  --success: #10B981;
   --success-foreground: #ffffff;
-  --warning: #C8963E;
+  --warning: #C49A2A;
   --warning-foreground: #ffffff;
 
-  /* Borders — soft navy-tinted lines (translucent) */
-  --border: rgba(30, 58, 95, 0.12);
-  --input: rgba(30, 58, 95, 0.18);
-  --ring: #C8963E;
+  /* Borders — solid slate-200 lines (crisp, dense UI) */
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #1B3A6B;
 
-  --chart-1: #1E3A5F;
-  --chart-2: #C8963E;
-  --chart-3: #2a5587;
-  --chart-4: #e0b35a;
-  --chart-5: #10b981;
+  --chart-1: #1B3A6B;
+  --chart-2: #C49A2A;
+  --chart-3: #24488A;
+  --chart-4: #10B981;
+  --chart-5: #94A3B8;
 
-  /* Sidebar = deep navy gradient base, gold active highlight */
-  --sidebar: #152a47;
-  --sidebar-foreground: rgba(255,255,255,0.82);
-  --sidebar-primary: #C8963E;
-  --sidebar-primary-foreground: #152a47;
-  --sidebar-accent: rgba(255,255,255,0.06);
+  /* Sidebar = deep navy base (gradient applied via [data-sidebar]), gold active highlight */
+  --sidebar: #0F2347;
+  --sidebar-foreground: rgba(255,255,255,0.55);
+  --sidebar-primary: #C49A2A;
+  --sidebar-primary-foreground: #0F2347;
+  --sidebar-accent: rgba(255,255,255,0.07);
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgba(255,255,255,0.08);
-  --sidebar-ring: #C8963E;
+  --sidebar-ring: #C49A2A;
 }
 
 .dark {
