@@ -5,30 +5,29 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13.5px] font-medium cursor-pointer transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        // Landing secondary CTA — navy, deep shadow + lift
         default:
-          "bg-[#1E3A5F] text-white shadow-[0_10px_30px_-12px_rgba(30,58,95,0.5)] hover:bg-[#152a47] hover:-translate-y-0.5 hover:shadow-[0_14px_36px_-12px_rgba(30,58,95,0.6)] active:translate-y-0",
+          "bg-[#1B3A6B] text-white shadow-[0_1px_3px_rgba(27,58,107,0.3)] hover:bg-[#0F2347] hover:-translate-y-px active:translate-y-0",
         navy:
-          "bg-[#1E3A5F] text-white shadow-[0_10px_30px_-12px_rgba(30,58,95,0.5)] hover:bg-[#152a47] hover:-translate-y-0.5 active:translate-y-0",
+          "bg-[#1B3A6B] text-white shadow-[0_1px_3px_rgba(27,58,107,0.3)] hover:bg-[#0F2347] hover:-translate-y-px active:translate-y-0",
         gold:
-          "bg-[#C8963E] text-white shadow-[0_14px_40px_-12px_rgba(200,150,62,0.7)] hover:bg-[#b58432] hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-12px_rgba(200,150,62,0.85)] active:translate-y-0",
+          "bg-[#C49A2A] text-white shadow-[0_1px_3px_rgba(196,154,42,0.35)] hover:bg-[#A07D1A] hover:-translate-y-px active:translate-y-0",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 hover:-translate-y-0.5",
+          "bg-[#EF4444] text-white shadow-sm hover:bg-[#DC2626]",
         outline:
-          "border border-[rgba(30,58,95,0.15)] bg-white/60 text-[#1E3A5F] backdrop-blur-sm shadow-sm hover:bg-white hover:border-[#C8963E]/40 hover:-translate-y-0.5",
+          "border border-[#E2E8F0] bg-white text-[#334155] hover:bg-[#F8FAFC] hover:border-[#CBD5E1]",
         secondary:
-          "bg-[#eef2f9] text-[#1E3A5F] shadow-sm hover:bg-[#e2e8f3] hover:-translate-y-0.5",
-        ghost: "text-[#1E3A5F] hover:bg-[#1E3A5F]/5",
-        link: "text-[#1E3A5F] underline-offset-4 hover:underline hover:text-[#C8963E]",
+          "bg-[#F1F5F9] text-[#1B3A6B] hover:bg-[#E2E8F0]",
+        ghost: "text-[#475569] hover:bg-[#F1F5F9] hover:text-[#0F172A]",
+        link: "text-[#1B3A6B] underline-offset-4 hover:underline hover:text-[#C49A2A]",
       },
       size: {
-        default: "h-9 px-4 py-2",
+        default: "h-9 px-3.5 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-12 rounded-lg px-7 text-base",
+        lg: "h-11 rounded-lg px-6 text-sm",
         icon: "h-9 w-9",
       },
     },
