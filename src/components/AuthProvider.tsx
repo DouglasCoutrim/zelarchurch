@@ -54,20 +54,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const setLoading = useAuthStore((s) => s.setLoading);
 
   useEffect(() => {
+    // Single source of truth: onAuthStateChange fires INITIAL_SESSION on mount,
+    // then SIGNED_IN / SIGNED_OUT / TOKEN_REFRESHED / USER_UPDATED transitions.
+    // Calling getSession() in parallel would cause a duplicate hydrateTenants
+    // race on boot (see code review B4).
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
+      if (event === "INITIAL_SESSION") setLoading(false);
       if (event === "SIGNED_OUT") {
         useTenantStore.getState().reset();
         return;
       }
-      if (session?.user) {
+      // Only hydrate on identity-changing events — avoid refetch on every TOKEN_REFRESHED.
+      if (
+        session?.user &&
+        (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "USER_UPDATED")
+      ) {
         void hydrateTenants(session.user.id);
       }
-    });
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-      if (data.session?.user) void hydrateTenants(data.session.user.id);
     });
     return () => sub.subscription.unsubscribe();
   }, [setSession, setLoading]);

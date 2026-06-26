@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Users, Pencil, Trash2, AlertTriangle, Music, Building2 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -58,6 +59,7 @@ function DepartmentsPage() {
       queryClient.invalidateQueries({ queryKey: ["plan-usage"] });
       setDeleting(null);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (
@@ -238,6 +240,7 @@ function DepartmentDialog({
       queryClient.invalidateQueries({ queryKey: ["plan-usage"] });
       onOpenChange(false);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (

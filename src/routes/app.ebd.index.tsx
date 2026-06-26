@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2, GraduationCap, Users, ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -52,6 +53,7 @@ function EbdClassesPage() {
       queryClient.invalidateQueries({ queryKey: ["ebd-classes"] });
       setDeleting(null);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (
@@ -202,6 +204,7 @@ function ClassDialog({
       queryClient.invalidateQueries({ queryKey: ["ebd-classes"] });
       onOpenChange(false);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (
