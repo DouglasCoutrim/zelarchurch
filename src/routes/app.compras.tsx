@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Plus, Pencil, Trash2, ShoppingCart, Check, X, PackageCheck, AlertCircle,
@@ -96,10 +97,12 @@ function PurchasesPage() {
   const approveMut = useMutation({
     mutationFn: (id: string) => approvePurchaseRequest(id, user!.id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["purchases"] }),
+    onError: (e: Error) => toast.error(e.message),
   });
   const boughtMut = useMutation({
     mutationFn: (id: string) => markPurchaseAsBought(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["purchases"] }),
+    onError: (e: Error) => toast.error(e.message),
   });
   const deleteMut = useMutation({
     mutationFn: (id: string) => deletePurchaseRequest(id),
@@ -107,6 +110,7 @@ function PurchasesPage() {
       queryClient.invalidateQueries({ queryKey: ["purchases"] });
       setDeleting(null);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (
@@ -355,6 +359,7 @@ function PurchaseDialog({
       queryClient.invalidateQueries({ queryKey: ["purchases"] });
       onOpenChange(false);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (

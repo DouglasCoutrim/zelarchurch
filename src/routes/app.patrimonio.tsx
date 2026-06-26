@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2, Search, Package, DollarSign, MapPin } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -88,6 +89,7 @@ function PatrimonyPage() {
       queryClient.invalidateQueries({ queryKey: ["patrimonies"] });
       setDeleting(null);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (
@@ -288,6 +290,7 @@ function PatrimonyDialog({
       queryClient.invalidateQueries({ queryKey: ["patrimonies"] });
       onOpenChange(false);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   function update<K extends keyof PatrimonyInput>(key: K, value: PatrimonyInput[K]) {

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Plus, Pencil, Trash2, Users, MapPin, CalendarDays, Clock,
@@ -71,6 +72,7 @@ function SchedulesPage() {
   const sendMut = useMutation({
     mutationFn: (id: string) => sendSchedule(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["schedules"] }),
+    onError: (e: Error) => toast.error(e.message),
   });
 
   const departmentsQ = useQuery({
@@ -96,6 +98,7 @@ function SchedulesPage() {
       qc.invalidateQueries({ queryKey: ["schedules"] });
       setDeleting(null);
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   const groups = useMemo(() => {
@@ -355,6 +358,7 @@ function ScheduleDialog({
       qc.invalidateQueries({ queryKey: ["schedules"] });
       onClose();
     },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (
