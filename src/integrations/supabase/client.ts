@@ -2,8 +2,13 @@
 // The publishable (anon) key is safe to ship in client code — RLS enforces access.
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = "https://gjfhsrnmflsgecixwwrh.supabase.co";
+const SUPABASE_URL =
+  (import.meta.env.VITE_SUPABASE_URL as string | undefined) ??
+  "https://gjfhsrnmflsgecixwwrh.supabase.co";
+
 const SUPABASE_PUBLISHABLE_KEY =
+  (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined) ??
+  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ??
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqZmhzcm5tZmxzZ2VjaXh3d3JoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4OTQ0NzEsImV4cCI6MjA5NzQ3MDQ3MX0.lq5O3fqofvExDd5hFwI2-xPtFdeuhAQKISuxSgTmF6w";
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

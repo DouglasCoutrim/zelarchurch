@@ -104,8 +104,8 @@ export async function loadDashboard(tenantId: string, userId: string): Promise<{
   let monthExpense = 0;
   (txRes.data ?? []).forEach((t: { amount: number | string; type: string }) => {
     const v = Number(t.amount) || 0;
-    if (t.type === "entrada" || t.type === "income") monthIncome += v;
-    else monthExpense += v;
+    if (t.type === "receita") monthIncome += v;
+    else if (t.type === "despesa") monthExpense += v;
   });
 
   return {
